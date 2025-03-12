@@ -337,9 +337,166 @@ input[name="tab-selector"] {
 }
 #richese h2 { border-color: #D3D3D3; } /* Light Gray */
 
+/* Tracker tabs styles (modifying the existing tab styles to work with the new tracker tabs) */
+#tracker-tabs {
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+#tracker-tabs input[type="radio"] {
+  display: none;
+}
+
+/* Show active tracker tab */
+#tracker-tab-link-01:checked ~ .tab-content #tracker-tab-01,
+#tracker-tab-link-02:checked ~ .tab-content #tracker-tab-02 {
+  display: block;
+}
+
+/* Style for active tracker tab label */
+#tracker-tab-link-01:checked + .tab-name,
+#tracker-tab-link-02:checked + .tab-name {
+  background-color: white;
+  border-bottom: 1px solid white;
+  position: relative;
+  z-index: 1;
+}
+
+/* Leader Numbers styles */
+.leader-numbers {
+  padding: 10px;
+  text-align: center;
+}
+
+.leader-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Force two columns */
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.leader-column {
+  text-align: left;
+}
+
+.leader-list {
+  list-style-type: none;
+  padding-left: 0;
+  line-height: 1.8;
+}
+
+     
+
+Here are the updated styles and HTML:
+
+I've made the requested changes to fix both issues:
+
+    Fixed the Column Layout:
+        Used CSS Grid with grid-template-columns: 1fr 1fr to force two columns
+        Made the list more compact by reducing line height, margins, and padding
+        Used a slightly smaller font size for the leader values
+        Added media queries to ensure it stays in two columns on most screens
+    Removed the Circle from Tabs:
+        Added a style rule #tracker-tabs input[type="radio"] { display: none; } to hide the radio button circles
+        This makes the tracker tabs consistent with your other tabs
+
+The layout is now more space-efficient, with both the original and expansion factions appearing side-by-side in most viewport sizes. I also shortened "Spacing Guild" to just "Guild" to help with spacing in the layout.
+
+To implement these changes:
+
+    Replace your existing tracker tabs HTML with the code from "Improved HTML for Leader Numbers"
+    Add the CSS from "Improved CSS for Leader Numbers" to your stylesheet
+
+This should give you a more compact, two-column layout without the circle on the tabs.
+Claude can make mistakes. Please double-check responses.
+
+
+Tip:
+Long chats cause you to reach your usage limits faster.
+ 
+Improved CSS for Leader Numbers
+/* Update these styles in your CSS section */
+
+/* Fix the circle on tabs by making them consistent with other tabs */
+#tracker-tabs input[type="radio"] {
+  display: none;
+}
+
+/* Leader Numbers styles - more compact */
+.leader-numbers {
+  padding: 10px;
+  text-align: center;
+}
+
+.leader-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Force two columns */
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.leader-column {
+  text-align: left;
+}
+
+.leader-list {
+  list-style-type: none;
+  padding-left: 0;
+  line-height: 1.4; /* Reduced line height */
+  margin: 0;
+}
+
+.leader-list li {
+  margin-bottom: 3px; /* Reduced margin */
+  border-bottom: 1px dotted #ccc;
+  padding-bottom: 3px; /* Reduced padding */
+  font-size: 15px; /* Slightly smaller font */
+}
+
+/* Worm Tracker styles */
+.worm-tracker {
+  padding: 15px;
+  text-align: center;
+}
+
+.worm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.worm-button, .spice-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  color: white;
+}
+
+.worm-button {
+  background-color: #C4A484; /* Brown for worm */
+}
+
+.spice-button {
+  background-color: orange; /* Orange for spice */
+}
+
+@media (max-width: 500px) {
+  .leader-column {
+    flex-basis: 100%;
+    min-width: auto;
+  }
+  
+  .leader-list {
+    font-size: 14px;
+  }
+}
 @media (max-width: 500px) {
   .faction-selection {
     grid-template-columns: 1fr;
+  
   }
 }
 
@@ -1132,21 +1289,64 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<div class="worm-tracker" style="
-    margin: 20px auto;
-    padding: 15px;
-    border: 1px solid black;
-    max-width: 400px;
-    text-align: center;">
-    <h2>Worm Tracker</h2>
-    <p>Next Card: <span id="nextCardChance">28.57%</span></p>
-    <p>Within Two: <span id="withinTwoChance">48.69%</span></p>
-    <p>Cards Drawn: <span id="cardsDrawn">0</span></p>
-    <p>Cards Left: <span id="cardsLeft">21</span></p>
-    <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
-        <button onclick="drawCard(true)" style="padding: 10px; font-size: 16px; background-color: #C4A484; color: white; border: none; cursor: pointer; border-radius: 5px;">Worm</button>
-        <button onclick="drawCard(false)" style="padding: 10px; font-size: 16px; background-color: orange; color: white; border: none; cursor: pointer; border-radius: 5px;">Spice</button>
+<!-- Replace your existing tracker tabs HTML with this version -->
+<div class="tab-container" id="tracker-tabs">
+  <input name="tracker-tab-selector" type="radio" id="tracker-tab-link-01" checked>
+  <label for="tracker-tab-link-01" class="tab-name">Leader Numbers</label>
+  <input name="tracker-tab-selector" type="radio" id="tracker-tab-link-02">
+  <label for="tracker-tab-link-02" class="tab-name">Worm Tracker</label>
+  
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Leader Numbers Tab Content -->
+    <div id="tracker-tab-01" class="tab-panel">
+      <div class="leader-numbers">
+        <h2>Faction Leader Values</h2>
+        <div class="leader-columns">
+          <!-- Left Column -->
+          <div class="leader-column">
+            <h3>Original Factions</h3>
+            <ul class="leader-list">
+              <li><strong>Atreides:</strong> 5, 5, 4, 2, 1</li>
+              <li><strong>Gesserit:</strong> 5, 5, 5, 5, 5</li>
+              <li><strong>Choam:</strong> 4, 4, 3, 3, 2, 2</li>
+              <li><strong>Emperor:</strong> 6, 5, 3, 3, 2</li>
+              <li><strong>Fremen:</strong> 7, 6, 5, 3, 2</li>
+              <li><strong>Harkonnen:</strong> 6, 4, 3, 2, 1</li>
+            </ul>
+          </div>
+          
+          <!-- Right Column -->
+          <div class="leader-column">
+            <h3>Expansion Factions</h3>
+            <ul class="leader-list">
+              <li><strong>Ixians:</strong> 5, 5, 4, 2, 1</li>
+              <li><strong>Richese:</strong> 5, 4, 3, 2, 2</li>
+              <li><strong>Guild:</strong> 5, 3, 3, 2, 1</li>
+              <li><strong>Tleilaxu:</strong> X, 4, 3, 2, 1</li>
+              <li><strong>Moritani:</strong> 6, 5, 4, 4, 2, 1</li>
+              <li><strong>Ecaz:</strong> 6, 4, 4, 3, 3, 2</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
+    
+    <!-- Worm Tracker Tab Content -->
+    <div id="tracker-tab-02" class="tab-panel">
+      <div class="worm-tracker">
+        <h2>Worm Tracker</h2>
+        <p>Next Card: <span id="nextCardChance">28.57%</span></p>
+        <p>Within Two: <span id="withinTwoChance">48.69%</span></p>
+        <p>Cards Drawn: <span id="cardsDrawn">0</span></p>
+        <p>Cards Left: <span id="cardsLeft">21</span></p>
+        <div class="worm-buttons">
+          <button onclick="drawCard(true)" class="worm-button">Worm</button>
+          <button onclick="drawCard(false)" class="spice-button">Spice</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Service Worker for PWA -->
