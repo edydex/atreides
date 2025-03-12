@@ -37,7 +37,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center; /* Center columns */
-    gap: 10px; /* Add spacing between columns */
+    gap: 5px; /* Add spacing between columns */
     width: 100%;
 }
 
@@ -52,13 +52,56 @@
 		.money-controls { display: flex; gap: 15px; justify-content: center; }
         
         @media (max-width: 500px) {
-			body {font-size: 15px; }
-            .container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; justify-content: center; }
-            .faction { width: 175px; }
-			input[type="text"] {
-				width: 70%; /* Make it smaller on phones */
-        }
-	}
+    body {
+        font-size: 15px;
+        padding: 5px; /* Reduce body padding on mobile */
+    }
+    
+    .container { 
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 10px; 
+        justify-content: center;
+    }
+    
+    .faction { 
+        width: 175px; 
+    }
+    
+    input[type="text"] {
+        width: 70%; /* Make it smaller on phones */
+    }
+    
+    /* Tab improvements */
+    .tab-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 -5px; /* Align with reduced body padding */
+        padding: 0;
+    }
+    
+    .tab-name {
+        padding: 6px 5px;
+        margin-right: 1px;
+        font-size: 13px;
+        flex-grow: 1; /* Make tabs expand to fill space */
+        text-align: center;
+    }
+    
+    .tab-panel {
+        margin: 0;
+        padding: 5px;
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+        width: 100%;
+    }
+    
+    .card-columns {
+        gap: 5px;
+    }
+}
+  
 
 /* Discard pile styling */
 .discard-pile {
