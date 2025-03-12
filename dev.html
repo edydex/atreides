@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dune - Atreides Sheet</title>
+<!-- flaceholder favicon line here, will be added in prod -->
+  <link rel="manifest" href="manifest.json">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 15px; font-size: 16px;}
+        .container { display: flex; justify-content: space-around; flex-wrap: wrap; }
+        .faction { border: 1px solid #000; padding: 1px; width: 15%; min-width: 175px; }
+.card-pool {
+    margin: 10px auto;
+    padding: 1px;
+
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center everything */
+    max-width: 400px; /* Prevent columns from spreading too far apart */
+}
+.faction h2 {
+
+    border-bottom: 4px solid; /* Thick underline */
+    padding-bottom: 5px; /* Adds spacing between underline and text */
+}
+
+#atreides h2 { border-color: green; }
+#gesserit h2 { border-color: blue; }
+#emperor h2 { border-color: red; }
+#fremen h2 { border-color: yellow; }
+#guild h2 { border-color: orange; }
+#harkonnen h2 { border-color: black; }
+
+
+.card-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center columns */
+    gap: 10px; /* Add spacing between columns */
+    width: 100%;
+}
+
+.card-column {
+    flex: 1;
+    min-width: 45%; /* Keep two columns even on small screens */
+}
+    input[type="text"] {
+        width: 85%; /* Default width */
+    }
+
+		.money-controls { display: flex; gap: 15px; justify-content: center; }
+        
+        @media (max-width: 500px) {
+			body {font-size: 15px; }
+            .container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; justify-content: center; }
+            .faction { width: 175px; }
+			input[type="text"] {
+				width: 70%; /* Make it smaller on phones */
+        }
+	}
+
+/* Discard pile styling */
+.discard-pile {
+    margin: 20px auto;
+    padding: 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+
+}
+
+.discard-pile h2 {
+    border-bottom: 4px solid #8B4513; /* Brown border for discard pile */
+    padding-bottom: 5px;
+    color: #8B4513;
+}
+
+.restore-button {
+    margin: 10px 0;
+    padding: 8px 15px;
+    background-color: #8B4513;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.restore-button:hover {
+    background-color: #6b3510;
+}
+/* Card popup styling */
+.card-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-svg {
+    max-width: 90%;
+    max-height: 90%;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Tab styling */
+.tab-container {
+  width: 100%;
+}
+
+.tab-name {
+  display: inline-block;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
+  background-color: #f1f1f1;
+  margin-right: 5px;
+  
+}
+
+/* Hide radio buttons */
+input[name="tab-selector"] {
+  display: none;
+}
+
+/* Tab content styling */
+.tab-panel {
+  display: none;
+  padding: 1px;
+  border: 1px solid #ccc;
+  border-radius: 0 5px 5px 5px;
+}
+
+/* Show active tab */
+#tab-link-01:checked ~ .tab-content #tab-01,
+#tab-link-02:checked ~ .tab-content #tab-02,
+#tab-link-03:checked ~ .tab-content #tab-03 {
+  display: block;
+}
+
+/* Style for active tab label */
+#tab-link-01:checked + .tab-name,
+#tab-link-02:checked + .tab-name,
+#tab-link-03:checked + .tab-name {
+  background-color: white;
+  border-bottom: 1px solid white;
+  position: relative;
+  z-index: 1;
+}
+
+/* Expansion pool styling */
+.expansion-pool {
+    margin: 20px auto;
+    padding: 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+}
+
+.expansion-pool h2 {
+    border-bottom: 4px solid #663399; /* Purple border for expansion */
+    padding-bottom: 5px;
+    color: #663399;
+}
+    </style>
+</head>
+<body>
+    <h1>Atreides Tracker Sheet</h1>
+<!-- Treachery, Discard and Expansion Piles tabs -->
+<div class="tab-container">
+  <input name="tab-selector" type="radio" id="tab-link-01" checked>
+  <label for="tab-link-01" class="tab-name">Treachery Pile</label>
+  <input name="tab-selector" type="radio" id="tab-link-02">
+  <label for="tab-link-02" class="tab-name">Discard Pile</label>
+  <input name="tab-selector" type="radio" id="tab-link-03">
+  <label for="tab-link-03" class="tab-name">Expansion Cards</label>
+  
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Treachery Pile Tab Content -->
+    <div id="tab-01" class="tab-panel">
+      <div class="card-pool">
+        <!-- <h2>Treachery Card Pool</h2> -->
+        <div class="card-columns">
+          <div class="card-column" id="cardPool1"></div>
+          <div class="card-column" id="cardPool2"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Discard Pile Tab Content -->
+    <div id="tab-02" class="tab-panel">
+      <div class="discard-pile">
+        <!-- <h2>Discard Pile</h2> -->
+        <div class="card-columns">
+          <div class="card-column" id="discardPool1"></div>
+          <div class="card-column" id="discardPool2"></div>
+        </div>
+        <button id="restoreAllCards" class="restore-button">Return All Cards to Pool</button>
+      </div>
+    </div>
+
+    <!-- Expansion Cards Tab Content -->
+    <div id="tab-03" class="tab-panel">
+      <div class="expansion-pool">
+        <div class="card-columns">
+          <div class="card-column" id="expansionPool1"></div>
+          <div class="card-column" id="expansionPool2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    <div class="container">
+	<!-- JS code begins -->
+    <script>
+		//Card pool contents
+        let cardPool = {
+            "Worthless": 5,
+            "Weapon- Projectile": 4,
+            "Defense- Projectile": 4,
+            "Weapon- Poison": 4,
+            "Defense- Poison": 4,
+            "Lasgun": 1,
+            "Cheap Hero": 3,
+            "Family Atomics": 1,
+            "Hajr (movement)": 1,
+            "Karama": 2,
+            "Ghola (HeroHeal)": 1,
+            "Truthtrance": 2,
+            "Weather Control": 1
+        };
+        
+        // Track discarded cards
+        let discardPile = {};
+            
+        // Initialize discard pile with 0 counts
+        for (let card in cardPool) {
+            discardPile[card] = 0;
+        }
+
+        // Expansion cards
+        let expansionPool = {
+            "Weapon- Projectile": 1,
+            "Weapon- Poison": 1, 
+            "Defense- Projectile": 1, 
+            "Defense- Poison": 1, 
+            "Worthless": 1, 
+            "Poison Tooth": 1, 
+            "Amal": 1, 
+            "Recruits": 1, 
+            "Harass & Withdraw": 1, 
+            "Spice Harvester": 1, 
+            "Thumper": 1
+        };
+
+        // Default starting money per faction
+        let factionMoney = {
+            "atreides": 10,
+            "gesserit": 5,
+            "emperor": 10,
+            "fremen": 3,
+            "guild": 5,
+            "harkonnen": 10
+        };
+        
+        // Card functions I don't understand, but they work
+        function updateCardPool() {
+			let pool1 = document.getElementById('cardPool1');
+			let pool2 = document.getElementById('cardPool2');
+			pool1.innerHTML = '';
+			pool2.innerHTML = '';
+			let index = 0;
+			for (let card in cardPool) {
+			let li = document.createElement('li');
+			let cardText = document.createElement('span');
+			cardText.textContent = `${card}: ${cardPool[card]}`;
+			cardText.style.cursor = 'pointer';
+			cardText.onclick = function() {
+				showCardSvg(card);
+			};
+			li.appendChild(cardText);
+			if (index % 2 === 0) {
+				pool1.appendChild(li);
+			} else {
+				pool2.appendChild(li);
+			}
+			index++;
+			}
+		}
+            
+        // Function to update the discard pile display
+        function updateDiscardPile() {
+            let pool1 = document.getElementById('discardPool1');
+            let pool2 = document.getElementById('discardPool2');
+            pool1.innerHTML = '';
+            pool2.innerHTML = '';
+            let index = 0;
+            let hasCards = false;
+            
+            for (let card in discardPile) {
+                if (discardPile[card] > 0) {
+                    hasCards = true;
+                    let li = document.createElement('li');
+                    let cardText = document.createElement('span');
+                    cardText.textContent = `${card}: ${discardPile[card]}`;
+                    cardText.style.cursor = 'pointer';
+                    cardText.onclick = function() {
+                        showCardSvg(card);
+                    };
+                    li.appendChild(cardText);
+                    if (index % 2 === 0) {
+                        pool1.appendChild(li);
+                    } else {
+                       pool2.appendChild(li);
+                    }
+                    index++;
+                }
+            }
+                // If no cards in discard pile, show a message (doesn't seem to work)
+                if (!hasCards) {
+                    let li = document.createElement('li');
+                    li.textContent = "No cards discarded";
+                    pool1.appendChild(li);
+                }
+            }
+
+        // Function to update the expansion pool display
+        function updateExpansionPool() {
+            let pool1 = document.getElementById('expansionPool1');
+            let pool2 = document.getElementById('expansionPool2');
+            pool1.innerHTML = '';
+            pool2.innerHTML = '';
+            let index = 0;
+            let hasCards = false;
+            
+            for (let card in expansionPool) {
+                if (expansionPool[card] > 0) {
+                    hasCards = true;
+                    let li = document.createElement('li');
+                    
+                    // Create clickable card name
+                    let cardText = document.createElement('span');
+                    cardText.textContent = `${card}: ${expansionPool[card]}`;
+                    cardText.style.cursor = 'pointer';
+                    cardText.onclick = function() {
+                        showCardSvg(card);
+                    };
+                    li.appendChild(cardText);
+                    
+                    // Add button to move card to main pool
+                    let addToMainBtn = document.createElement('button');
+                    addToMainBtn.textContent = " [Add to Main]";
+                    addToMainBtn.style.marginLeft = "10px";
+                    addToMainBtn.onclick = function() {
+                        addToMainPool(card);
+                    };
+                    li.appendChild(addToMainBtn);
+                    
+                    if (index % 2 === 0) {
+                        pool1.appendChild(li);
+                    } else {
+                        pool2.appendChild(li);
+                    }
+                    index++;
+                }
+            }
+            
+            // If no cards in expansion pile, show a message
+            if (!hasCards) {
+                let li = document.createElement('li');
+                li.textContent = "All expansion cards added";
+                pool1.appendChild(li);
+            }
+        }
+
+        // Function to add a card from expansion to main pool
+        function addToMainPool(cardName) {
+            if (expansionPool[cardName] > 0) {
+                // Check if card exists in main pool, if not add it
+                if (cardPool[cardName] === undefined) {
+                    cardPool[cardName] = 0;
+                    // Also add to discard pile object if it's a new card
+                    discardPile[cardName] = 0;
+                }
+                
+                // Move the card
+                cardPool[cardName]++;
+                expansionPool[cardName]--;
+                
+                // Update displays
+                updateCardPool();
+                updateExpansionPool();
+                
+                // Save state
+                saveData();
+            }
+        }
+			
+        // Assigning cards to each faction
+		function addCard(faction) {
+			let dropdown = document.getElementById(`cardDropdown-${faction}`);
+			let cardName = dropdown.value;
+			if (cardName && cardPool[cardName] > 0) {
+			let li = document.createElement('li');
+			li.textContent = cardName;
+
+			let returnBtn = document.createElement('button');
+			returnBtn.textContent = " [Return]";
+			returnBtn.style.marginLeft = "10px";
+			returnBtn.onclick = function () {
+				returnCard(faction, cardName, li);
+			};
+
+			li.appendChild(returnBtn);
+			document.getElementById(`cardList-${faction}`).appendChild(li);
+			cardPool[cardName]--;
+			updateCardPool();
+            saveData();
+			}
+		}
+
+		// Send card to discard pile instead of directly back to Treachery pool
+		function returnCard(faction, cardName, cardElement) {
+			// Increase the count in the discard pile
+			discardPile[cardName]++;
+
+			// Remove card from player's list
+			cardElement.remove();
+
+			// Update the discard pile display
+			updateDiscardPile();
+    
+			// Update the Treachery Card Pool display (unchanged card counts)
+			updateCardPool();
+    
+			// Save the game state
+			saveData();
+		}
+
+		// Function to restore all cards from discard pile to the main pool
+		function restoreAllCards() {
+			for (let card in discardPile) {
+			if (discardPile[card] > 0) {
+            cardPool[card] += discardPile[card];
+            discardPile[card] = 0;
+			}
+			}
+			// Update both displays
+			updateCardPool();
+			updateDiscardPile();
+    
+			// Save the game state
+			saveData();
+		}
+		
+        // Function to keep track of Money
+        function adjustMoney(faction, amount) {
+            let moneyElement = document.getElementById(`money-${faction}`);
+            let money = parseInt(moneyElement.textContent) + amount;
+            moneyElement.textContent = money;
+            saveData();
+        }
+        // Function to add Traitors
+        function addTraitor(faction) {
+            let traitorInput = document.getElementById(`traitorInput-${faction}`);
+            let traitorName = traitorInput.value;
+            if (traitorName) {
+                let li = document.createElement('li');
+                li.textContent = traitorName;
+                document.getElementById(`traitorList-${faction}`).appendChild(li);
+                traitorInput.value = '';
+                saveData();
+            }
+        }
+        // Function for Money, Treachery, and Traitor Controls
+            const factions = ['atreides', 'gesserit', 'emperor', 'fremen', 'guild', 'harkonnen'];
+            factions.forEach(faction => {
+                document.write(`
+                    <div class="faction" id="${faction}">
+                        <h2>${faction.charAt(0).toUpperCase() + faction.slice(1)}</h2>
+                        <h3>Money: <span id="money-${faction}">${factionMoney[faction]}</span></h3>
+                        <div class="money-controls">
+                            <button onclick="adjustMoney('${faction}', -5)">-5</button>
+                            <button onclick="adjustMoney('${faction}', -1)">-1</button>
+                            <button onclick="adjustMoney('${faction}', 1)">+1</button>
+                            <button onclick="adjustMoney('${faction}', 5)">+5</button>
+
+                        </div>
+                        <h3>Treachery Cards</h3>
+                        <select id="cardDropdown-${faction}">
+                            ${Object.keys({...cardPool, ...expansionPool}).map(card => `<option value="${card}">${card}</option>`).join('')}
+                        </select>
+                        <button onclick="addCard('${faction}')">Add Card</button>
+                        <ul id="cardList-${faction}"></ul>
+                        <h3>Traitors</h3>
+                        <input type="text" id="traitorInput-${faction}" placeholder="Enter traitor name">
+                        <button onclick="addTraitor('${faction}')">Add Traitor</button>
+                        <ul id="traitorList-${faction}"></ul>
+                    </div>
+                `);
+            });
+            
+            // Initialize displays
+            updateCardPool();
+            updateDiscardPile();
+            updateExpansionPool();
+            
+            // Add event listener for the restore button
+            document.getElementById('restoreAllCards').addEventListener('click', restoreAllCards);
+			
+    </script>
+	<!-- Script for Faction Cards and Treachery Pile over -->
+	</div>
+	<!-- div for main content container over -->
+	
+	<!-- "Other Notes" block code -->
+    <div style="margin-top: 20px; margin-bottom: 50px;">
+        <h2>Other Notes</h2>
+       <textarea id="miscNotes" placeholder="Write your notes here..." 
+			style="width: 95%; max-width: 800px; min-height: 100px; padding: 10px; font-size: 16px; resize: none; overflow: hidden; display: block; margin: 0 auto 20px auto;"></textarea>
+
+    </div>
+
+    <script>
+        const notesBox = document.getElementById("miscNotes");
+
+        // Auto-expand function
+        notesBox.addEventListener("input", function () {
+            this.style.height = "auto"; // Reset height
+            this.style.height = this.scrollHeight + "px"; // Set to new height
+        });
+
+        // Add bottom space
+        document.body.style.paddingBottom = "50px";
+    </script>
+	<!-- "Other Notes" code over -->
+	
+	<!-- Script for Saving Data begins -->
+	<script>
+    function saveData() {
+        const factions = ['atreides', 'gesserit', 'emperor', 'fremen', 'guild', 'harkonnen'];
+
+        let gameState = {
+            money: {},
+            treacheryCards: {},
+            traitors: {},
+            notes: document.getElementById("miscNotes").value,
+            cardPool: {},
+            discardPile: {}, // Add discard pile to saved state
+            expansionPool: {} // Add expansion pool to saved state
+        };
+
+        // Save money values
+        factions.forEach(faction => {
+            gameState.money[faction] = parseInt(document.getElementById(`money-${faction}`).textContent);
+        });
+
+        // Save Treachery Cards for each faction (including return buttons)
+        factions.forEach(faction => {
+            let cardList = document.getElementById(`cardList-${faction}`);
+            gameState.treacheryCards[faction] = Array.from(cardList.children).map(li => li.textContent.replace(" [Return]", ""));
+        });
+
+        // Save Traitor names for each faction
+        factions.forEach(faction => {
+            let traitorList = document.getElementById(`traitorList-${faction}`);
+            gameState.traitors[faction] = Array.from(traitorList.children).map(li => li.textContent);
+        });
+
+        // Save current Treachery Card Pool counts
+        for (let card in cardPool) {
+            gameState.cardPool[card] = cardPool[card];
+        }
+        
+        // Save current Discard Pile counts
+        for (let card in discardPile) {
+            gameState.discardPile[card] = discardPile[card];
+        }
+        
+        // Save current Expansion Pool counts
+        for (let card in expansionPool) {
+            gameState.expansionPool[card] = expansionPool[card];
+        }
+
+        localStorage.setItem("duneTrackerData", JSON.stringify(gameState));
+    }
+	// Fuction to Restore localStorage data
+    function loadData() {
+        let savedData = localStorage.getItem("duneTrackerData");
+        if (!savedData) return;
+        savedData = JSON.parse(savedData);
+
+        // Restore Money
+        for (let faction in savedData.money) {
+            document.getElementById(`money-${faction}`).textContent = savedData.money[faction];
+        }
+
+        // Restore Treachery Cards for each faction
+        for (let faction in savedData.treacheryCards) {
+            let cardList = document.getElementById(`cardList-${faction}`);
+            cardList.innerHTML = ""; // Clear previous content
+            savedData.treacheryCards[faction].forEach(cardName => {
+                addCardToFaction(faction, cardName);
+            });
+        }
+
+        // Restore Traitor List
+        for (let faction in savedData.traitors) {
+            let traitorList = document.getElementById(`traitorList-${faction}`);
+            traitorList.innerHTML = ""; // Clear previous content
+            savedData.traitors[faction].forEach(name => {
+                let li = document.createElement('li');
+                li.textContent = name;
+                traitorList.appendChild(li);
+            });
+        }
+
+        // Restore Treachery Card Pool counts
+        if (savedData.cardPool) {
+            cardPool = savedData.cardPool;
+            updateCardPool(); // Ensure the displayed pool matches saved values
+        }
+        
+        // Restore Discard Pile counts
+        if (savedData.discardPile) {
+            discardPile = savedData.discardPile;
+            updateDiscardPile(); // Update the discard pile display
+        }
+        
+        // Restore Expansion Pool counts if they exist in saved data
+        if (savedData.expansionPool) {
+            expansionPool = savedData.expansionPool;
+            updateExpansionPool(); // Update the expansion pool display
+        }
+
+        // Restore Misc. Notes
+        document.getElementById("miscNotes").value = savedData.notes;
+    }  
+
+    // Function to add card to a faction (ensuring return button exists)
+    function addCardToFaction(faction, cardName) {
+        let li = document.createElement('li');
+        li.textContent = cardName;
+
+        let returnBtn = document.createElement('button');
+        returnBtn.textContent = " [Return]";
+        returnBtn.style.marginLeft = "10px";
+        returnBtn.onclick = function () {
+            returnCard(faction, cardName, li);
+        };
+
+        li.appendChild(returnBtn);
+        document.getElementById(`cardList-${faction}`).appendChild(li);
+    }
+
+    // Auto-save every 2 seconds
+    intervalFix = setInterval(saveData, 2000);
+
+    // Load data when the page loads
+    window.onload = function() {
+        loadData();
+        updateDiscardPile(); // Make sure discard pile is initialized
+        updateExpansionPool(); // Initialize expansion pool
+    };
+	
+	// "Big Red Button" to reset/ nuke/ erase all localStorage
+	function resetData() {
+    if (confirm("Are you sure you want to reset all data? This will erase everything!")) {
+		clearInterval(intervalFix);
+        localStorage.removeItem("duneTrackerData"); // Fully clears localStorage
+        location.reload(); // Reloads the page to apply reset
+    }
+}
+// Initialize deck
+let totalCards = 21;
+let totalWorms = 6;
+let cardsDrawn = 0;
+let wormsLeft = totalWorms;
+
+// Function to update the displayed percentages
+function updateWormChances() {
+    let cardsLeft = totalCards - cardsDrawn;
+    if (cardsLeft <= 0) return;
+
+    let nextCardChance = (wormsLeft / cardsLeft) * 100;
+    let withinTwoChance = (1 - ((cardsLeft - wormsLeft) / cardsLeft) * ((cardsLeft - wormsLeft - 1) / (cardsLeft - 1))) * 100;
+
+    document.getElementById("nextCardChance").textContent = nextCardChance.toFixed(2) + "%";
+    document.getElementById("withinTwoChance").textContent = withinTwoChance.toFixed(2) + "%";
+    document.getElementById("cardsDrawn").textContent = cardsDrawn;
+    document.getElementById("cardsLeft").textContent = cardsLeft;
+}
+
+// Function to handle card draw
+function drawCard(isWorm) {
+    if (cardsDrawn >= totalCards) return; // Stop if all cards are drawn
+
+    cardsDrawn++; // Increase drawn count
+    if (isWorm) wormsLeft--; // Reduce worm count if a worm is drawn
+
+    updateWormChances(); // Refresh UI
+    saveData(); // Save the worm tracker state
+}
+
+// Function to display cards when they are clicked in the Treachery Pool
+function showCardSvg(cardName) {
+    const modal = document.getElementById('cardModal');
+    const svgContainer = document.getElementById('cardSvgContainer');
+    
+    // Set the SVG based on card name
+    let svgContent = getCardSvg(cardName);
+    svgContainer.innerHTML = svgContent;
+    
+    // Show the modal
+    modal.style.display = 'flex';
+    
+    // Prevent clicks on the SVG from closing the modal
+    svgContainer.onclick = function(event) {
+        event.stopPropagation();
+    };
+}
+
+function closeCardModal() {
+    document.getElementById('cardModal').style.display = 'none';
+}
+
+// Assign SVGs to each card
+function getCardSvg(cardName) {
+    // SVG data for each card (actual paths will be added in prod)
+    const svgData = {
+        "Worthless": `<svg width="822" height="1122" version="1.1" viewBox="0 0 822 1122" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="m406.5 80.008c-359.66 1e-6 -323.99-0.76908-328.04 7.0605-2.7494 5.3168-2.4921...  0h215v11h-215v-5.5z"/></svg>`,
+        "Weapon- Projectile": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Projectile Weapon</text></svg>`,
+        "Defense- Projectile": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Projectile Defense</text></svg>`,
+        // Add placeholder SVGs for all other cards
+        "Weapon- Poison": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Poison Weapon</text></svg>`,
+        "Defense- Poison": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Poison Defense</text></svg>`,
+        "Lasgun": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Lasgun</text></svg>`,
+        "Cheap Hero": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Cheap Hero</text></svg>`,
+        "Family Atomics": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Family Atomics</text></svg>`,
+        "Hajr (movement)": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Hajr</text></svg>`,
+        "Karama": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Karama</text></svg>`,
+        "Ghola (HeroHeal)": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Ghola</text></svg>`,
+        "Truthtrance": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Truthtrance</text></svg>`,
+        "Weather Control": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Weather Control</text></svg>`,
+        // New expansion cards
+        "Poison Tooth": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Poison Tooth</text></svg>`,
+        "Amal": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Amal</text></svg>`,
+        "Recruits": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Recruits</text></svg>`,
+        "Harass & Withdraw": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Harass & Withdraw</text></svg>`,
+        "Spice Harvester": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Spice Harvester</text></svg>`,
+        "Thumper": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Thumper</text></svg>`
