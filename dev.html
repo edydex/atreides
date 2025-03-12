@@ -217,10 +217,207 @@ input[name="tab-selector"] {
     padding-bottom: 5px;
     color: #4B0082;
 }
-    </style>
+
+
+/* Faction Management Button */
+.faction-management {
+  margin: 10px 0 20px 0;
+  text-align: center;
+}
+
+.manage-factions-btn {
+  padding: 8px 15px;
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.manage-factions-btn:hover {
+  background-color: #333;
+}
+
+/* Faction Modal Styles */
+.faction-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.faction-modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.faction-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.faction-modal-header h3 {
+  margin: 0;
+}
+
+.close-modal {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.faction-selection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.faction-option {
+  padding: 5px;
+}
+
+.expansion-faction {
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+.faction-modal-footer {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.apply-factions-btn {
+  padding: 8px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.apply-factions-btn:hover {
+  background-color: #3e8e41;
+}
+
+/* Additional styles for expansion factions */
+#ecaz h2 { border-color: #FF69B4; } /* Pink */
+#moritani h2 { border-color: #008080; } /* Teal */
+#ixians h2 { border-color: #bbb0a5; } /* Greige */
+#tleilaxu h2 { border-color: #800080; } /* Purple */
+#choam h2 { 
+  border-color: #000; 
+  position: relative;
+}
+#choam h2:after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(45deg, #ff0000, #ff0000 10px, #000 10px, #000 20px);
+}
+#richese h2 { border-color: #D3D3D3; } /* Light Gray */
+
+@media (max-width: 500px) {
+  .faction-selection {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
 </head>
 <body>
     <h1>Atreides Tracker Sheet</h1>
+<!-- Add this HTML section right after the main heading and before the tab container -->
+<div class="faction-management">
+  <button id="manageFactions" class="manage-factions-btn">Manage Factions</button>
+  
+  <!-- Faction Selection Modal -->
+  <div id="factionModal" class="faction-modal">
+    <div class="faction-modal-content">
+      <div class="faction-modal-header">
+        <h3>Select Factions</h3>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="faction-selection">
+        <!-- Original factions -->
+        <div class="faction-option">
+          <input type="checkbox" id="faction-atreides" checked>
+          <label for="faction-atreides">Atreides (Green) - 10 spice</label>
+        </div>
+        <div class="faction-option">
+          <input type="checkbox" id="faction-harkonnen">
+          <label for="faction-harkonnen">Harkonnen (Black) - 10 spice</label>
+        </div>
+        <div class="faction-option">
+          <input type="checkbox" id="faction-emperor">
+          <label for="faction-emperor">Emperor (Red) - 10 spice</label>
+        </div>
+        <div class="faction-option">
+          <input type="checkbox" id="faction-fremen">
+          <label for="faction-fremen">Fremen (Yellow) - 3 spice</label>
+        </div>
+        <div class="faction-option">
+          <input type="checkbox" id="faction-guild">
+          <label for="faction-guild">Guild (Orange) - 5 spice</label>
+        </div>
+        <div class="faction-option">
+          <input type="checkbox" id="faction-gesserit">
+          <label for="faction-gesserit">Gesserit (Blue) - 5 spice</label>
+        </div>
+        
+        <!-- Expansion factions -->
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-ecaz">
+          <label for="faction-ecaz">Ecaz (Pink) - 12 spice</label>
+        </div>
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-moritani">
+          <label for="faction-moritani">Moritani (Teal) - 12 spice</label>
+        </div>
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-ixians">
+          <label for="faction-ixians">Ixians (Greige) - 10 spice</label>
+        </div>
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-tleilaxu">
+          <label for="faction-tleilaxu">Tleilaxu (Purple) - 5 spice</label>
+        </div>
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-choam">
+          <label for="faction-choam">Choam (Red/Black) - 2 spice</label>
+        </div>
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-richese">
+          <label for="faction-richese">Richese (Light Gray) - 5 spice</label>
+        </div>
+      </div>
+      <div class="faction-modal-footer">
+        <button id="applyFactions" class="apply-factions-btn">Apply Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Treachery, Discard, and Expansion Piles tabs -->
 <div class="tab-container">
   <input name="tab-selector" type="radio" id="tab-link-01" checked>
@@ -266,453 +463,352 @@ input[name="tab-selector"] {
     </div>
   </div>
 </div>
+
+<!-- This will be the container for faction cards, replace your existing container div with this -->
+<div id="factionContainer" class="container">
+  <!-- Faction cards will be generated here dynamically -->
+</div>    
+
+<!-- JS code begins -->
+<script>
+// Card pool contents
+let cardPool = {
+    "Worthless": 5,
+    "Weapon- Projectile": 4,
+    "Defense- Projectile": 4,
+    "Weapon- Poison": 4,
+    "Defense- Poison": 4,
+    "Lasgun": 1,
+    "Cheap Hero": 3,
+    "Family Atomics": 1,
+    "Hajr (movement)": 1,
+    "Karama": 2,
+    "Ghola (HeroHeal)": 1,
+    "Truthtrance": 2,
+    "Weather Control": 1
+};
+
+// Expansion cards
+let expansionCards = {
+    "Weapon- Projectile": 1,
+    "Weapon- Poison": 1,
+    "Defense- Projectile": 1,
+    "Defense- Poison": 1,
+    "Worthless": 1,
+    "Poison Tooth": 1,
+    "Amal": 1,
+    "Recruits": 1,
+    "Harass & Withdraw": 1,
+    "Spice Harvester": 1,
+    "Thumper": 1
+};
+
+// Initialize expansion pool with the expansion cards
+let expansionPool = {};
+for (let card in expansionCards) {
+    expansionPool[card] = expansionCards[card];
+}
+
+// Track discarded cards
+let discardPile = {};
     
-    <div class="container">
-	<!-- JS code begins -->
-    <script>
-		//Card pool contents
-        let cardPool = {
-            "Worthless": 5,
-            "Weapon- Projectile": 4,
-            "Defense- Projectile": 4,
-            "Weapon- Poison": 4,
-            "Defense- Poison": 4,
-            "Lasgun": 1,
-            "Cheap Hero": 3,
-            "Family Atomics": 1,
-            "Hajr (movement)": 1,
-            "Karama": 2,
-            "Ghola (HeroHeal)": 1,
-            "Truthtrance": 2,
-            "Weather Control": 1
-        };
-        
-        // Expansion cards
-        let expansionCards = {
-            "Weapon- Projectile": 1,
-            "Weapon- Poison": 1,
-            "Defense- Projectile": 1,
-            "Defense- Poison": 1,
-            "Worthless": 1,
-            "Poison Tooth": 1,
-            "Amal": 1,
-            "Recruits": 1,
-            "Harass & Withdraw": 1,
-            "Spice Harvester": 1,
-            "Thumper": 1
-        };
+// Initialize discard pile with 0 counts
+for (let card in cardPool) {
+    discardPile[card] = 0;
+}
 
-        // Initialize expansion pool with the expansion cards
-        let expansionPool = {};
-        for (let card in expansionCards) {
-            expansionPool[card] = expansionCards[card];
-        }
-        
-        // Track discarded cards
-        let discardPile = {};
-            
-        // Initialize discard pile with 0 counts
-        for (let card in cardPool) {
-            discardPile[card] = 0;
-        }
-        // Default starting money per faction
-        let factionMoney = {
-            "atreides": 10,
-            "gesserit": 5,
-            "emperor": 10,
-            "fremen": 3,
-            "guild": 5,
-            "harkonnen": 10
-        };
-        // Card functions I don't understand, but they work
-        function updateCardPool() {
-			let pool1 = document.getElementById('cardPool1');
-			let pool2 = document.getElementById('cardPool2');
-			pool1.innerHTML = '';
-			pool2.innerHTML = '';
-			let index = 0;
-			for (let card in cardPool) {
-			let li = document.createElement('li');
-			let cardText = document.createElement('span');
-			cardText.textContent = `${card}: ${cardPool[card]}`;
-			cardText.style.cursor = 'pointer';
-			cardText.onclick = function() {
-				showCardSvg(card);
-			};
-			li.appendChild(cardText);
-			if (index % 2 === 0) {
-				pool1.appendChild(li);
-			} else {
-				pool2.appendChild(li);
-			}
-			index++;
-			}
-		}
-            
-        // Function to update the discard pile display
-        function updateDiscardPile() {
-            let pool1 = document.getElementById('discardPool1');
-            let pool2 = document.getElementById('discardPool2');
-            pool1.innerHTML = '';
-            pool2.innerHTML = '';
-            let index = 0;
-            let hasCards = false;
-            
-            for (let card in discardPile) {
-                if (discardPile[card] > 0) {
-                    hasCards = true;
-                    let li = document.createElement('li');
-                    li.textContent = `${card}: ${discardPile[card]}`;
-                    if (index % 2 === 0) {
-                        pool1.appendChild(li);
-                    } else {
-                       pool2.appendChild(li);
-                    }
-                    index++;
-                }
-            }
-                // If no cards in discard pile, show a message (doesn't seem to work)
-                if (!hasCards) {
-                    let li = document.createElement('li');
-                    li.textContent = "No cards discarded";
-                    pool1.appendChild(li);
-                }
-            }
-        
-        // Function to update the expansion pool display
-        function updateExpansionPool() {
-            let pool1 = document.getElementById('expansionPool1');
-            let pool2 = document.getElementById('expansionPool2');
-            pool1.innerHTML = '';
-            pool2.innerHTML = '';
-            let index = 0;
-            let hasCards = false;
-            
-            for (let card in expansionPool) {
-                if (expansionPool[card] > 0) {
-                    hasCards = true;
-                    let li = document.createElement('li');
-                    let cardSpan = document.createElement('span');
-                    cardSpan.textContent = `${card}: ${expansionPool[card]}`;
-                    cardSpan.style.cursor = 'pointer';
-                    cardSpan.onclick = function() {
-                        showCardSvg(card);
-                    };
-                    
-                    // Add button to add card to main pool
-                    let addButton = document.createElement('button');
-                    addButton.textContent = " [Add to Main]";
-                    addButton.style.marginLeft = "10px";
-                    addButton.onclick = function() {
-                        addToMainPool(card);
-                    };
-                    
-                    li.appendChild(cardSpan);
-                    li.appendChild(addButton);
-                    
-                    if (index % 2 === 0) {
-                        pool1.appendChild(li);
-                    } else {
-                        pool2.appendChild(li);
-                    }
-                    index++;
-                }
-            }
-            
-            // If no cards in expansion pool, show a message
-            if (!hasCards) {
-                let li = document.createElement('li');
-                li.textContent = "All expansion cards have been added to the main pool";
-                pool1.appendChild(li);
-            }
-        }
+// Define all available factions with their starting money
+const allFactions = {
+  'atreides': { money: 10, name: 'Atreides', color: 'green' },
+  'gesserit': { money: 5, name: 'Gesserit', color: 'blue' },
+  'emperor': { money: 10, name: 'Emperor', color: 'red' },
+  'fremen': { money: 3, name: 'Fremen', color: 'yellow' },
+  'guild': { money: 5, name: 'Guild', color: 'orange' },
+  'harkonnen': { money: 10, name: 'Harkonnen', color: 'black' },
+  // Expansion factions
+  'ecaz': { money: 12, name: 'Ecaz', color: 'pink' },
+  'moritani': { money: 12, name: 'Moritani', color: 'teal' },
+  'ixians': { money: 10, name: 'Ixians', color: 'greige' },
+  'tleilaxu': { money: 5, name: 'Tleilaxu', color: 'purple' },
+  'choam': { money: 2, name: 'Choam', color: 'red/black' },
+  'richese': { money: 5, name: 'Richese', color: 'light gray' }
+};
 
-        // Function to add a card from expansion pool to main pool
-        function addToMainPool(cardName) {
-            if (expansionPool[cardName] > 0) {
-                // Check if card exists in main pool, add if it does
-                if (cardName in cardPool) {
-                    cardPool[cardName]++;
-                } else {
-                    // Add new card type to main pool if it doesn't exist
-                    cardPool[cardName] = 1;
-                    
-                    // Also add to discard pile tracking with 0 count
-                    discardPile[cardName] = 0;
-                    
-                    // Add to card dropdown options for all factions
-                    factions.forEach(faction => {
-                        let dropdown = document.getElementById(`cardDropdown-${faction}`);
-                        let option = document.createElement('option');
-                        option.value = cardName;
-                        option.textContent = cardName;
-                        dropdown.appendChild(option);
-                    });
-                }
-                
-                // Remove card from expansion pool
-                expansionPool[cardName]--;
-                
-                // Update displays
-                updateCardPool();
-                updateExpansionPool();
-                
-                // Save the game state
-                saveData();
-            }
-        }
-			
-        // Assigning cards to each faction
-		function addCard(faction) {
-			let dropdown = document.getElementById(`cardDropdown-${faction}`);
-			let cardName = dropdown.value;
-			if (cardName && cardPool[cardName] > 0) {
-			let li = document.createElement('li');
-			li.textContent = cardName;
+// Initial active factions - will be overridden by localStorage if available
+let activeFactions = ['atreides'];
 
-			let returnBtn = document.createElement('button');
-			returnBtn.textContent = " [Return]";
-			returnBtn.style.marginLeft = "10px";
-			returnBtn.onclick = function () {
-				returnCard(faction, cardName, li);
-			};
+// Modal control functions
+function openFactionModal() {
+  document.getElementById('factionModal').style.display = 'block';
+  
+  // Set checkboxes based on active factions
+  for (let faction in allFactions) {
+    document.getElementById(`faction-${faction}`).checked = activeFactions.includes(faction);
+  }
+}
 
-			li.appendChild(returnBtn);
-			document.getElementById(`cardList-${faction}`).appendChild(li);
-			cardPool[cardName]--;
-			updateCardPool();
-			}
-		}
+function closeFactionModal() {
+  document.getElementById('factionModal').style.display = 'none';
+}
 
-		// Send card to discard pile instead of directly back to Treachery pool
-		function returnCard(faction, cardName, cardElement) {
-			// Increase the count in the discard pile
-			discardPile[cardName]++;
-
-			// Remove card from player's list
-			cardElement.remove();
-
-			// Update the discard pile display
-			updateDiscardPile();
-    
-			// Update the Treachery Card Pool display (unchanged card counts)
-			updateCardPool();
-    
-			// Save the game state
-			saveData();
-		}
-
-		// Function to restore all cards from discard pile to the main pool
-		function restoreAllCards() {
-			for (let card in discardPile) {
-			if (discardPile[card] > 0) {
-            cardPool[card] += discardPile[card];
-            discardPile[card] = 0;
-			}
-			}
-			// Update both displays
-			updateCardPool();
-			updateDiscardPile();
-    
-			// Save the game state
-			saveData();
-		}
-		
-        // Function to keep track of Money
-        function adjustMoney(faction, amount) {
-            let moneyElement = document.getElementById(`money-${faction}`);
-            let money = parseInt(moneyElement.textContent) + amount;
-            moneyElement.textContent = money;
-        }
-        // Function to add Traitors
-        function addTraitor(faction) {
-            let traitorInput = document.getElementById(`traitorInput-${faction}`);
-            let traitorName = traitorInput.value;
-            if (traitorName) {
-                let li = document.createElement('li');
-                li.textContent = traitorName;
-                document.getElementById(`traitorList-${faction}`).appendChild(li);
-                traitorInput.value = '';
-            }
-        }
-        // Function for Money, Treachery, and Traitor Controls
-            const factions = ['atreides', 'gesserit', 'emperor', 'fremen', 'guild', 'harkonnen'];
-            factions.forEach(faction => {
-                document.write(`
-                    <div class="faction" id="${faction}">
-                        <h2>${faction.charAt(0).toUpperCase() + faction.slice(1)}</h2>
-                        <h3>Money: <span id="money-${faction}">${factionMoney[faction]}</span></h3>
-                        <div class="money-controls">
-                            <button onclick="adjustMoney('${faction}', -5)">-5</button>
-                            <button onclick="adjustMoney('${faction}', -1)">-1</button>
-                            <button onclick="adjustMoney('${faction}', 1)">+1</button>
-                            <button onclick="adjustMoney('${faction}', 5)">+5</button>
-
-                        </div>
-                        <h3>Treachery Cards</h3>
-                        <select id="cardDropdown-${faction}">
-                            ${Object.keys(cardPool).map(card => `<option value="${card}">${card}</option>`).join('')}
-                        </select>
-                        <button onclick="addCard('${faction}')">Add Card</button>
-                        <ul id="cardList-${faction}"></ul>
-                        <h3>Traitors</h3>
-                        <input type="text" id="traitorInput-${faction}" placeholder="Enter traitor name">
-                        <button onclick="addTraitor('${faction}')">Add Traitor</button>
-                        <ul id="traitorList-${faction}"></ul>
-                    </div>
-                `);
-            });
-            
-            updateCardPool();
-            updateDiscardPile();
-            updateExpansionPool();
-            
-            // Add event listener for the restore button
-            document.getElementById('restoreAllCards').addEventListener('click', restoreAllCards);
-			
-    </script>
-	<!-- Script for Faction Cards and Treachery Pile over -->
-	</div>
-	<!-- div for main content container over -->
-	
-	<!-- "Other Notes" block code -->
-    <div style="margin-top: 20px; margin-bottom: 50px;">
-        <h2>Other Notes</h2>
-       <textarea id="miscNotes" placeholder="Write your notes here..." 
-			style="width: 95%; max-width: 800px; min-height: 100px; padding: 10px; font-size: 16px; resize: none; overflow: hidden; display: block; margin: 0 auto 20px auto;"></textarea>
-
-    </div>
-
-    <script>
-        const notesBox = document.getElementById("miscNotes");
-
-        // Auto-expand function
-        notesBox.addEventListener("input", function () {
-            this.style.height = "auto"; // Reset height
-            this.style.height = this.scrollHeight + "px"; // Set to new height
-        });
-
-        // Add bottom space
-        document.body.style.paddingBottom = "50px";
-    </script>
-	<!-- "Other Notes" code over -->
-	
-	<!-- Script for Saving Data begins -->
-	<script>
-    function saveData() {
-        const factions = ['atreides', 'gesserit', 'emperor', 'fremen', 'guild', 'harkonnen'];
-
-        let gameState = {
-            money: {},
-            treacheryCards: {},
-            traitors: {},
-            notes: document.getElementById("miscNotes").value,
-            cardPool: {},
-            discardPile: {}, // Add discard pile to saved state
-            expansionPool: {} // Add expansion pool to saved state
-        };
-
-        // Save money values
-        factions.forEach(faction => {
-            gameState.money[faction] = parseInt(document.getElementById(`money-${faction}`).textContent);
-        });
-
-        // Save Treachery Cards for each faction (including return buttons)
-        factions.forEach(faction => {
-            let cardList = document.getElementById(`cardList-${faction}`);
-            gameState.treacheryCards[faction] = Array.from(cardList.children).map(li => li.textContent.replace(" [Return]", ""));
-        });
-
-        // Save Traitor names for each faction
-        factions.forEach(faction => {
-            let traitorList = document.getElementById(`traitorList-${faction}`);
-            gameState.traitors[faction] = Array.from(traitorList.children).map(li => li.textContent);
-        });
-
-        // Save current Treachery Card Pool counts
-        for (let card in cardPool) {
-            gameState.cardPool[card] = cardPool[card];
-        }
-        
-        // Save current Discard Pile counts
-        for (let card in discardPile) {
-            gameState.discardPile[card] = discardPile[card];
-        }
-        
-        // Save expansion pool counts
-        for (let card in expansionPool) {
-            gameState.expansionPool[card] = expansionPool[card];
-        }
-
-        localStorage.setItem("duneTrackerData", JSON.stringify(gameState));
+function applyFactionChanges() {
+  // Get selected factions
+  const newActiveFactions = [];
+  for (let faction in allFactions) {
+    if (document.getElementById(`faction-${faction}`).checked) {
+      newActiveFactions.push(faction);
     }
-	// Fuction to Restore localStorage data
-    function loadData() {
-        let savedData = localStorage.getItem("duneTrackerData");
-        if (!savedData) {
-            // Initialize expansion pool on first load
-            updateExpansionPool();
-            return;
-        }
-        
-        savedData = JSON.parse(savedData);
+  }
+  
+  // Update active factions
+  activeFactions = newActiveFactions;
+  
+  // Regenerate faction UI
+  generateFactionCards();
+  
+  // Save to localStorage
+  saveData();
+  
+  // Close modal
+  closeFactionModal();
+}
 
-        // Restore Money
-        for (let faction in savedData.money) {
-            document.getElementById(`money-${faction}`).textContent = savedData.money[faction];
-        }
+// Generate faction cards based on active factions
+function generateFactionCards() {
+  const container = document.getElementById('factionContainer');
+  container.innerHTML = ''; // Clear existing content
+  
+  // Create cards for each active faction
+  activeFactions.forEach(faction => {
+    const factionData = allFactions[faction];
+    const factionMoney = getMoneyForFaction(faction);
+    
+    const factionCard = document.createElement('div');
+    factionCard.className = 'faction';
+    factionCard.id = faction;
+    
+    factionCard.innerHTML = `
+      <h2>${factionData.name}</h2>
+      <h3>Money: <span id="money-${faction}">${factionMoney}</span></h3>
+      <div class="money-controls">
+        <button onclick="adjustMoney('${faction}', -5)">-5</button>
+        <button onclick="adjustMoney('${faction}', -1)">-1</button>
+        <button onclick="adjustMoney('${faction}', 1)">+1</button>
+        <button onclick="adjustMoney('${faction}', 5)">+5</button>
+      </div>
+      <h3>Treachery Cards</h3>
+      <select id="cardDropdown-${faction}">
+        ${Object.keys(cardPool).map(card => `<option value="${card}">${card}</option>`).join('')}
+      </select>
+      <button onclick="addCard('${faction}')">Add Card</button>
+      <ul id="cardList-${faction}"></ul>
+      <h3>Traitors</h3>
+      <input type="text" id="traitorInput-${faction}" placeholder="Enter traitor name">
+      <button onclick="addTraitor('${faction}')">Add Traitor</button>
+      <ul id="traitorList-${faction}"></ul>
+    `;
+    
+    container.appendChild(factionCard);
+  });
+  
+  // Restore cards and traitors from localStorage if available
+  restoreFactionData();
+}
 
-        // Restore Treachery Cards for each faction
-        for (let faction in savedData.treacheryCards) {
-            let cardList = document.getElementById(`cardList-${faction}`);
-            cardList.innerHTML = ""; // Clear previous content
-            savedData.treacheryCards[faction].forEach(cardName => {
-                addCardToFaction(faction, cardName);
-            });
-        }
+// Helper function to get money for a faction (either from saved state or default)
+function getMoneyForFaction(faction) {
+  // Try to get from saved state first
+  let savedData = localStorage.getItem("duneTrackerData");
+  if (savedData) {
+    savedData = JSON.parse(savedData);
+    if (savedData.money && savedData.money[faction] !== undefined) {
+      return savedData.money[faction];
+    }
+  }
+  
+  // If no saved state, return default
+  return allFactions[faction].money;
+}
 
-        // Restore Traitor List
-        for (let faction in savedData.traitors) {
-            let traitorList = document.getElementById(`traitorList-${faction}`);
-            traitorList.innerHTML = ""; // Clear previous content
-            savedData.traitors[faction].forEach(name => {
-                let li = document.createElement('li');
-                li.textContent = name;
-                traitorList.appendChild(li);
-            });
-        }
+// Helper function to restore cards and traitors after regenerating faction cards
+function restoreFactionData() {
+  let savedData = localStorage.getItem("duneTrackerData");
+  if (!savedData) return;
+  
+  savedData = JSON.parse(savedData);
+  
+  // Restore Treachery Cards for each faction
+  for (let faction of activeFactions) {
+    if (savedData.treacheryCards && savedData.treacheryCards[faction]) {
+      const cardList = document.getElementById(`cardList-${faction}`);
+      cardList.innerHTML = ""; // Clear previous content
+      savedData.treacheryCards[faction].forEach(cardName => {
+        addCardToFaction(faction, cardName);
+      });
+    }
+    
+    // Restore Traitor List
+    if (savedData.traitors && savedData.traitors[faction]) {
+      const traitorList = document.getElementById(`traitorList-${faction}`);
+      traitorList.innerHTML = ""; // Clear previous content
+      savedData.traitors[faction].forEach(name => {
+        let li = document.createElement('li');
+        li.textContent = name;
+        traitorList.appendChild(li);
+      });
+    }
+  }
+}
 
-        // Restore Treachery Card Pool counts
-        if (savedData.cardPool) {
-            cardPool = savedData.cardPool;
-            updateCardPool(); // Ensure the displayed pool matches saved values
-        }
-        
-        // Restore Discard Pile counts
-        if (savedData.discardPile) {
-            discardPile = savedData.discardPile;
-            updateDiscardPile(); // Update the discard pile display
-        }
-        
-        // Restore Expansion Pool counts
-        if (savedData.expansionPool) {
-            expansionPool = savedData.expansionPool;
+// Card functions
+function updateCardPool() {
+    let pool1 = document.getElementById('cardPool1');
+    let pool2 = document.getElementById('cardPool2');
+    pool1.innerHTML = '';
+    pool2.innerHTML = '';
+    let index = 0;
+    for (let card in cardPool) {
+        let li = document.createElement('li');
+        let cardText = document.createElement('span');
+        cardText.textContent = `${card}: ${cardPool[card]}`;
+        cardText.style.cursor = 'pointer';
+        cardText.onclick = function() {
+            showCardSvg(card);
+        };
+        li.appendChild(cardText);
+        if (index % 2 === 0) {
+            pool1.appendChild(li);
         } else {
-            // If no expansion pool in saved data, initialize it
-            expansionPool = {};
-            for (let card in expansionCards) {
-                expansionPool[card] = expansionCards[card];
+            pool2.appendChild(li);
+        }
+        index++;
+    }
+}
+    
+// Function to update the discard pile display
+function updateDiscardPile() {
+    let pool1 = document.getElementById('discardPool1');
+    let pool2 = document.getElementById('discardPool2');
+    pool1.innerHTML = '';
+    pool2.innerHTML = '';
+    let index = 0;
+    let hasCards = false;
+    
+    for (let card in discardPile) {
+        if (discardPile[card] > 0) {
+            hasCards = true;
+            let li = document.createElement('li');
+            let cardText = document.createElement('span');
+            cardText.textContent = `${card}: ${discardPile[card]}`;
+            cardText.style.cursor = 'pointer';
+            cardText.onclick = function() {
+                showCardSvg(card);
+            };
+            li.appendChild(cardText);
+            if (index % 2 === 0) {
+                pool1.appendChild(li);
+            } else {
+                pool2.appendChild(li);
             }
+            index++;
+        }
+    }
+    // If no cards in discard pile, show a message
+    if (!hasCards) {
+        let li = document.createElement('li');
+        li.textContent = "No cards discarded";
+        pool1.appendChild(li);
+    }
+}
+
+// Function to update the expansion pool display
+function updateExpansionPool() {
+    let pool1 = document.getElementById('expansionPool1');
+    let pool2 = document.getElementById('expansionPool2');
+    pool1.innerHTML = '';
+    pool2.innerHTML = '';
+    let index = 0;
+    let hasCards = false;
+    
+    for (let card in expansionPool) {
+        if (expansionPool[card] > 0) {
+            hasCards = true;
+            let li = document.createElement('li');
+            let cardSpan = document.createElement('span');
+            cardSpan.textContent = `${card}: ${expansionPool[card]}`;
+            cardSpan.style.cursor = 'pointer';
+            cardSpan.onclick = function() {
+                showCardSvg(card);
+            };
+            
+            // Add button to add card to main pool
+            let addButton = document.createElement('button');
+            addButton.textContent = " [Add to Main]";
+            addButton.style.marginLeft = "10px";
+            addButton.onclick = function() {
+                addToMainPool(card);
+            };
+            
+            li.appendChild(cardSpan);
+            li.appendChild(addButton);
+            
+            if (index % 2 === 0) {
+                pool1.appendChild(li);
+            } else {
+                pool2.appendChild(li);
+            }
+            index++;
+        }
+    }
+    
+    // If no cards in expansion pool, show a message
+    if (!hasCards) {
+        let li = document.createElement('li');
+        li.textContent = "All expansion cards have been added to the main pool";
+        pool1.appendChild(li);
+    }
+}
+
+// Function to add a card from expansion pool to main pool
+function addToMainPool(cardName) {
+    if (expansionPool[cardName] > 0) {
+        // Check if card exists in main pool, add if it does
+        if (cardName in cardPool) {
+            cardPool[cardName]++;
+        } else {
+            // Add new card type to main pool if it doesn't exist
+            cardPool[cardName] = 1;
+            
+            // Also add to discard pile tracking with 0 count
+            discardPile[cardName] = 0;
+            
+            // Add to card dropdown options for all factions
+            activeFactions.forEach(faction => {
+                let dropdown = document.getElementById(`cardDropdown-${faction}`);
+                let option = document.createElement('option');
+                option.value = cardName;
+                option.textContent = cardName;
+                dropdown.appendChild(option);
+            });
         }
         
-        updateExpansionPool(); // Update the expansion pool display
+        // Remove card from expansion pool
+        expansionPool[cardName]--;
+        
+        // Update displays
+        updateCardPool();
+        updateExpansionPool();
+        
+        // Save the game state
+        saveData();
+    }
+}
 
-        // Restore Misc. Notes
-        document.getElementById("miscNotes").value = savedData.notes;
-    }  
-
-    // Function to add card to a faction (ensuring return button exists)
-    function addCardToFaction(faction, cardName) {
+// Assigning cards to each faction
+function addCard(faction) {
+    let dropdown = document.getElementById(`cardDropdown-${faction}`);
+    let cardName = dropdown.value;
+    if (cardName && cardPool[cardName] > 0) {
         let li = document.createElement('li');
         li.textContent = cardName;
 
@@ -725,73 +821,186 @@ input[name="tab-selector"] {
 
         li.appendChild(returnBtn);
         document.getElementById(`cardList-${faction}`).appendChild(li);
+        cardPool[cardName]--;
+        updateCardPool();
+        saveData();
     }
+}
 
-    // Function to add a card from pool to faction
-    function addCard(faction) {
-        let dropdown = document.getElementById(`cardDropdown-${faction}`);
-        let cardName = dropdown.value;
-        if (cardName && cardPool[cardName] > 0) {
-            addCardToFaction(faction, cardName);
-            cardPool[cardName]--; // Decrease from pool
-            updateCardPool();
-            saveData(); // Save state immediately
+// Function to add card to a faction (ensuring return button exists)
+function addCardToFaction(faction, cardName) {
+    let li = document.createElement('li');
+    li.textContent = cardName;
+
+    let returnBtn = document.createElement('button');
+    returnBtn.textContent = " [Return]";
+    returnBtn.style.marginLeft = "10px";
+    returnBtn.onclick = function () {
+        returnCard(faction, cardName, li);
+    };
+
+    li.appendChild(returnBtn);
+    document.getElementById(`cardList-${faction}`).appendChild(li);
+}
+
+// Send card to discard pile instead of directly back to Treachery pool
+function returnCard(faction, cardName, cardElement) {
+    // Increase the count in the discard pile
+    discardPile[cardName]++;
+
+    // Remove card from player's list
+    cardElement.remove();
+
+    // Update the discard pile display
+    updateDiscardPile();
+
+    // Update the Treachery Card Pool display (unchanged card counts)
+    updateCardPool();
+
+    // Save the game state
+    saveData();
+}
+
+// Function to restore all cards from discard pile to the main pool
+function restoreAllCards() {
+    for (let card in discardPile) {
+        if (discardPile[card] > 0) {
+            cardPool[card] += discardPile[card];
+            discardPile[card] = 0;
         }
     }
+    // Update both displays
+    updateCardPool();
+    updateDiscardPile();
 
-    // Auto-save every 2 seconds
-    intervalFix = setInterval(saveData, 2000);
+    // Save the game state
+    saveData();
+}
 
-    // Load data when the page loads
-    window.onload = function() {
-        loadData();
-        updateDiscardPile(); // Make sure discard pile is initialized
-        updateExpansionPool(); // Make sure expansion pool is initialized
+// Function to keep track of Money
+function adjustMoney(faction, amount) {
+    let moneyElement = document.getElementById(`money-${faction}`);
+    let currentMoney = parseInt(moneyElement.textContent);
+    
+    // Calculate new balance but don't let it go below 0
+    let newMoney = Math.max(0, currentMoney + amount);
+    
+    // Update the display
+    moneyElement.textContent = newMoney;
+    
+    // Save the change
+    saveData();
+}
+
+// Save data to localStorage
+function saveData() {
+    let gameState = {
+        money: {},
+        treacheryCards: {},
+        traitors: {},
+        notes: document.getElementById("miscNotes")?.value || "",
+        cardPool: {},
+        discardPile: {},
+        expansionPool: {},
+        activeFactions: activeFactions // Save active factions list
     };
-	
-	// "Big Red Button" to reset/ nuke/ erase all localStorage
-	function resetData() {
-    if (confirm("Are you sure you want to reset all data? This will erase everything!")) {
-		clearInterval(intervalFix);
-        localStorage.removeItem("duneTrackerData"); // Fully clears localStorage
-        
-        // Reset expansion pool to initial state
+
+    // Save money values for active factions
+    activeFactions.forEach(faction => {
+        const moneyElement = document.getElementById(`money-${faction}`);
+        if (moneyElement) {
+            gameState.money[faction] = parseInt(moneyElement.textContent);
+        }
+    });
+
+    // Save Treachery Cards for each active faction
+    activeFactions.forEach(faction => {
+        const cardList = document.getElementById(`cardList-${faction}`);
+        if (cardList) {
+            gameState.treacheryCards[faction] = Array.from(cardList.children).map(li => li.textContent.replace(" [Return]", ""));
+        } else {
+            gameState.treacheryCards[faction] = [];
+        }
+    });
+
+    // Save Traitor names for each active faction
+    activeFactions.forEach(faction => {
+        const traitorList = document.getElementById(`traitorList-${faction}`);
+        if (traitorList) {
+            gameState.traitors[faction] = Array.from(traitorList.children).map(li => li.textContent);
+        } else {
+            gameState.traitors[faction] = [];
+        }
+    });
+
+    // Save current Treachery Card Pool counts
+    for (let card in cardPool) {
+        gameState.cardPool[card] = cardPool[card];
+    }
+    
+    // Save current Discard Pile counts
+    for (let card in discardPile) {
+        gameState.discardPile[card] = discardPile[card];
+    }
+    
+    // Save expansion pool counts
+    for (let card in expansionPool) {
+        gameState.expansionPool[card] = expansionPool[card];
+    }
+
+    localStorage.setItem("duneTrackerData", JSON.stringify(gameState));
+}
+
+// Load data from localStorage
+function loadData() {
+    let savedData = localStorage.getItem("duneTrackerData");
+    if (!savedData) {
+        generateFactionCards(); // Initialize with default faction (Atreides)
+        updateCardPool();
+        updateDiscardPile();
+        updateExpansionPool();
+        return;
+    }
+    
+    savedData = JSON.parse(savedData);
+    
+    // Restore active factions list if available
+    if (savedData.activeFactions && Array.isArray(savedData.activeFactions)) {
+        activeFactions = savedData.activeFactions;
+    }
+    
+    // Generate faction cards based on active factions
+    generateFactionCards();
+
+    // Restore Treachery Card Pool counts
+    if (savedData.cardPool) {
+        cardPool = savedData.cardPool;
+        updateCardPool();
+    }
+    
+    // Restore Discard Pile counts
+    if (savedData.discardPile) {
+        discardPile = savedData.discardPile;
+        updateDiscardPile();
+    }
+    
+    // Restore Expansion Pool counts
+    if (savedData.expansionPool) {
+        expansionPool = savedData.expansionPool;
+    } else {
+        // If no expansion pool in saved data, initialize it
         expansionPool = {};
         for (let card in expansionCards) {
             expansionPool[card] = expansionCards[card];
         }
-        
-        location.reload(); // Reloads the page to apply reset
     }
-}
-// Initialize deck
-let totalCards = 21;
-let totalWorms = 6;
-let cardsDrawn = 0;
-let wormsLeft = totalWorms;
+    
+    updateExpansionPool();
 
-// Function to update the displayed percentages
-function updateWormChances() {
-    let cardsLeft = totalCards - cardsDrawn;
-    if (cardsLeft <= 0) return;
-
-    let nextCardChance = (wormsLeft / cardsLeft) * 100;
-    let withinTwoChance = (1 - ((cardsLeft - wormsLeft) / cardsLeft) * ((cardsLeft - wormsLeft - 1) / (cardsLeft - 1))) * 100;
-
-    document.getElementById("nextCardChance").textContent = nextCardChance.toFixed(2) + "%";
-    document.getElementById("withinTwoChance").textContent = withinTwoChance.toFixed(2) + "%";
-    document.getElementById("cardsDrawn").textContent = cardsDrawn;
-    document.getElementById("cardsLeft").textContent = cardsLeft;
-}
-
-// Function to handle card draw
-function drawCard(isWorm) {
-    if (cardsDrawn >= totalCards) return; // Stop if all cards are drawn
-
-    cardsDrawn++; // Increase drawn count
-    if (isWorm) wormsLeft--; // Reduce worm count if a worm is drawn
-
-    updateWormChances(); // Refresh UI
+    // Restore Misc. Notes
+    if (savedData.notes) {
+        document.getElementById("miscNotes").value = savedData.notes;
+    }
 }
 
 // Function to display cards when they are clicked in the Treachery Pool or Expansion Pool
@@ -826,7 +1035,7 @@ function getCardSvg(cardName) {
         "Weapon- Poison": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Poison Weapon</text></svg>`,
         "Defense- Poison": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Poison Defense</text></svg>`,
         "Lasgun": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Lasgun</text></svg>`,
-        "Cheap Hero": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle"font-size="40">Cheap Hero</text></svg>`,
+        "Cheap Hero": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Cheap Hero</text></svg>`,
         "Family Atomics": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Family Atomics</text></svg>`,
         "Hajr (movement)": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Hajr</text></svg>`,
         "Karama": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Karama</text></svg>`,
@@ -852,9 +1061,75 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// Initial update on page load
-updateWormChances();
+// Reset game data
+function resetData() {
+    if (confirm("Are you sure you want to reset all data? This will erase everything!")) {
+        clearInterval(intervalFix);
+        localStorage.removeItem("duneTrackerData");
+        
+        // Reset active factions to default
+        activeFactions = ['atreides'];
+        
+        // Reset expansion pool to initial state
+        expansionPool = {};
+        for (let card in expansionCards) {
+            expansionPool[card] = expansionCards[card];
+        }
+        
+        location.reload(); // Reloads the page to apply reset
+    }
+}
 
+// Worm Tracker Variables
+let totalCards = 21;
+let totalWorms = 6;
+let cardsDrawn = 0;
+let wormsLeft = totalWorms;
+
+// Function to update the displayed percentages
+function updateWormChances() {
+    let cardsLeft = totalCards - cardsDrawn;
+    if (cardsLeft <= 0) return;
+
+    let nextCardChance = (wormsLeft / cardsLeft) * 100;
+    let withinTwoChance = (1 - ((cardsLeft - wormsLeft) / cardsLeft) * ((cardsLeft - wormsLeft - 1) / (cardsLeft - 1))) * 100;
+
+    document.getElementById("nextCardChance").textContent = nextCardChance.toFixed(2) + "%";
+    document.getElementById("withinTwoChance").textContent = withinTwoChance.toFixed(2) + "%";
+    document.getElementById("cardsDrawn").textContent = cardsDrawn;
+    document.getElementById("cardsLeft").textContent = cardsLeft;
+}
+
+// Function to handle card draw
+function drawCard(isWorm) {
+    if (cardsDrawn >= totalCards) return; // Stop if all cards are drawn
+
+    cardsDrawn++; // Increase drawn count
+    if (isWorm) wormsLeft--; // Reduce worm count if a worm is drawn
+
+    updateWormChances(); // Refresh UI
+    saveData(); // Save worm tracker state
+}
+
+// Auto-save every 2 seconds
+let intervalFix = setInterval(saveData, 2000);
+
+// Initialize event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Set up faction management modal
+    document.getElementById('manageFactions').addEventListener('click', openFactionModal);
+    document.querySelector('.close-modal').addEventListener('click', closeFactionModal);
+    document.getElementById('applyFactions').addEventListener('click', applyFactionChanges);
+    
+    // Set up restore button for discard pile
+    document.getElementById('restoreAllCards').addEventListener('click', restoreAllCards);
+    
+    // Initialize faction UI and data
+    loadData();
+    
+    // Initialize worm tracker
+    updateWormChances();
+});
 </script>
 
 <div class="worm-tracker" style="
