@@ -614,17 +614,32 @@ let cardPool = {
 
 // Expansion cards
 let expansionCards = {
-    "Weapon- Projectile": 1,
+    "Amal (Halve Spice)": 1,
+	"Artillery Strike": 1,
+	"Chemistry": 1,
+	"Defense- Poison": 1,
+	"Defense- Projectile": 1,
+	"Distrans": 1,
+	"Harass & Withdraw": 1,
+    "Harvester": 1,	
+	"Juice of Sappho": 1,
+	"Karama": 1,
+	"Mirror Weapon": 1,
+	"Nullentropy Box": 1,
+	"Ornithopter": 1,
+	"Poison Blade": 1,
+	"Poison Tooth": 1,
+	"Portable Snooper": 1,
+    "Recruits": 1,	
+	"Residual Poison": 1,	
+	"Semuta Drug": 1,
+	"Shield Snooper": 1,
+	"Stone Burner": 1,	
+    "Thumper": 1,
     "Weapon- Poison": 1,
-    "Defense- Projectile": 1,
-    "Defense- Poison": 1,
+    "Weapon- Projectile": 1,
+	"Weirding Way": 1,
     "Worthless": 1,
-    "Poison Tooth": 1,
-    "Amal": 1,
-    "Recruits": 1,
-    "Harass & Withdraw": 1,
-    "Spice Harvester": 1,
-    "Thumper": 1
 };
 
 // Initialize expansion pool with the expansion cards
@@ -1265,13 +1280,100 @@ function getCardSvg(cardName) {
 		</g>
 		</svg>
 		`,
-        // Add placeholders for expansion cards
-        "Poison Tooth": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Poison Tooth</br>Plays as part of your Battle Plan.</br>Kills both leaders, and is not stopped<br>by a Snooper.</br>After seeing the battle results, you may choose not to use this weapon.</text></svg>`,
-        "Amal": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Halves everyone's spice.</text></svg>`,
-        "Recruits": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Recruits</text></svg>`,
-        "Harass & Withdraw": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Harass & Withdraw</text></svg>`,
-        "Spice Harvester": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Spice Harvester</text></svg>`,
-        "Thumper": `<svg width="822" height="1122" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Thumper</text></svg>`
+        // Add expansion cards
+    "Amal (Halve Spice)": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Amal
+    </br>At the beginning of any phase, cause all players to discard half of the spice behind their shields, rounded up, to the Spice Bank.
+    </text></svg>`,
+    
+    "Artillery Strike": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Artillery Strike
+    </br>Play as part of your Battle Plan. Kills both leaders. Both players may use Shields to protect their leader against the Artillery Strike. 
+    Surviving (shielded) leaders do not count towards the battle total; the side that dialed higher wins the battle. No spice is collected for any leader killed in this battle. Discard after use. 
+    </text></svg>`,
+    
+    "Chemistry": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Chemistry
+    </br>Play as part of your Battle Plan. Counts as a poison defense, unless played with another defense. In that case, it counts as a poison weapon. You may keep this card if you win this battle.
+    </text></svg>`,
+    
+    "Distrans": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Distrans
+    </br>Give another player a Treachery Card from your hand (if that player's hand is not full). Play at any time (other than during a bid). Discard after use.
+    </text></svg>`,
+    
+    "Harass & Withdraw": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Harass & Withdraw
+    </br>Play as part of your Battle Plan in place of a weapon or defense. Your undialed forces return to your reserves. Your leader may still be killed normally. If your opponent calls Traitor, this effect is canceled. 
+    A Face Dancer called on your leader has no effect on your undialed forces. Do not use when on your Homeworld. Discard after use.
+    </text></svg>`,
+    
+    "Harvester": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Harvester
+    </br>Play just after a spice blow comes up. Double the spice blow. Place double the amount of spice in the territory.
+    </text></svg>`,
+    
+    "Juice of Sappho": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Juice of Sappho
+    </br>Choose one: Play this card to be considered the aggressor in a battle, or action that Go first for any phase or requires turn order, or Go last for any phase or action that requires turn order (even superseding Guild). 
+    Play the card in the applicable phase when you wish to intervene. Discard after use.
+    </text></svg>`,
+    
+    "Karama": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Karama
+    </br>After game setup and factions have completed their "At Start" actions, use this card to stop one use of a faction advantage (including alliance abilities) when a player attempts to use it. When used on faction advantages during a battle this must be played before Battle Plans are revealed. Or, this card may be used to do either of these things when appropriate:
+    • Purchase a shipment of forces onto the planet at Guild rates (1/2 normal) paid to the Spice Bank, or
+    • Bid more spice than you have (without revealing this card) and/or purchase a Treachery Card without paying spice for it (cannot be used if your hand is full).
+    Cannot be used to stop a Special Victory Condition or special Karama power.
+    </text></svg>`,
+    
+    "Mirror Weapon": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Mirror Weapon
+    </br>Play as part of your Battle Plan. Copies your opponent's weapon, if they reveal one (and if their Treachery Card counts as a weapon). You must use your weapon first if order matters. Discard after use.
+    </text></svg>`,
+    
+    "Nullentropy Box": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Nullentropy Box
+    </br>At any time, pay 2 spice to the Spice Bank, then take the Treachery Card discard pile and secretly search it for any card (other than a Nullentropy Box) to add to your hand. Shuffle the discard pile afterward and then return it face up, discarding this card on top.
+    </text></svg>`,
+    
+    "Ornithopter": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Ornithopter
+    </br>As part of your movement, you may move one group of your forces up to 3 territories, or move 2 different groups of your forces up to your normal movement. Discard after use.
+    </text></svg>`,
+    
+    "Poison Blade": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Poison Blade
+    </br>Play as part of your Battle Plan. This weapon counts as both projectile and poison. You may keep this card if you win this battle.
+    </text></svg>`,
+    
+    "Poison Tooth": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Poison Tooth
+    </br>Play as part of your Battle Plan. Kills both leaders, and is not stopped by a Snooper. After seeing the battle results, you may choose not to use this weapon. If you win the battle and did not use this card, you may keep it. Otherwise, it is discarded.
+    </text></svg>`,
+    
+    "Portable Snooper": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Portable Snooper
+    </br>Protects your leader from a poison weapon. You may play this after revealing your Battle Plan if you did not play a defense (unless prevented by the Bene Gesserit Voice). You may not play this if you played a weapon and a worthless card in your Battle Plan. Discard after use.
+    </text></svg>`,
+    
+    "Recruits": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Recruits
+    </br>Play during Revival. All factions double their current Free Revival rates. The normal revival limit is increased to 7. Discard after use.
+    </text></svg>`,
+    
+    "Reinforcements": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Reinforcements
+    </br>Play as part of your Battle Plan in place of a weapon or defense. Adda to your dialed number, then send 3 forces from your reserves to the Tanks You may not use this card if you do not have at least 3 forces in your reserves. Discard after use.
+    </text></svg>`,
+    
+    "Residual Poison": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Residual Poison
+    </br>Play on your opponent before choosing leaders in a battle. That faction will lose one of their available leaders at random to the tanks. No spice is collected for it. Discard after use.
+    </text></svg>`,
+    
+    "Semuta Drug": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Semuta Drug
+    </br>Take a Treachery Card immediately after another player discards it, and add it to your hand. If multiple cards are discarded at the same time, you choose which card to take. Discard after use.
+    </text></svg>`,
+    
+    "Shield Snooper": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Shield Snooper
+    </br>Play as part of your Battle Plan. Counts as both a Shield (projectile defense) and Snooper (poison defense). You may keep this card if you win this battle.
+    </text></svg>`,
+    
+    "Stone Burner": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Stone Burner
+    </br>You choose after battle plans are revealed: Both leaders are killed, OR both leaders in this battle do not count their strength if they otherwise survived. In either case, the player with the higher number of undialed force tokens wins the battle. Dialed forces are lost normally. Discard after use.
+    </text></svg>`,
+    
+    "Thumper": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Thumper
+    </br>Play at beginning of Spice Blow Phase instead of revealing the next Spice Blow card. Causes a Sandworm to appear. Play proceeds as though Shai-Hulud has been revealed.
+    </text></svg>`,
+    
+    "Weirding Way": `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">Weirding Way
+    </br>Play as part of your Battle Plan. Counts as a projectile weapon, unless played with another weapon. In that case, it counts as a projectile defense. You may keep this card if you win this battle.
+    </text></svg>`
     };
     
     return svgData[cardName] || `<svg width="366" height="500" viewBox="0 0 822 1122" xmlns="http://www.w3.org/2000/svg"><text x="411" y="561" text-anchor="middle" font-size="40">${cardName}</text></svg>`;
