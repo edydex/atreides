@@ -1,8 +1,8 @@
 {
     "id": "onl.mayo.dune.twa",
-    "name": "Dune - Atreides Sheet",
-    "short_name": "Atreides Tracker",
-    "description": "A faction tracking sheet for Dune board game",
+    "name": "Atreides Companion - Dune",
+    "short_name": "Atreides",
+    "description": "Companion app for Atreides faction in Dune (2019) board game",
     "start_url": "./index.html",
     "display": "standalone",
     "orientation": "any",
