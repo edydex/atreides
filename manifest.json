@@ -1,9 +1,13 @@
 {
-    "name": "Dune - Atreides Sheet",
+    "id": "onl.mayo.dune.twa"
+	"name": "Dune - Atreides Sheet",
     "short_name": "Atreides Tracker",
     "description": "A faction tracking sheet for Dune board game",
     "start_url": "./index.html",
     "display": "standalone",
+	"orientation": "any"
+	"launch_handler": {
+	  "client_mode": "auto" },
     "background_color": "#ffffff",
     "theme_color": "#4CAF50",
     "icons": [
@@ -13,4 +17,31 @@
             "type": "image/png"
         }
     ]
+	"dir": "ltr",
+	"lang": "en",
+	"screenshots": [
+  {
+    "src": "/screenshots/main.jpg",
+    "sizes": "1080x1920",
+    "type": "image/jpg"
+  },
+    "src": "/screenshots/faction_select.jpg",
+    "sizes": "1080x1920",
+    "type": "image/jpg"
+  },
+    "src": "/screenshots/expansion_cards.jpg",
+    "sizes": "1080x1920",
+    "type": "image/jpg"
+  },
+    "src": "/screenshots/card_preview.jpg",
+    "sizes": "1080x1920",
+    "type": "image/jpg"
+  },
+  {
+    "src": "/screenshots/bottom_of_the_page.jpg",
+    "sizes": "1080x1920",
+    "type": "image/jpg"
+  }
+]
+
 }
