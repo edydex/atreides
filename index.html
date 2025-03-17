@@ -49,7 +49,62 @@
         width: 85%; /* Default width */
     }
 
-		.money-controls { display: flex; gap: 15px; justify-content: center; }
+/* Custom Money Buttons - redefined from scratch */
+.money-controls {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.money-controls button {
+  /* Reset all browser defaults */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  /* Fixed dimensions */
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+  
+  /* Visual styling */
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  
+  /* Text styling */
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+  color: #333;
+  
+  /* Interaction */
+  cursor: pointer;
+}
+
+/* Button states */
+.money-controls button:hover {
+  background-color: #e0e0e0;
+}
+
+.money-controls button:active {
+  background-color: #d0d0d0;
+  transform: translateY(1px);
+}
+
+/* Specific button colors */
+.money-controls button.decrease {
+  color: #d32f2f;
+}
+
+.money-controls button.increase {
+  color: #388e3c;
+}
         
         @media (max-width: 500px) {
     body {
@@ -469,53 +524,6 @@ input[name="tab-selector"] {
   }
 }
 
-/* iOS button normalization */
-@supports (-webkit-touch-callout: none) {
-  button, 
-  input[type="button"], 
-  input[type="submit"],
-  input[type="reset"] {
-    -webkit-appearance: none !important;
-    appearance: none !important;
-    background-image: none !important;
-    text-shadow: none !important;
-    box-sizing: border-box !important;
-    width: auto !important;
-    max-width: 100% !important;
-    display: inline-block !important;
-    margin: 0 !important;
-    padding: 6px 12px !important;
-    font-size: 14px !important;
-    line-height: 1.4 !important;
-    text-align: center !important;
-    cursor: pointer !important;
-    background-color: #f8f8f8 !important;
-    border: 1px solid #ccc !important;
-    border-radius: 4px !important;
-  }
-  
-  /* Money control buttons */
-  .money-controls button {
-    min-width: 30px !important;
-    width: 30px !important;
-    height: 30px !important;
-    padding: 0 !important;
-    line-height: 1 !important;
-    margin: 0 3px !important;
-  }
-  
-  /* Add/Return/Traitor buttons */
-  button:not(.money-controls button):not(.worm-button):not(.spice-button) {
-    padding: 4px 8px !important;
-    margin-left: 5px !important;
-  }
-  
-  /* Worm tracker buttons */
-  .worm-button, .spice-button {
-    padding: 8px 15px !important;
-    margin: 5px !important;
-  }
-}
 
 </style>
 </head>
