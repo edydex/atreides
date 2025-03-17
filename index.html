@@ -469,18 +469,54 @@ input[name="tab-selector"] {
   }
 }
 
+/* iOS button normalization */
 @supports (-webkit-touch-callout: none) {
   button, 
   input[type="button"], 
   input[type="submit"],
   input[type="reset"] {
-    /* iOS-specific overrides */
-    -webkit-appearance: none;
-    appearance: none;
-    background-image: none;
-    text-shadow: none;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background-image: none !important;
+    text-shadow: none !important;
+    box-sizing: border-box !important;
+    width: auto !important;
+    max-width: 100% !important;
+    display: inline-block !important;
+    margin: 0 !important;
+    padding: 6px 12px !important;
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    background-color: #f8f8f8 !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+  }
+  
+  /* Money control buttons */
+  .money-controls button {
+    min-width: 30px !important;
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    margin: 0 3px !important;
+  }
+  
+  /* Add/Return/Traitor buttons */
+  button:not(.money-controls button):not(.worm-button):not(.spice-button) {
+    padding: 4px 8px !important;
+    margin-left: 5px !important;
+  }
+  
+  /* Worm tracker buttons */
+  .worm-button, .spice-button {
+    padding: 8px 15px !important;
+    margin: 5px !important;
   }
 }
+
 </style>
 </head>
 <body>
