@@ -469,6 +469,18 @@ input[name="tab-selector"] {
   }
 }
 
+@supports (-webkit-touch-callout: none) {
+  button, 
+  input[type="button"], 
+  input[type="submit"],
+  input[type="reset"] {
+    /* iOS-specific overrides */
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: none;
+    text-shadow: none;
+  }
+}
 </style>
 </head>
 <body>
