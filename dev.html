@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dune - Atreides Companion</title>
   <link rel="manifest" href="/manifest.json">
+
 <style>
 
 body { font-family: Arial, sans-serif; padding: 15px; font-size: 16px;}
@@ -156,6 +157,13 @@ input[name="tab-selector"] {
 .card-column {
     flex: 1;
     min-width: 45%; /* Keep two columns even on small screens */
+}
+#cardPool1List, #cardPool2List, 
+#discardPool1 ul, #discardPool2 ul,
+#expansionPool1 ul, #expansionPool2 ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 0;
 }
 
 /* Discard pile styling */
@@ -593,15 +601,18 @@ input[type="text"] {
   <!-- Tab Content -->
   <div class="tab-content">
     <!-- Treachery Deck Tab Content -->
-    <div id="tab-01" class="tab-panel">
-      <div class="card-pool">
-        <!-- <h2>Treachery Deck Card Pool</h2> -->
-        <div class="card-columns">
-          <div class="card-column" id="cardPool1"></div>
-          <div class="card-column" id="cardPool2"></div>
-        </div>
+<div id="tab-01" class="tab-panel">
+  <div class="card-pool">
+    <div class="card-columns">
+      <div class="card-column" id="cardPool1">
+        <ul id="cardPool1List"></ul>
+      </div>
+      <div class="card-column" id="cardPool2">
+        <ul id="cardPool2List"></ul>
       </div>
     </div>
+  </div>
+</div>
     
     <!-- Discard Pile Tab Content -->
     <div id="tab-02" class="tab-panel">
@@ -1534,10 +1545,16 @@ function closeCardModal() {
 
 // Assign SVGs to each card - This section exists in prod version, but is too long for AI to read, so please ignore.
 function getCardSvg(cardName) {
-    // Placeholder function to return SVG content based on card name
-    // In a real implementation, this would return the actual SVG content
-    return `<svg><text>${cardName}</text></svg>`;
+    // Placeholder for actual SVG content
+    return `<svg><!-- SVG content for ${cardName} --></svg>`;
 }
+
+// Keyboard event listener to close the modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeCardModal();
+    }
+});
 
 // Keyboard event listener to close the modal with Escape key
 document.addEventListener('keydown', function(event) {
