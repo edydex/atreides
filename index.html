@@ -389,17 +389,6 @@ input[type="text"] {
 }
 
 /* iOS fixes for select elements (not sure if this is used anymore, might be dead code)*/
-@supports (-webkit-touch-callout: none) {
-  select {
-    -webkit-appearance: none;
-    appearance: none;       
-    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-    background-repeat: no-repeat;
-    background-position-x: calc(100% - 5px);
-    background-position-y: center;
-    padding-right: 25px;
-  }
-}
         
         @media (max-width: 500px) {
     body {
