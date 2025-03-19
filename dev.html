@@ -593,6 +593,43 @@ input[name="tab-selector"] {
   }
 }
 
+/* Remove left padding from traitor lists to accommodate longer names */
+[id^="traitorList-"] {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+/* Ensure traitor list items also have no left margin/padding */
+[id^="traitorList-"] li {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+/* Remove bullet points from traitor lists */
+[id^="traitorList-"] {
+  list-style-type: none; /* Explicitly remove bullet points */
+  padding-left: 0;
+  margin-left: 0;
+}
+
+[id^="traitorList-"] li {
+  list-style-type: none; /* Also remove bullet points at the item level */
+  padding-left: 0;
+  margin-left: 0;
+}
+
+/* Also ensure card lists have no bullets */
+[id^="cardList-"] {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+[id^="cardList-"] li {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 0;
+}
 
 </style>
 </head>
