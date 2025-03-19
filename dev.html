@@ -5,33 +5,147 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dune - Atreides Companion</title>
   <link rel="manifest" href="/manifest.json">
-    <style>
-        body { font-family: Arial, sans-serif; padding: 15px; font-size: 16px;}
-        .container { display: flex; justify-content: space-around; flex-wrap: wrap; }
-        .faction { border: 1px solid #000; padding: 1px; width: 15%; min-width: 175px; }
+<style>
+
+body { font-family: Arial, sans-serif; padding: 15px; font-size: 16px;}
+.container { display: flex; justify-content: space-around; flex-wrap: wrap; }
+
+/* "Manage Factions" button and its functions styles*/
+/* Faction Management Button */
+.faction-management {
+  margin: 10px 0 20px 0;
+  text-align: center;
+}
+.manage-factions-btn {
+  padding: 8px 15px;
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.manage-factions-btn:hover {
+  background-color: #333;
+}
+/* Faction Modal Styles */
+.faction-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.faction-modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.faction-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+.faction-modal-header h3 {
+  margin: 0;
+}
+.close-modal {
+  font-size: 24px;
+  cursor: pointer;
+}
+.faction-selection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.faction-option {
+  padding: 5px;
+}
+.expansion-faction {
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+.faction-modal-footer {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
+}
+.apply-factions-btn {
+  padding: 8px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.apply-factions-btn:hover {
+  background-color: #3e8e41;
+}
+
+/* Radio Tab Styling */
+.tab-container {
+  width: 100%;
+}
+.tab-name {
+  display: inline-block;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
+  background-color: #f1f1f1;
+  margin-right: 5px;
+}
+/* Hide radio buttons */
+input[name="tab-selector"] {
+  display: none;
+}
+/* Tab content styling */
+.tab-panel {
+  display: none;
+  padding: 1px;
+  border: 1px solid #ccc;
+  border-radius: 0 5px 5px 5px;
+}
+/* Show active tab */
+#tab-link-01:checked ~ .tab-content #tab-01,
+#tab-link-02:checked ~ .tab-content #tab-02,
+#tab-link-03:checked ~ .tab-content #tab-03 {
+  display: block;
+}
+/* Style for active tab label */
+#tab-link-01:checked + .tab-name,
+#tab-link-02:checked + .tab-name,
+#tab-link-03:checked + .tab-name {
+  background-color: white;
+  border-bottom: 1px solid white;
+  position: relative;
+  z-index: 1;
+}
+
+/* Card pool styling */
 .card-pool {
     margin: 10px auto;
     padding: 1px;
-
     display: flex;
     flex-direction: column; /* Stack items vertically */
     align-items: center; /* Center everything */
     max-width: 400px; /* Prevent columns from spreading too far apart */
 }
-.faction h2 {
-
-    border-bottom: 4px solid; /* Thick underline */
-    padding-bottom: 5px; /* Adds spacing between underline and text */
-}
-
-#atreides h2 { border-color: green; }
-#gesserit h2 { border-color: blue; }
-#emperor h2 { border-color: red; }
-#fremen h2 { border-color: yellow; }
-#guild h2 { border-color: orange; }
-#harkonnen h2 { border-color: black; }
-
-
 .card-columns {
     display: flex;
     flex-wrap: wrap;
@@ -39,41 +153,124 @@
     gap: 5px; /* Add spacing between columns */
     width: 100%;
 }
-
 .card-column {
     flex: 1;
     min-width: 45%; /* Keep two columns even on small screens */
 }
-    input[type="text"] {
-        width: 85%; /* Default width */
-    }
 
-/* Custom Money Buttons - redefined from scratch */
+/* Discard pile styling */
+.discard-pile {
+    margin: 20px auto;
+    padding: 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+}
+.discard-pile h2 {
+    border-bottom: 4px solid #8B4513; /* Brown border for discard pile */
+    padding-bottom: 5px;
+    color: #8B4513;
+}
+.restore-button {
+    margin: 10px 0;
+    padding: 8px 15px;
+    background-color: #8B4513;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.restore-button:hover {
+    background-color: #6b3510;
+}
+
+/* Expansion card pool styling */
+.expansion-pool {
+    margin: 20px auto;
+    padding: 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+}
+
+/* Card pop-up (card preview) styling */
+.card-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-svg {
+    max-width: 90%;
+    max-height: 90%;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Faction tiles (faction cards) styling */
+.faction { border: 1px solid #000; padding: 1px; width: 15%; min-width: 175px; } /* faction cards tile */
+.faction h2 {
+    border-bottom: 4px solid; /* Thick underline */
+    padding-bottom: 5px; /* Adds spacing between underline and text */
+}
+/* Styles for faction lines */
+#atreides h2 { border-color: green; }
+#gesserit h2 { border-color: blue; }
+#emperor h2 { border-color: red; }
+#fremen h2 { border-color: yellow; }
+#guild h2 { border-color: orange; }
+#harkonnen h2 { border-color: black; }
+#ecaz h2 { border-color: #FF69B4; } /* Pink */
+#moritani h2 { border-color: #008080; } /* Teal */
+#ixians h2 { border-color: #bbb0a5; } /* Greige */
+#tleilaxu h2 { border-color: #800080; } /* Purple */
+#choam h2 { 
+  border-color: #000; 
+  position: relative;
+}
+#choam h2:after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(45deg, #ff0000, #ff0000 10px, #000 10px, #000 20px);
+} /* Red and Black */
+#richese h2 { border-color: #D3D3D3; } /* Light Gray */
+
+/* Custom Money Buttons */
 .money-controls {
   display: flex;
   gap: 15px;
   justify-content: center;
   margin: 10px 0;
 }
-
 .money-controls button {
   /* Reset all browser defaults */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  
   /* Fixed dimensions */
   width: 32px;
   height: 32px;
   min-width: 32px;
   min-height: 32px;
   padding: 0;
-  
   /* Visual styling */
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 4px;
-  
   /* Text styling */
   font-family: inherit;
   font-size: 14px;
@@ -81,30 +278,24 @@
   line-height: 1;
   text-align: center;
   color: #333;
-  
   /* Interaction */
   cursor: pointer;
 }
-
 /* Button states */
 .money-controls button:hover {
   background-color: #e0e0e0;
 }
-
 .money-controls button:active {
   background-color: #d0d0d0;
   transform: translateY(1px);
 }
-
-/* Specific button colors */
+/* Specific button colors - doesn't seem to work */
 .money-controls button.decrease {
   color: #d32f2f;
 }
-
 .money-controls button.increase {
   color: #388e3c;
 }
-/* Add these styles to your CSS section */
 
 /* Traitor dropdown styling */
 .traitor-dropdown {
@@ -116,35 +307,65 @@
   background-color: white;
   margin-bottom: 5px;
 }
-
-/* Styling for optgroup to distinguish between factions */
+/* Styling for optgroup to distinguish between factions (seems to be dead code) */
 .traitor-dropdown optgroup {
   font-weight: bold;
   font-style: normal;
   background-color: #f4f4f4;
   color: #333;
 }
-
+/* Styling for options in the dropdown (might be dead code)*/
 .traitor-dropdown option {
-  padding: 6px;
+  padding: 2px;
   font-weight: normal;
 }
 
 /* Style for traitor list */
 #traitorList li {
   position: relative;
-  padding-right: 25px; /* Space for remove button */
-  margin-bottom: 5px;
+  margin-bottom: 1px;
   word-break: break-word;
 }
+/* Remove left padding from traitor lists to accommodate longer names */
+[id^="traitorList-"] {
+  padding-left: 0;
+  margin-left: 0;
+}
+/* Ensure traitor list items also have no left margin/padding */
+[id^="traitorList-"] li {
+  padding-left: 0;
+  margin-left: 0;
+}
+/* Remove bullet points from traitor lists */
+[id^="traitorList-"] {
+  list-style-type: none; /* Explicitly remove bullet points */
+  padding-left: 0;
+  margin-left: 0;
+}
+[id^="traitorList-"] li {
+  list-style-type: none; /* Also remove bullet points at the item level */
+  padding-left: 0;
+  margin-left: 0;
+}
+/* Also ensure card lists have no bullets */
+[id^="cardList-"] {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+[id^="cardList-"] li {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 0;
+}
 
-/* Remove button for traitors */
+/* Button to Remove traitors (that little red (x) to the right of traitor names) */
 .remove-traitor {
   position: absolute;
   right: 0;
   top: 0;
-  width: 20px;
-  height: 20px;
+  width: 20px; /* adjust if the button is too big, and is clicked accidentally */
+  height: 20px; /* adjust if the button is too big, and is clicked accidentally */
   padding: 0;
   line-height: 1;
   font-size: 12px;
@@ -157,12 +378,15 @@
   align-items: center;
   justify-content: center;
 }
-
 .remove-traitor:hover {
   background-color: #f1b0b7;
 }
+/* I think it's dead code, used earlier for to add traitors */ 
+input[type="text"] {
+    width: 85%; /* Default width */
+}
 
-/* iOS fixes for select elements */
+/* iOS fixes for select elements (not sure if this is used anymore, might be dead code)*/
 @supports (-webkit-touch-callout: none) {
   select {
     -webkit-appearance: none;
@@ -225,260 +449,23 @@
         gap: 5px;
     }
 }
-  
 
-/* Discard pile styling */
-.discard-pile {
-    margin: 20px auto;
-    padding: 1px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 400px;
-
-}
-
-.discard-pile h2 {
-    border-bottom: 4px solid #8B4513; /* Brown border for discard pile */
-    padding-bottom: 5px;
-    color: #8B4513;
-}
-
-.restore-button {
-    margin: 10px 0;
-    padding: 8px 15px;
-    background-color: #8B4513;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.restore-button:hover {
-    background-color: #6b3510;
-}
-/* Card popup styling */
-.card-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.7);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
-
-.card-svg {
-    max-width: 90%;
-    max-height: 90%;
-    background-color: white;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-/* Tab styling */
-.tab-container {
-  width: 100%;
-}
-
-.tab-name {
-  display: inline-block;
-  padding: 10px 15px;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  border-bottom: none;
-  border-radius: 5px 5px 0 0;
-  background-color: #f1f1f1;
-  margin-right: 5px;
-  
-}
-
-/* Hide radio buttons */
-input[name="tab-selector"] {
-  display: none;
-}
-
-/* Tab content styling */
-.tab-panel {
-  display: none;
-  padding: 1px;
-  border: 1px solid #ccc;
-  border-radius: 0 5px 5px 5px;
-}
-
-/* Show active tab */
-#tab-link-01:checked ~ .tab-content #tab-01,
-#tab-link-02:checked ~ .tab-content #tab-02,
-#tab-link-03:checked ~ .tab-content #tab-03 {
-  display: block;
-}
-
-/* Style for active tab label */
-#tab-link-01:checked + .tab-name,
-#tab-link-02:checked + .tab-name,
-#tab-link-03:checked + .tab-name {
-  background-color: white;
-  border-bottom: 1px solid white;
-  position: relative;
-  z-index: 1;
-}
-
-/* Expansion pool styling */
-.expansion-pool {
-    margin: 20px auto;
-    padding: 1px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 400px;
-}
-
-.expansion-pool h2 {
-    border-bottom: 4px solid #4B0082; /* Indigo border for expansion pile */
-    padding-bottom: 5px;
-    color: #4B0082;
-}
-
-
-/* Faction Management Button */
-.faction-management {
-  margin: 10px 0 20px 0;
-  text-align: center;
-}
-
-.manage-factions-btn {
-  padding: 8px 15px;
-  background-color: #4a4a4a;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.manage-factions-btn:hover {
-  background-color: #333;
-}
-
-/* Faction Modal Styles */
-.faction-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.7);
-  z-index: 1000;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.faction-modal-content {
-  background-color: white;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 5px;
-  max-width: 500px;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.faction-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
-}
-
-.faction-modal-header h3 {
-  margin: 0;
-}
-
-.close-modal {
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.faction-selection {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.faction-option {
-  padding: 5px;
-}
-
-.expansion-faction {
-  background-color: #f8f8f8;
-  border-radius: 3px;
-}
-
-.faction-modal-footer {
-  text-align: center;
-  margin-top: 20px;
-  padding-top: 10px;
-  border-top: 1px solid #ccc;
-}
-
-.apply-factions-btn {
-  padding: 8px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.apply-factions-btn:hover {
-  background-color: #3e8e41;
-}
-
-/* Additional styles for expansion factions */
-#ecaz h2 { border-color: #FF69B4; } /* Pink */
-#moritani h2 { border-color: #008080; } /* Teal */
-#ixians h2 { border-color: #bbb0a5; } /* Greige */
-#tleilaxu h2 { border-color: #800080; } /* Purple */
-#choam h2 { 
-  border-color: #000; 
-  position: relative;
-}
-#choam h2:after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: repeating-linear-gradient(45deg, #ff0000, #ff0000 10px, #000 10px, #000 20px);
-}
-#richese h2 { border-color: #D3D3D3; } /* Light Gray */
-
+/* Second radio tab styles */
 /* Tracker tabs styles (modifying the existing tab styles to work with the new tracker tabs) */
 #tracker-tabs {
   max-width: 700px;
   margin: 20px auto;
 }
-
 #tracker-tabs input[type="radio"] {
   display: none;
 }
-
-/* Show active tracker tab */
+/* Show active tracker tab (only first two are used now)*/
 #tracker-tab-link-01:checked ~ .tab-content #tracker-tab-01,
 #tracker-tab-link-02:checked ~ .tab-content #tracker-tab-02,
 #tracker-tab-link-03:checked ~ .tab-content #tracker-tab-03 {
   display: block;
 }
-
-/* Style for active tab label */
+/* Style for active tab label (again, only the first two are used now)*/
 #tracker-tab-link-01:checked + .tab-name,
 #tracker-tab-link-02:checked + .tab-name,
 #tracker-tab-link-03:checked + .tab-name {
@@ -487,59 +474,31 @@ input[name="tab-selector"] {
   position: relative;
   z-index: 1;
 }
-
-/* Leader Numbers styles */
-.leader-numbers {
-  padding: 10px;
-  text-align: center;
-}
-
-.leader-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Force two columns */
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.leader-column {
-  text-align: left;
-}
-
-.leader-list {
-  list-style-type: none;
-  padding-left: 0;
-  line-height: 1.8;
-}
-
 /* Removed the circles on tabs  */
 #tracker-tabs input[type="radio"] {
   display: none;
 }
 
-/* Leader Numbers styles - more compact */
+/* Leader Values / Leader Numbers tab styles */
 .leader-numbers {
   padding: 10px;
   text-align: center;
 }
-
 .leader-columns {
   display: grid;
   grid-template-columns: 1fr 1fr; /* Force two columns */
   gap: 10px;
   margin-top: 10px;
 }
-
 .leader-column {
   text-align: left;
 }
-
 .leader-list {
   list-style-type: none;
   padding-left: 0;
   line-height: 1.4; /* Reduced line height */
   margin: 0;
 }
-
 .leader-list li {
   margin-bottom: 3px; /* Reduced margin */
   border-bottom: 1px dotted #ccc;
@@ -547,95 +506,24 @@ input[name="tab-selector"] {
   font-size: 15px; /* Slightly smaller font */
 }
 
-/* Worm Tracker styles */
-.worm-tracker {
-  padding: 15px;
-  text-align: center;
-}
-
-.worm-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 15px;
-}
-
-.worm-button, .spice-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  color: white;
-}
-
-.worm-button {
-  background-color: #C4A484; /* Brown for worm */
-}
-
-.spice-button {
-  background-color: orange; /* Orange for spice */
-}
-
 @media (max-width: 500px) {
   .leader-column {
     flex-basis: 100%;
     min-width: auto;
   }
-  
   .leader-list {
     font-size: 14px;
   }
-}
-@media (max-width: 500px) {
   .faction-selection {
     grid-template-columns: 1fr;
   }
-}
-
-/* Remove left padding from traitor lists to accommodate longer names */
-[id^="traitorList-"] {
-  padding-left: 0;
-  margin-left: 0;
-}
-
-/* Ensure traitor list items also have no left margin/padding */
-[id^="traitorList-"] li {
-  padding-left: 0;
-  margin-left: 0;
-}
-
-/* Remove bullet points from traitor lists */
-[id^="traitorList-"] {
-  list-style-type: none; /* Explicitly remove bullet points */
-  padding-left: 0;
-  margin-left: 0;
-}
-
-[id^="traitorList-"] li {
-  list-style-type: none; /* Also remove bullet points at the item level */
-  padding-left: 0;
-  margin-left: 0;
-}
-
-/* Also ensure card lists have no bullets */
-[id^="cardList-"] {
-  list-style-type: none;
-  padding-left: 0;
-  margin-left: 0;
-}
-
-[id^="cardList-"] li {
-  list-style-type: none;
-  padding-left: 0;
-  margin-left: 0;
 }
 
 </style>
 </head>
 <body>
     <h1>Atreides Tracker Sheet</h1>
-<!-- Add this HTML section right after the main heading and before the tab container -->
+<!-- "Manage Factions" button and its contents" -->
 <div class="faction-management">
   <button id="manageFactions" class="manage-factions-btn">Manage Factions</button>
   
@@ -706,7 +594,7 @@ input[name="tab-selector"] {
   </div>
 </div>
 
-<!-- Treachery, Discard, and Expansion Piles tabs -->
+<!-- Treachery, Discard, and Expansion Piles tabs (radio) -->
 <div class="tab-container">
   <input name="tab-selector" type="radio" id="tab-link-01" checked>
   <label for="tab-link-01" class="tab-name">Treachery Deck</label>
@@ -717,10 +605,10 @@ input[name="tab-selector"] {
   
   <!-- Tab Content -->
   <div class="tab-content">
-    <!-- Treachery Pile Tab Content -->
+    <!-- Treachery Deck Tab Content -->
     <div id="tab-01" class="tab-panel">
       <div class="card-pool">
-        <!-- <h2>Treachery Card Pool</h2> -->
+        <!-- <h2>Treachery Deck Card Pool</h2> -->
         <div class="card-columns">
           <div class="card-column" id="cardPool1"></div>
           <div class="card-column" id="cardPool2"></div>
@@ -752,14 +640,15 @@ input[name="tab-selector"] {
   </div>
 </div>
 
-<!-- This will be the container for faction cards, replace your existing container div with this -->
+<!-- Container for Faction cards / faction tiles-->
 <div id="factionContainer" class="container">
   <!-- Faction cards will be generated here dynamically -->
 </div>    
 
 <!-- JS code begins -->
 <script>
-// Card pool contents
+// Define all cards, all faction related values here 
+// Card pool contents (Treachery Deck)
 let cardPool = {
     "Worthless": 5,
     "Weapon- Projectile": 4,
@@ -778,14 +667,14 @@ let cardPool = {
 
 // Expansion cards
 let expansionCards = {
-    "Amal (Halves Spice)": 1,
+  "Amal (Halves Spice)": 1,
 	"Artillery Strike": 1,
 	"Chemistry": 1,
 	"Defense- Poison": 1,
 	"Defense- Projectile": 1,
 	"Distrans": 1,
 	"Harass & Withdraw": 1,
-    "Harvester": 1,	
+  "Harvester": 1,	
 	"Juice of Sappho": 1,
 	"Karama": 1,
 	"Mirror Weapon": 1,
@@ -794,17 +683,17 @@ let expansionCards = {
 	"Poison Blade": 1,
 	"Poison Tooth": 1,
 	"Portable Snooper": 1,
-    "Recruits": 1,
+  "Recruits": 1,
 	"Reinforcements": 1,
 	"Residual Poison": 1,	
 	"Semuta Drug": 1,
 	"Shield Snooper": 1,
 	"Stone Burner": 1,	
-    "Thumper": 1,
-    "Weapon- Poison": 1,
-    "Weapon- Projectile": 1,
+  "Thumper": 1,
+  "Weapon- Poison": 1,
+  "Weapon- Projectile": 1,
 	"Weirding Way": 1,
-    "Worthless": 1,
+  "Worthless": 1,
 };
 
 // Initialize expansion pool with the expansion cards
@@ -1108,33 +997,33 @@ function updateCardPool() {
 // Traitor Selection
 const traitors = {
   atreides: [
-    { name: "Dr. Yueh (1)" },
-    { name: "Duncan Idaho (2)" },
-    { name: "Gurney Halleck (4)" },
     { name: "Lady Jessica (5)" },
     { name: "Thufir Hawat (5)" },
+    { name: "Gurney Halleck (4)" },
+    { name: "Duncan Idaho (2)" },
+    { name: "Dr. Yueh (1)" },
 	{ name: "Cheap Hero (0)" }
   ],
   harkonnen: [
-    { name: "Piter De Vries (3)" },
-    { name: "Beast Rabban (4)" },
-    { name: "Umman Kudu (1)" },
-    { name: "Cpt. Iakin Nefud (2)" },
     { name: "Feyd-Rautha (6)" },
+    { name: "Beast Rabban (4)" },
+    { name: "Piter De Vries (3)" },
+    { name: "Cpt. Iakin Nefud (2)" },
+    { name: "Umman Kudu (1)" },
 	{ name: "Cheap Hero (0)" }
   ],
   fremen: [
     { name: "Stilgar (7)" },
     { name: "Chani (6)" },
-    { name: "Jamis (2)" },
-    { name: "Shadout Mapes (3)" },
     { name: "Otheym (5)" },
+    { name: "Shadout Mapes (3)" },
+    { name: "Jamis (2)" },
 	{ name: "Cheap Hero (0)" }
   ],
   emperor: [
     { name: "Hasimir Fenring (6)" },
-    { name: "Caid (3)" },
     { name: "Cpt. Aramsham (5)" },
+    { name: "Caid (3)" },
     { name: "Burseg (3)" },
     { name: "Bashar (2)" },
 	{ name: "Cheap Hero (0)" }
@@ -1148,27 +1037,27 @@ const traitors = {
 	{ name: "Cheap Hero (0)" }
   ],
   guild: [
-    { name: "Guild Rep. (1)" },
-    { name: "Master Bewt (3)" },
     { name: "Staban Tuek (5)" },
-    { name: "Soo - Soo Sook (2)" },
+    { name: "Master Bewt (3)" },
     { name: "Esmar Tuek (3)" },
+    { name: "Soo - Soo Sook (2)" },
+    { name: "Guild Rep. (1)" },
 	{ name: "Cheap Hero (0)" }
   ],
   ixians: [
     { name: "C'tair Pilru (5)" },
-    { name: "Dominic Vernius (4)" },
     { name: "Tessia Vernius (5)" },
-    { name: "Cammar Pilru (1)" },
+    { name: "Dominic Vernius (4)" },
     { name: "Kailea Vernius (2)" },
+    { name: "Cammar Pilru (1)" },
 	{ name: "Cheap Hero (0)" }
   ],
   tleilaxu: [
+    { name: "Zoal (X)" },
     { name: "Hidar Fen Ajidica (4)" },
-    { name: "Blin (1)" },
     { name: "Master Zaaf (3)" },
     { name: "Wykk (2)" },
-    { name: "Zoal (X)" },
+    { name: "Blin (1)" },
 	{ name: "Cheap Hero (0)" }
   ],
   richese: [
@@ -1189,19 +1078,19 @@ const traitors = {
 	{ name: "Cheap Hero (0)" }
   ],
   moritani: [
-    { name: "Vando Terboli (1)" },
-    { name: "Trin Kronos (2)" },
-    { name: "Grieu Kronos (4)" },
     { name: "Lupino Ord (5)" },
     { name: "Hiih Resser (4)" },
+    { name: "Grieu Kronos (4)" },
+    { name: "Trin Kronos (2)" },
+    { name: "Vando Terboli (1)" },
 	{ name: "Cheap Hero (0)" }
   ],
   ecaz: [
-    { name: "Bindikk Narvi (2)" },
-    { name: "Ilesa Ecaz (3)" },
-    { name: "Rivvy Dinari (3)" },
     { name: "Whitmore Bludd (4)" },
     { name: "Sanyá Ecaz (4)" },
+    { name: "Ilesa Ecaz (3)" },
+    { name: "Rivvy Dinari (3)" },
+    { name: "Bindikk Narvi (2)" },
 	{ name: "Cheap Hero (0)" }
   ]
 };
@@ -1657,6 +1546,11 @@ function closeCardModal() {
 }
 
 // Assign SVGs to each card - This section exists in prod version, but is too long for AI to read, so please ignore.
+function getCardSvg(cardName) {
+    // Placeholder function to return SVG content based on card name
+    // In a real implementation, this would return the actual SVG content
+    return `<svg><text>${cardName}</text></svg>`;
+}
 
 // Keyboard event listener to close the modal with Escape key
 document.addEventListener('keydown', function(event) {
@@ -1682,37 +1576,6 @@ function resetData() {
         
         location.reload(); // Reloads the page to apply reset
     }
-}
-
-// Worm Tracker Variables
-let totalCards = 21;
-let totalWorms = 6;
-let cardsDrawn = 0;
-let wormsLeft = totalWorms;
-
-// Function to update the displayed percentages
-function updateWormChances() {
-    let cardsLeft = totalCards - cardsDrawn;
-    if (cardsLeft <= 0) return;
-
-    let nextCardChance = (wormsLeft / cardsLeft) * 100;
-    let withinTwoChance = (1 - ((cardsLeft - wormsLeft) / cardsLeft) * ((cardsLeft - wormsLeft - 1) / (cardsLeft - 1))) * 100;
-
-    document.getElementById("nextCardChance").textContent = nextCardChance.toFixed(2) + "%";
-    document.getElementById("withinTwoChance").textContent = withinTwoChance.toFixed(2) + "%";
-    document.getElementById("cardsDrawn").textContent = cardsDrawn;
-    document.getElementById("cardsLeft").textContent = cardsLeft;
-}
-
-// Function to handle card draw
-function drawCard(isWorm) {
-    if (cardsDrawn >= totalCards) return; // Stop if all cards are drawn
-
-    cardsDrawn++; // Increase drawn count
-    if (isWorm) wormsLeft--; // Reduce worm count if a worm is drawn
-
-    updateWormChances(); // Refresh UI
-    saveData(); // Save worm tracker state
 }
 
 // Auto-save every 2 seconds
@@ -1790,19 +1653,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		</div>
     </div>
    <!-- Worm Tracker Tab Content -->
-    <div id="tracker-tab-03" class="tab-panel">
-      <div class="worm-tracker">
-        <h2>Worm Tracker</h2>
-        <p>Next Card: <span id="nextCardChance">28.57%</span></p>
-        <p>Within Two: <span id="withinTwoChance">48.69%</span></p>
-        <p>Cards Drawn: <span id="cardsDrawn">0</span></p>
-        <p>Cards Left: <span id="cardsLeft">21</span></p>
-        <div class="worm-buttons">
-          <button onclick="drawCard(true)" class="worm-button">Worm</button>
-          <button onclick="drawCard(false)" class="spice-button">Spice</button>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
