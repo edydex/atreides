@@ -332,6 +332,66 @@ input[name="tab-selector"] {
     box-sizing: border-box;
 }
 
+/* Custom Number Input with + - buttons */
+.number-input-container {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.number-input-container input {
+    flex: 1;
+    text-align: center;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin: 0;
+}
+
+.number-btn {
+    width: 40px;
+    height: 36px;
+    border: 1px solid #ccc;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: background-color 0.2s;
+}
+
+.number-btn:hover {
+    opacity: 0.8;
+}
+
+.number-btn:active {
+    transform: scale(0.95);
+}
+
+.number-btn.minus {
+    border-radius: 4px 0 0 4px;
+}
+
+.number-btn.plus {
+    border-radius: 0 4px 4px 0;
+}
+
+/* Hide default number input spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
 .battle-wheel-display {
     flex: 1;
     min-width: 280px;
@@ -398,8 +458,8 @@ input[name="tab-selector"] {
 /* Cheat Sheet Styling */
 .cheat-sheet-content {
     max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
+    margin: 15px auto;
+    padding: 12px;
 }
 
 .cheat-section {
@@ -421,6 +481,12 @@ input[name="tab-selector"] {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 10px;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .card-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .card-item {
@@ -480,13 +546,95 @@ input[name="tab-selector"] {
 }
 
 @media (max-width: 768px) {
+    .cheat-sheet-content {
+        margin: 6px;
+        padding: 6px;
+    }
+    
+    .cheat-section {
+        margin-bottom: 20px;
+        padding: 15px;
+    }
+    
+    .cheat-section h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
     .leader-reference .leader-columns {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .leader-reference .leader-column h4 {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    
+    .leader-reference .leader-list li {
+        font-size: 12px;
+        padding: 3px 0;
     }
     
     .card-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .card-item {
+        padding: 6px 8px;
+        font-size: 12px;
+        text-align: left;
+    }
+    
+    .rule-item {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cheat-sheet-content {
+        margin: 3px;
+        padding: 4px;
+    }
+    
+    .cheat-section {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .cheat-section h3 {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+    
+    .leader-reference .leader-columns {
+        gap: 10px;
+    }
+    
+    .leader-reference .leader-column h4 {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+    
+    .leader-reference .leader-list li {
+        font-size: 11px;
+        padding: 2px 0;
+    }
+    
+    .card-grid {
+        gap: 6px;
+    }
+    
+    .card-item {
+        padding: 5px 6px;
+        font-size: 11px;
+    }
+    
+    .rule-item {
+        padding: 8px;
+        font-size: 13px;
     }
 }
 
@@ -1272,25 +1420,27 @@ function initializeCheatSheet() {
                     </div>
                 </div>
             </div>
-            
-            <!-- Battle Rules Reference -->
+
+            <!-- Special Karama Rules -->
             <div class="cheat-section">
-                <h3>Battle Rules Quick Reference</h3>
+                <h3>Special Karama Rules (Advanced)</h3>
                 <div class="rules-reference">
                     <div class="rule-item">
-                        <strong>Force Feeding:</strong> Most factions need 1 spice per force for full strength. Unfed forces = 0.5 strength.
+                        <strong>Atreides:</strong> You may use a Karama Card to look at
+any one player’s entire Battle Plan.
                     </div>
                     <div class="rule-item">
-                        <strong>Fremen Exception:</strong> Fremen forces always count as full strength (no spice needed).
+                        <strong>Emperor:</strong> You may use a Karama Card to revive up
+to three forces or one leader for free.
                     </div>
                     <div class="rule-item">
-                        <strong>Lasgun + Shield:</strong> Creates nuclear explosion, destroys both forces.
+                        <strong>Fremen:</strong> You may use a Karama Card to place your sandworm token in any sand territory that you wish. This is treated as a normal sandworm.
                     </div>
                     <div class="rule-item">
-                        <strong>Family Atomics:</strong> Destroys all forces in the territory.
+                        <strong>Spacing Guild:</strong> You may use a Karama Card to stop one off-planet shipment of any one player.
                     </div>
                     <div class="rule-item">
-                        <strong>Tleilaxu Leader:</strong> Zoal (X) strength equals enemy leader strength.
+                        <strong>Harkonnen:</strong> You may use a Karama Card to take without looking any number of cards, up to the entire hand of any one player of your choice. For each card you take, you must give that player one of your cards in return.
                     </div>
                 </div>
             </div>
@@ -2453,11 +2603,19 @@ function initializeBattleWheel() {
                     <h3 id="your-forces-header" style="background-color: ${factionColor}; color: ${textColor}; margin: -15px -15px 15px -15px; padding: 10px;">Your Forces</h3>
                     <div class="input-group">
                         <label>Forces:</label>
-                        <input type="number" id="your-forces" min="0" max="20" value="0" onchange="updateBattleDial()">
+                        <div class="number-input-container">
+                            <div class="number-btn minus" onclick="decrementValue('your-forces')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
+                            <input type="number" id="your-forces" min="0" max="20" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                            <div class="number-btn plus" onclick="incrementValue('your-forces')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
+                        </div>
                     </div>
                     <div class="input-group">
                         <label>Spice to Feed Forces:</label>
-                        <input type="number" id="spice-feeding" min="0" max="20" value="0" onchange="updateBattleDial()">
+                        <div class="number-input-container">
+                            <div class="number-btn minus" onclick="decrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
+                            <input type="number" id="spice-feeding" min="0" max="20" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                            <div class="number-btn plus" onclick="incrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
+                        </div>
                         <small id="spice-info">Spice needed: 0</small>
                     </div>
                     <div class="input-group">
@@ -2477,41 +2635,21 @@ function initializeBattleWheel() {
                         <label>Weapon:</label>
                         <select id="your-weapon" onchange="updateBattleDial()">
                             <option value="0">No Weapon</option>
-                            <optgroup label="Projectile Weapons">
-                                <option value="1">Crysknife (1)</option>
-                                <option value="2">Maula Pistol (2)</option>
-                                <option value="3">Slip Tip (3)</option>
-                                <option value="4">Stunner (4)</option>
-                                <option value="5">Hunter Seeker (5)</option>
-                            </optgroup>
-                            <optgroup label="Poison Weapons">
-                                <option value="2">Gom Jabbar (2)</option>
-                                <option value="3">Ellaca Drug (3)</option>
-                                <option value="4">Chaumas (4)</option>
-                                <option value="5">Chaumurky (5)</option>
-                                <option value="6">Basilia Weapon (6)</option>
-                            </optgroup>
-                            <optgroup label="Special Weapons">
-                                <option value="lasgun">Lasgun (*)</option>
-                                <option value="artillery">Artillery Strike (*)</option>
-                                <option value="family-atomics">Family Atomics (*)</option>
-                            </optgroup>
+                            <option value="projectile">Projectile Weapon</option>
+                            <option value="poison">Poison Weapon</option>
+                            <option value="lasgun">Lasgun</option>
+                            <option value="artillery">Artillery Strike</option>
+                            <option value="chemistry">Chemistry</option>
                         </select>
                     </div>
                     <div class="input-group">
                         <label>Defense:</label>
                         <select id="your-defense" onchange="updateBattleDial()">
                             <option value="none">No Defense</option>
-                            <optgroup label="Projectile Defense">
-                                <option value="shield">Shield</option>
-                            </optgroup>
-                            <optgroup label="Poison Defense">
-                                <option value="snooper">Snooper</option>
-                            </optgroup>
-                            <optgroup label="Special Defense">
-                                <option value="chemistry">Chemistry</option>
-                                <option value="shield-snooper">Shield Snooper</option>
-                            </optgroup>
+                            <option value="shield">Shield (Projectile Defense)</option>
+                            <option value="snooper">Snooper (Poison Defense)</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="shield-snooper">Shield Snooper</option>
                         </select>
                     </div>
                 </div>
@@ -2527,6 +2665,11 @@ function initializeBattleWheel() {
                         </div>
                         <div id="weapon-info">
                             <div class="info-text">No weapons or defenses selected</div>
+                        </div>
+                        <div style="margin-top: 15px; text-align: center;">
+                            <button onclick="clearBattleWheel()" style="padding: 8px 16px; font-size: 14px; background-color: #666; color: white; border: none; cursor: pointer; border-radius: 4px;">
+                                Clear Battle Wheel
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2654,6 +2797,29 @@ function calculateFactionForceStrength(faction, totalForces, spiceFeeding) {
     };
 }
 
+// Custom number input functions
+function incrementValue(inputId) {
+    const input = document.getElementById(inputId);
+    const currentValue = parseInt(input.value) || 0;
+    const maxValue = parseInt(input.max) || 20;
+    
+    if (currentValue < maxValue) {
+        input.value = currentValue + 1;
+        input.dispatchEvent(new Event('change'));
+    }
+}
+
+function decrementValue(inputId) {
+    const input = document.getElementById(inputId);
+    const currentValue = parseInt(input.value) || 0;
+    const minValue = parseInt(input.min) || 0;
+    
+    if (currentValue > minValue) {
+        input.value = currentValue - 1;
+        input.dispatchEvent(new Event('change'));
+    }
+}
+
 function updateBattleDial() {
     if (!document.getElementById('your-forces')) return;
     
@@ -2678,41 +2844,30 @@ function updateBattleDial() {
     
     yourLeader = parseInt(yourLeader) || 0;
     
-    // Calculate weapon strength
-    let yourWeaponStrength = 0;
+    // Get weapon name for display
     let weaponName = 'No weapon';
     
-    if (yourWeapon && !isNaN(parseInt(yourWeapon))) {
-        yourWeaponStrength = parseInt(yourWeapon);
-        weaponName = document.getElementById('your-weapon').selectedOptions[0].text;
+    if (yourWeapon === 'projectile') {
+        weaponName = 'Projectile Weapon';
+    } else if (yourWeapon === 'poison') {
+        weaponName = 'Poison Weapon';
     } else if (yourWeapon === 'lasgun') {
-        weaponName = 'Lasgun (special)';
+        weaponName = 'Lasgun';
     } else if (yourWeapon === 'artillery') {
-        weaponName = 'Artillery Strike (variable)';
-    } else if (yourWeapon === 'family-atomics') {
-        weaponName = 'Family Atomics (destroys all)';
+        weaponName = 'Artillery Strike';
+    } else if (yourWeapon === 'chemistry') {
+        weaponName = 'Chemistry';
+    } else if (yourWeapon && yourWeapon !== '0') {
+        weaponName = document.getElementById('your-weapon').selectedOptions[0].text;
     }
     
     // Check for special weapons
-    if (yourWeapon === 'family-atomics') {
-        document.getElementById('your-total').textContent = '∞';
-        document.getElementById('strength-breakdown').innerHTML = '<small>Family Atomics</small>';
-        document.getElementById('weapon-info').innerHTML = '<div class="info-text" style="color: #d32f2f;">⚠️ Family Atomics destroys ALL forces in territory</div>';
-        return;
-    }
     
-    if (yourWeapon === 'lasgun') {
-        document.getElementById('your-total').textContent = effectiveForces + yourLeader + ' + ?';
-        document.getElementById('strength-breakdown').innerHTML = '<small>' + effectiveForces + ' effective forces + ' + yourLeader + ' leader + Lasgun</small>';
-        document.getElementById('weapon-info').innerHTML = '<div class="info-text" style="color: #ff9800;">⚠️ Lasgun: If enemy has Shield = Nuclear explosion!</div>';
-        return;
-    }
-    
-    const yourTotal = effectiveForces + yourLeader + yourWeaponStrength;
+    const yourTotal = effectiveForces + yourLeader;
     
     // Update display
     document.getElementById('your-total').textContent = yourTotal;
-    document.getElementById('strength-breakdown').innerHTML = '<small>' + effectiveForces + ' effective forces + ' + yourLeader + ' leader + ' + yourWeaponStrength + ' weapon</small>';
+    document.getElementById('strength-breakdown').innerHTML = '<small>' + effectiveForces + ' effective forces + ' + yourLeader + ' leader</small>';
     
     // Update weapon info
     let defenseInfo = '';
@@ -2721,8 +2876,26 @@ function updateBattleDial() {
         defenseInfo = '<br><strong>Defense:</strong> ' + defenseName;
     }
     
-    document.getElementById('weapon-info').innerHTML = 
-        '<div class="info-text"><strong>Weapon:</strong> ' + weaponName + defenseInfo + '</div>';
+    // Add special weapon warnings
+    let weaponInfo = '<div class="info-text"><strong>Weapon:</strong> ' + weaponName + defenseInfo;
+    if (yourWeapon === 'lasgun') {
+        weaponInfo += '<br><span style="color: #ff9800;">⚠️ Lasgun: If enemy has Shield = Nuclear explosion!</span>';
+    }
+    weaponInfo += '</div>';
+    
+    document.getElementById('weapon-info').innerHTML = weaponInfo;
+}
+
+// Clear Battle Wheel function
+function clearBattleWheel() {
+    if (confirm('Clear all Battle Wheel selections?')) {
+        document.getElementById('your-forces').value = 0;
+        document.getElementById('spice-feeding').value = 0;
+        document.getElementById('your-leader').value = '0';
+        document.getElementById('your-weapon').value = '0';
+        document.getElementById('your-defense').value = 'none';
+        updateBattleDial();
+    }
 }
 
 // Initialize event listeners
@@ -2835,6 +3008,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 </script>
 
+<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+    <button onclick="resetData()" style="padding: 10px; font-size: 16px; background-color: red; color: white; border: none; cursor: pointer; border-radius: 5px;">
+        Reset Game Data
+    </button>
+</div>
+
 </div> <!-- End of Atreides Tracker Page Content -->
 
 <!-- Battle Wheel Page Content -->
@@ -2861,11 +3040,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 </body>
-<div style="text-align: center; margin-top: 20px;">
-    <button onclick="resetData()" style="padding: 10px; font-size: 16px; background-color: red; color: white; margin-bottom: 20px; border: none; cursor: pointer; border-radius: 5px;">
-        Reset Game Data
-    </button>
-</div>
+
     <footer style="
         width: 100%;
         /* background-color: #f1f1f1; */
