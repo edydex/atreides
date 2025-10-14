@@ -67,6 +67,46 @@ body { font-family: Arial, sans-serif; padding: 15px; font-size: 16px;}
   font-size: 24px;
   cursor: pointer;
 }
+
+/* Info Banner Styling */
+.info-banner {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-left: 4px solid #f39c12;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  position: relative;
+  color: #856404;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.info-banner h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #d68910;
+}
+
+.banner-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #856404;
+  background: none;
+  border: none;
+  padding: 0;
+  line-height: 1;
+}
+
+.banner-close:hover {
+  color: #d68910;
+  font-weight: bold;
+}
+
 .faction-selection {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -961,6 +1001,13 @@ input[type="text"] {
 <!-- Atreides Tracker Page Content -->
 <div class="page-content-atreides">
 
+<!-- Information Banner -->
+<div id="info-banner" class="info-banner">
+    <button class="banner-close" onclick="closeBanner()">&times;</button>
+    <h4>YOU ARE NOT ENTITLED TO ALL INFORMATION</h4>
+    <p>You only get to keep track of Treachery cards. You might only be able to keep track of the spice of 1-2 people, but you won't have time to keep track of everything, you would just be holding up the game.</p>
+</div>
+
 <!-- "Manage Factions" button and its contents" -->
 <div class="faction-management">
   <button id="manageFactions" class="manage-factions-btn">Manage Factions</button>
@@ -1170,22 +1217,24 @@ const factionData = {
         name: 'Ecaz', 
         color: 'pink',
         leaders: [
-            { name: 'Archduke Armand Ecaz', strength: 4 },
+            { name: 'Duke Prad Vidal', strength: 6 },
+            { name: 'Whitmore Bludd', strength: 4 },
             { name: 'Sanya Ecaz', strength: 4 },
-            { name: 'Ecaz Troubadour', strength: 3 },
-            { name: 'Ecaz Diplomat', strength: 3 },
-            { name: 'Ecaz Swordmaster', strength: 2 }
+            { name: 'Rivvy Dinary', strength: 3 },
+            { name: 'Ilesa Ecaz', strength: 3 },
+            { name: 'Bindikk Narvi', strength: 2 }
         ]
     },
     'moritani': { 
         name: 'Moritani', 
         color: 'teal',
         leaders: [
-            { name: 'Viscount Hundro Moritani', strength: 5 },
-            { name: 'Wolfram Moritani', strength: 4 },
-            { name: 'Moritani Assassin', strength: 3 },
-            { name: 'Moritani Mentat', strength: 3 },
-            { name: 'Moritani Trooper', strength: 2 }
+            { name: 'Duke Prad Vidal', strength: 6 },
+            { name: 'Lupino Ord', strength: 5 },
+            { name: 'Grieu Kronos', strength: 4 },
+            { name: 'Hiih Resser', strength: 4 },
+            { name: 'Trin Kronos', strength: 2 },
+            { name: 'Vando Terboli', strength: 1 }
         ]
     },
     'ixians': { 
@@ -1587,6 +1636,16 @@ function openFactionModal() {
 
 function closeFactionModal() {
   document.getElementById('factionModal').style.display = 'none';
+}
+
+// Close info banner function
+function closeBanner() {
+  const banner = document.getElementById('info-banner');
+  if (banner) {
+    banner.style.display = 'none';
+    // Save preference to localStorage so it stays closed
+    localStorage.setItem('atreidesInfoBannerClosed', 'true');
+  }
 }
 
 function applyFactionChanges() {
@@ -2654,7 +2713,26 @@ function initializeBattleWheel() {
                             </div>
                             <small id="spice-info">Fedaykin (2 strength each, no spice needed)</small>
                         </div>
-                    ` : selectedFaction === 'ixians' || selectedFaction === 'emperor' ? `
+                    ` : selectedFaction === 'emperor' ? `
+                        <div class="input-group">
+                            <label>Special Troops:</label>
+                            <div class="number-input-container">
+                                <div class="number-btn minus" onclick="decrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
+                                <input type="number" id="special-troops" min="0" max="5" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                                <div class="number-btn plus" onclick="incrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
+                            </div>
+                            <small>Elite troops (2 strength when fed, 1 when unfed). Against Fremen they count as normal forces.</small>
+                        </div>
+                        <div class="input-group">
+                            <label>Spice to Feed Forces:</label>
+                            <div class="number-input-container">
+                                <div class="number-btn minus" onclick="decrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
+                                <input type="number" id="spice-feeding" min="0" max="20" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                                <div class="number-btn plus" onclick="incrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
+                            </div>
+                            <small id="spice-info">Prioritizes feeding special troops first</small>
+                        </div>
+                    ` : selectedFaction === 'ixians' ? `
                         <div class="input-group">
                             <label>Special Troops:</label>
                             <div class="number-input-container">
@@ -3064,6 +3142,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize faction UI and data
     loadData();
+    
+    // Check if info banner should be hidden
+    if (localStorage.getItem('atreidesInfoBannerClosed') === 'true') {
+        const banner = document.getElementById('info-banner');
+        if (banner) {
+            banner.style.display = 'none';
+        }
+    }
     
     // Initialize faction selector and page functionality
     initializeFactionSelector();
