@@ -392,6 +392,34 @@ input[type="number"] {
     appearance: textfield;
 }
 
+/* Custom Checkbox Styling */
+.kwisatz-checkbox {
+    display: flex !important;
+    align-items: center !important;
+    font-weight: normal !important;
+    cursor: pointer !important;
+    margin-top: 8px !important;
+    line-height: 1.2 !important;
+}
+
+.kwisatz-checkbox input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    margin-right: 8px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    cursor: pointer !important;
+    accent-color: #4CAF50 !important;
+    flex-shrink: 0 !important;
+}
+
+.kwisatz-checkbox-text {
+    flex: 1 !important;
+    white-space: nowrap !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+}
+
 .battle-wheel-display {
     flex: 1;
     min-width: 280px;
@@ -1080,11 +1108,18 @@ const factionData = {
         name: 'Harkonnen', 
         color: 'black',
         leaders: [
-            { name: 'Baron Harkonnen', strength: 4 },
+            { name: 'Feyd-Rautha', strength: 6 },
             { name: 'Beast Rabban', strength: 4 },
-            { name: 'Feyd-Rautha', strength: 2 },
-            { name: 'Piter de Vries', strength: 2 },
-            { name: 'Captain Iakin', strength: 2 }
+            { name: 'Piter de Vries', strength: 3 },
+            { name: 'Captain Iakin', strength: 2 },
+            { name: 'Umman Kudu', strength: 1 },
+            { name: 'Captured Leader', strength: 7 },
+            { name: 'Captured Leader', strength: 6 },
+            { name: 'Captured Leader', strength: 5 },
+            { name: 'Captured Leader', strength: 4 },
+            { name: 'Captured Leader', strength: 3 },
+            { name: 'Captured Leader', strength: 2 },
+            { name: 'Captured Leader', strength: 1 }
         ]
     },
     'emperor': { 
@@ -2609,15 +2644,46 @@ function initializeBattleWheel() {
                             <div class="number-btn plus" onclick="incrementValue('your-forces')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
                         </div>
                     </div>
-                    <div class="input-group">
-                        <label>Spice to Feed Forces:</label>
-                        <div class="number-input-container">
-                            <div class="number-btn minus" onclick="decrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
-                            <input type="number" id="spice-feeding" min="0" max="20" value="0" onchange="updateBattleDial()" inputmode="numeric">
-                            <div class="number-btn plus" onclick="incrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
+                    ${selectedFaction === 'fremen' ? `
+                        <div class="input-group">
+                            <label>Fedaykin Special Troops:</label>
+                            <div class="number-input-container">
+                                <div class="number-btn minus" onclick="decrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
+                                <input type="number" id="special-troops" min="0" max="3" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                                <div class="number-btn plus" onclick="incrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
+                            </div>
+                            <small id="spice-info">Fedaykin (2 strength each, no spice needed)</small>
                         </div>
-                        <small id="spice-info">Spice needed: 0</small>
-                    </div>
+                    ` : selectedFaction === 'ixians' || selectedFaction === 'emperor' ? `
+                        <div class="input-group">
+                            <label>Special Troops:</label>
+                            <div class="number-input-container">
+                                <div class="number-btn minus" onclick="decrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
+                                <input type="number" id="special-troops" min="0" max="5" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                                <div class="number-btn plus" onclick="incrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
+                            </div>
+                            <small>Elite troops (2 strength when fed, 1 when unfed)</small>
+                        </div>
+                        <div class="input-group">
+                            <label>Spice to Feed Forces:</label>
+                            <div class="number-input-container">
+                                <div class="number-btn minus" onclick="decrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
+                                <input type="number" id="spice-feeding" min="0" max="20" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                                <div class="number-btn plus" onclick="incrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
+                            </div>
+                            <small id="spice-info">Prioritizes feeding special troops first</small>
+                        </div>
+                    ` : `
+                        <div class="input-group">
+                            <label>Spice to Feed Forces:</label>
+                            <div class="number-input-container">
+                                <div class="number-btn minus" onclick="decrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
+                                <input type="number" id="spice-feeding" min="0" max="20" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                                <div class="number-btn plus" onclick="incrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
+                            </div>
+                            <small id="spice-info">Spice needed: 0</small>
+                        </div>
+                    `}
                     <div class="input-group">
                         <label>Leader:</label>
                         <select id="your-leader" onchange="updateBattleDial()">
@@ -2630,6 +2696,12 @@ function initializeBattleWheel() {
                             }).join('')}
                             <option value="0">Cheap Hero (0)</option>
                         </select>
+                        ${selectedFaction === 'atreides' ? `
+                            <label class="kwisatz-checkbox">
+                                <input type="checkbox" id="kwisatz-haderach" onchange="validateKwisatzHaderach(); updateBattleDial();">
+                                <span class="kwisatz-checkbox-text">With Kwisatz Haderach (+2)</span>
+                            </label>
+                        ` : ''}
                     </div>
                     <div class="input-group">
                         <label>Weapon:</label>
@@ -2764,20 +2836,41 @@ function darkenColor(color, amount) {
     return darkVersions[color] || '#333';
 }
 
-function calculateFactionForceStrength(faction, totalForces, spiceFeeding) {
+function calculateFactionForceStrength(faction, totalForces, spiceFeeding, specialTroops = 0) {
     let effectiveForces = 0;
     let spiceNeeded = totalForces;
     let factionRule = '';
     
     switch(faction) {
         case 'fremen':
+            // Regular forces always full strength (no spice needed)
             effectiveForces = totalForces;
+            // Fedaykin are worth 2 each and don't need spice
+            effectiveForces += specialTroops * 2;
             spiceNeeded = 0;
-            factionRule = 'Fremen forces always count full strength (no spice needed)';
+            factionRule = `Fremen: ${totalForces} regular (1 each) + ${specialTroops} Fedaykin (2 each)`;
+            break;
+            
+        case 'ixians':
+        case 'emperor':
+            // Prioritize feeding special troops first (they're worth more when fed)
+            const totalTroopsToFeed = totalForces + specialTroops;
+            spiceNeeded = totalTroopsToFeed;
+            
+            let remainingSpice = spiceFeeding;
+            let fedSpecialTroops = Math.min(remainingSpice, specialTroops);
+            remainingSpice -= fedSpecialTroops;
+            let unfedSpecialTroops = specialTroops - fedSpecialTroops;
+            
+            let fedRegularForces = Math.min(remainingSpice, totalForces);
+            let unfedRegularForces = totalForces - fedRegularForces;
+            
+            effectiveForces = (fedSpecialTroops * 2) + (unfedSpecialTroops * 1) + (fedRegularForces * 1) + (unfedRegularForces * 0.5);
+            
+            factionRule = `Fed special: ${fedSpecialTroops}×2, unfed special: ${unfedSpecialTroops}×1, fed regular: ${fedRegularForces}×1, unfed regular: ${unfedRegularForces}×0.5`;
             break;
             
         case 'harkonnen':
-        case 'emperor':
         case 'atreides':
         case 'gesserit':
         case 'guild':
@@ -2824,15 +2917,25 @@ function updateBattleDial() {
     if (!document.getElementById('your-forces')) return;
     
     const yourForces = parseInt(document.getElementById('your-forces').value) || 0;
-    const spiceFeeding = parseInt(document.getElementById('spice-feeding').value) || 0;
+    const spiceFeedingElement = document.getElementById('spice-feeding');
+    const spiceFeeding = spiceFeedingElement ? parseInt(spiceFeedingElement.value) || 0 : 0;
+    const specialTroopsElement = document.getElementById('special-troops');
+    const specialTroops = specialTroopsElement ? parseInt(specialTroopsElement.value) || 0 : 0;
     let yourLeader = document.getElementById('your-leader').value;
     const yourWeapon = document.getElementById('your-weapon').value;
     const yourDefense = document.getElementById('your-defense').value;
     
-    const { effectiveForces, spiceNeeded, factionRule } = calculateFactionForceStrength(selectedFaction, yourForces, spiceFeeding);
+    const { effectiveForces, spiceNeeded, factionRule } = calculateFactionForceStrength(selectedFaction, yourForces, spiceFeeding, specialTroops);
     
     // Update spice info display
-    document.getElementById('spice-info').textContent = 'Spice needed: ' + spiceNeeded + ' | ' + factionRule;
+    const spiceInfoElement = document.getElementById('spice-info');
+    if (spiceInfoElement) {
+        if (selectedFaction === 'fremen') {
+            spiceInfoElement.textContent = factionRule;
+        } else {
+            spiceInfoElement.textContent = 'Spice needed: ' + spiceNeeded + ' | ' + factionRule;
+        }
+    }
     
     // Handle Tleilaxu's special "X" leader
     if (yourLeader === 'X') {
@@ -2863,11 +2966,24 @@ function updateBattleDial() {
     
     // Check for special weapons
     
-    const yourTotal = effectiveForces + yourLeader;
+    // Check for Kwisatz Haderach bonus (Atreides only)
+    let kwisatzBonus = 0;
+    const kwisatzCheckbox = document.getElementById('kwisatz-haderach');
+    if (kwisatzCheckbox && kwisatzCheckbox.checked) {
+        kwisatzBonus = 2;
+    }
+    
+    const yourTotal = effectiveForces + yourLeader + kwisatzBonus;
     
     // Update display
     document.getElementById('your-total').textContent = yourTotal;
-    document.getElementById('strength-breakdown').innerHTML = '<small>' + effectiveForces + ' effective forces + ' + yourLeader + ' leader</small>';
+    
+    // Build breakdown text
+    let breakdownText = effectiveForces + ' effective forces + ' + yourLeader + ' leader';
+    if (kwisatzBonus > 0) {
+        breakdownText += ' + ' + kwisatzBonus + ' Kwisatz Haderach';
+    }
+    document.getElementById('strength-breakdown').innerHTML = '<small>' + breakdownText + '</small>';
     
     // Update weapon info
     let defenseInfo = '';
@@ -2886,14 +3002,52 @@ function updateBattleDial() {
     document.getElementById('weapon-info').innerHTML = weaponInfo;
 }
 
+// Validate Kwisatz Haderach selection
+function validateKwisatzHaderach() {
+    const leaderSelect = document.getElementById('your-leader');
+    const kwisatzCheckbox = document.getElementById('kwisatz-haderach');
+    
+    if (kwisatzCheckbox && kwisatzCheckbox.checked) {
+        const leaderValue = leaderSelect ? leaderSelect.value : '0';
+        // "No Leader" has value "0" and we need to distinguish it from "Cheap Hero" which also has value "0"
+        const selectedText = leaderSelect ? leaderSelect.selectedOptions[0].text : '';
+        
+        if (leaderValue === '0' && selectedText === 'No Leader (0)') {
+            alert('Kwisatz Haderach can only be added if another Leader is also selected');
+            kwisatzCheckbox.checked = false;
+            return false;
+        }
+    }
+    return true;
+}
+
 // Clear Battle Wheel function
 function clearBattleWheel() {
     if (confirm('Clear all Battle Wheel selections?')) {
         document.getElementById('your-forces').value = 0;
-        document.getElementById('spice-feeding').value = 0;
+        
+        // Clear spice feeding if it exists (not for Fremen)
+        const spiceFeedingElement = document.getElementById('spice-feeding');
+        if (spiceFeedingElement) {
+            spiceFeedingElement.value = 0;
+        }
+        
+        // Clear special troops if it exists
+        const specialTroopsElement = document.getElementById('special-troops');
+        if (specialTroopsElement) {
+            specialTroopsElement.value = 0;
+        }
+        
         document.getElementById('your-leader').value = '0';
         document.getElementById('your-weapon').value = '0';
         document.getElementById('your-defense').value = 'none';
+        
+        // Also clear Kwisatz Haderach checkbox if it exists
+        const kwisatzCheckbox = document.getElementById('kwisatz-haderach');
+        if (kwisatzCheckbox) {
+            kwisatzCheckbox.checked = false;
+        }
+        
         updateBattleDial();
     }
 }
