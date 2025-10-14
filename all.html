@@ -460,6 +460,14 @@ input[type="number"] {
     line-height: 1.2 !important;
 }
 
+.description {
+    font-size: 12px !important;
+    color: #666 !important;
+    margin-top: 5px !important;
+    line-height: 1.3 !important;
+    font-style: italic !important;
+}
+
 .battle-wheel-display {
     flex: 1;
     min-width: 280px;
@@ -1992,7 +2000,7 @@ const traitors = {
 	{ name: "Cheap Hero (0)" }
   ],
   ecaz: [
-    { name: "Archduke Armand Ecaz (6)" },
+    { name: "Duke Prad Vidal(6)" },
     { name: "Whitmore Bludd (4)" },
     { name: "Sanyá Ecaz (4)" },
     { name: "Ilesa Ecaz (3)" },
@@ -2804,6 +2812,21 @@ function initializeBattleWheel() {
                             <option value="chemistry">Chemistry</option>
                             <option value="shield-snooper">Shield Snooper</option>
                         </select>
+                        ${selectedFaction !== 'ecaz' ? `
+                            <label class="kwisatz-checkbox">
+                                <input type="checkbox" id="ecaz-alliance" onchange="toggleEcazForces(); updateBattleDial();">
+                                <span class="kwisatz-checkbox-text">Allied to Ecaz?</span>
+                            </label>
+                        ` : ''}
+                    </div>
+                    <div class="input-group" id="ecaz-forces-group" style="display: none;">
+                        <label>Ecaz Forces:</label>
+                        <div class="number-input-container">
+                            <div class="number-btn minus" onclick="decrementValue('ecaz-forces')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
+                            <input type="number" id="ecaz-forces" value="0" min="0" max="20" onchange="updateBattleDial()" inputmode="numeric">
+                            <div class="number-btn plus" onclick="incrementValue('ecaz-forces')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
+                        </div>
+                        <div class="description">Half of Ecaz forces (rounded up) have to participate in battle, each troop has 1 strength</div>
                     </div>
                 </div>
                 
@@ -3054,7 +3077,14 @@ function updateBattleDial() {
         kwisatzBonus = 2;
     }
     
-    const yourTotal = effectiveForces + yourLeader + kwisatzBonus;
+    // Check for Ecaz alliance forces
+    let ecazForces = 0;
+    const ecazCheckbox = document.getElementById('ecaz-alliance');
+    if (ecazCheckbox && ecazCheckbox.checked) {
+        ecazForces = parseInt(document.getElementById('ecaz-forces').value) || 0;
+    }
+    
+    const yourTotal = effectiveForces + yourLeader + kwisatzBonus + ecazForces;
     
     // Update display
     document.getElementById('your-total').textContent = yourTotal;
@@ -3063,6 +3093,9 @@ function updateBattleDial() {
     let breakdownText = effectiveForces + ' effective forces + ' + yourLeader + ' leader';
     if (kwisatzBonus > 0) {
         breakdownText += ' + ' + kwisatzBonus + ' Kwisatz Haderach';
+    }
+    if (ecazForces > 0) {
+        breakdownText += ' + ' + ecazForces + ' Ecaz forces';
     }
     document.getElementById('strength-breakdown').innerHTML = '<small>' + breakdownText + '</small>';
     
@@ -3102,6 +3135,21 @@ function validateKwisatzHaderach() {
     return true;
 }
 
+// Toggle Ecaz Forces display and functionality
+function toggleEcazForces() {
+    const checkbox = document.getElementById('ecaz-alliance');
+    const forcesGroup = document.getElementById('ecaz-forces-group');
+    
+    if (checkbox && forcesGroup) {
+        if (checkbox.checked) {
+            forcesGroup.style.display = 'block';
+        } else {
+            forcesGroup.style.display = 'none';
+            document.getElementById('ecaz-forces').value = 0;
+        }
+    }
+}
+
 // Clear Battle Wheel function
 function clearBattleWheel() {
     if (confirm('Clear all Battle Wheel selections?')) {
@@ -3127,6 +3175,17 @@ function clearBattleWheel() {
         const kwisatzCheckbox = document.getElementById('kwisatz-haderach');
         if (kwisatzCheckbox) {
             kwisatzCheckbox.checked = false;
+        }
+        
+        // Also clear Ecaz alliance checkbox if it exists
+        const ecazCheckbox = document.getElementById('ecaz-alliance');
+        if (ecazCheckbox) {
+            ecazCheckbox.checked = false;
+            const forcesGroup = document.getElementById('ecaz-forces-group');
+            if (forcesGroup) {
+                forcesGroup.style.display = 'none';
+            }
+            document.getElementById('ecaz-forces').value = 0;
         }
         
         updateBattleDial();
