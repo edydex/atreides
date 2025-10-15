@@ -266,6 +266,54 @@ input[name="tab-selector"] {
     border-radius: 5px;
 }
 
+/* Faction Rules Popup Styling */
+.faction-rules-popup {
+    max-width: 800px;
+    max-height: 80vh;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    overflow-y: auto;
+    margin: 20px;
+}
+
+.faction-rules-popup h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.faction-rules-popup h3 {
+    color: #555;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.faction-rules-popup p {
+    line-height: 1.6;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.close-button:hover {
+    color: #000;
+}
+
 /* Faction tiles (faction cards) styling */
 .faction { border: 1px solid #000; padding: 1px; width: 15%; min-width: 175px; } /* faction cards tile */
 .faction h2 {
@@ -468,6 +516,60 @@ input[type="number"] {
     font-style: italic !important;
 }
 
+/* Faction Item Styles */
+.faction-item-compact {
+    padding: 4px 6px;
+    margin: 2px 0;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #f8f9fa;
+    display: inline-block;
+    width: fit-content;
+    font-size: 12px;
+}
+
+.faction-item-compact:hover {
+    background: #e9ecef;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.faction-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.faction-column h4 {
+    margin-bottom: 4px;
+    margin-top: 0;
+    font-size: 16px;
+}
+
+.faction-column {
+    padding: 0 2px;
+}
+
+.faction-reference {
+    padding: 2px 0px;
+}
+
+/* Faction Border Colors */
+.atreides-border { border-color: green; }
+.gesserit-border { border-color: blue; }
+.emperor-border { border-color: #c41e3a; }
+.fremen-border { border-color: #FFD700; }
+.guild-border { border-color: orange; }
+.harkonnen-border { border-color: black; }
+.ecaz-border { border-color: #FF69B4; }
+.moritani-border { border-color: #008080; }
+.ixians-border { border-color: #bbb0a5; }
+.tleilaxu-border { border-color: #800080; }
+.choam-border { border-color: #000; }
+.richese-border { border-color: #D3D3D3; }
+
 .battle-wheel-display {
     flex: 1;
     min-width: 280px;
@@ -540,8 +642,8 @@ input[type="number"] {
 
 .cheat-section {
     background: white;
-    margin-bottom: 30px;
-    padding: 20px;
+    margin-bottom: 20px;
+    padding: 12px 0px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -549,8 +651,8 @@ input[type="number"] {
 .cheat-section h3 {
     color: #4CAF50;
     border-bottom: 2px solid #4CAF50;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .card-grid {
@@ -1483,32 +1585,57 @@ function initializeCheatSheet() {
                 </div>
             </div>
             
-            <!-- Faction Leaders Section -->
+            <!-- Factions and Leaders Section -->
             <div class="cheat-section">
-                <h3>Faction Leaders</h3>
-                <div class="leader-reference">
-                    <div class="leader-columns">
-                        <div class="leader-column">
-                            <h4>Original Factions</h4>
-                            <ul class="leader-list">
-                                <li><strong>Atreides:</strong> 5, 5, 4, 2, 1</li>
-                                <li><strong>Gesserit:</strong> 5, 5, 5, 5, 5</li>
-                                <li><strong>Emperor:</strong> 6, 5, 3, 3, 2</li>
-                                <li><strong>Fremen:</strong> 7, 6, 5, 3, 2</li>
-                                <li><strong>Guild:</strong> 5, 3, 3, 2, 1</li>
-                                <li><strong>Harkonnen:</strong> 4, 4, 2, 2, 2</li>
-                            </ul>
+                <h3>Factions and their Leaders</h3>
+                <p style="color: #666; font-size: 14px; margin-bottom: 10px; font-style: italic;">Click a faction to see more information about them</p>
+                <div class="faction-reference">
+                    <div class="faction-columns">
+                        <div class="faction-column">
+                            <h4>Original</h4>
+                            <div class="faction-list">
+                                <div class="faction-item-compact atreides-border" onclick="showFactionRules('atreides')">
+                                    <strong>Atreides:</strong> 5, 5, 4, 2, 1
+                                </div>
+                                <div class="faction-item-compact gesserit-border" onclick="showFactionRules('gesserit')">
+                                    <strong>Gesserit:</strong> 5, 5, 5, 5, 5
+                                </div>
+                                <div class="faction-item-compact emperor-border" onclick="showFactionRules('emperor')">
+                                    <strong>Emperor:</strong> 6, 5, 3, 3, 2
+                                </div>
+                                <div class="faction-item-compact fremen-border" onclick="showFactionRules('fremen')">
+                                    <strong>Fremen:</strong> 7, 6, 5, 3, 2
+                                </div>
+                                <div class="faction-item-compact guild-border" onclick="showFactionRules('guild')">
+                                    <strong>Guild:</strong> 5, 3, 3, 2, 1
+                                </div>
+                                <div class="faction-item-compact harkonnen-border" onclick="showFactionRules('harkonnen')">
+                                    <strong>Harkonnen:</strong> 6, 4, 3, 2, 1
+                                </div>
+                            </div>
                         </div>
-                        <div class="leader-column">
-                            <h4>Expansion Factions</h4>
-                            <ul class="leader-list">
-                                <li><strong>Ecaz:</strong> 4, 4, 3, 3, 2</li>
-                                <li><strong>Moritani:</strong> 5, 4, 3, 3, 2</li>
-                                <li><strong>Ixians:</strong> 5, 4, 4, 3, 3</li>
-                                <li><strong>Tleilaxu:</strong> X, 3, 2, 2, 2</li>
-                                <li><strong>Choam:</strong> 4, 4, 3, 2, 2</li>
-                                <li><strong>Richese:</strong> 4, 4, 3, 3, 2</li>
-                            </ul>
+                        <div class="faction-column">
+                            <h4>Expansion</h4>
+                            <div class="faction-list">
+                                <div class="faction-item-compact ecaz-border" onclick="showFactionRules('ecaz')">
+                                    <strong>Ecaz:</strong> 6, 4, 4, 3, 3, 2
+                                </div>
+                                <div class="faction-item-compact moritani-border" onclick="showFactionRules('moritani')">
+                                    <strong>Moritani:</strong> 6, 5, 4, 4, 2, 1
+                                </div>
+                                <div class="faction-item-compact ixians-border" onclick="showFactionRules('ixians')">
+                                    <strong>Ixians:</strong> 5, 5, 4, 2, 1
+                                </div>
+                                <div class="faction-item-compact tleilaxu-border" onclick="showFactionRules('tleilaxu')">
+                                    <strong>Tleilaxu:</strong> X, 4, 3, 2, 1
+                                </div>
+                                <div class="faction-item-compact choam-border" onclick="showFactionRules('choam')">
+                                    <strong>Choam:</strong> 4, 4, 3, 3, 2, 2
+                                </div>
+                                <div class="faction-item-compact richese-border" onclick="showFactionRules('richese')">
+                                    <strong>Richese:</strong> 5, 4, 3, 2, 2
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3142,11 +3269,11 @@ function updateBattleDial() {
     document.getElementById('strength-breakdown').innerHTML = '<small>' + breakdownText + '</small>';
     
     // Update weapon info
-    let defenseInfo = '';
+    let defenseName = 'No Defense';
     if (yourDefense !== 'none') {
-        const defenseName = document.getElementById('your-defense').selectedOptions[0].text;
-        defenseInfo = '<br><strong>Defense:</strong> ' + defenseName;
+        defenseName = document.getElementById('your-defense').selectedOptions[0].text;
     }
+    let defenseInfo = '<br><strong>Defense:</strong> ' + defenseName;
     
     // Add special weapon warnings
     let weaponInfo = '<div class="info-text"><strong>Weapon:</strong> ' + weaponName + defenseInfo;
@@ -3278,6 +3405,231 @@ function clearBattleWheel() {
         
         updateBattleDial();
     }
+}
+
+// Faction Special Rules Data
+const factionRules = {
+    'atreides': {
+        title: 'Atreides',
+        content: `
+            <h3>Alliance</h3>
+            <p>You may assist your allies by forcing their opponent to show them one element of their Battle Plan.</p>
+            
+            <h3>Advantages</h3>
+            <p><strong>BIDDING:</strong> During the bidding round, you may look at each Treachery Card as it comes up for purchase before any faction bids on it. You, and only you, may keep written records about cards.</p>
+            
+            <p><strong>MOVEMENT:</strong> At the start of the Movement Phase, before anyone moves, you may look at the top card of the Spice Deck.</p>
+            
+            <p><strong>BATTLE:</strong> During the Battle Phase, you may force your opponent to reveal your choice of one of the four elements they will use in their Battle Plan against you: the leader, the weapon, the defense, or the number dialed. If you choose to ask about a weapon or defense and your opponent tells you that they are not playing that element during this battle, you may not then ask to see a different element.</p>
+            
+            <h3>Advanced Game Advantage</h3>
+            <p><strong>KWISATZ HADERACH:</strong> The Kwisatz Haderach card starts out inactive and may not be used. Use the Kwisatz Haderach card and counter token to secretly keep track of force losses. Once you have lost 7 or more forces in a battle or battles, the Kwisatz Haderach card becomes active for the rest of the game and may be used as follows: It cannot be used alone in battle but may add its +2 strength to leaders or cheap heroes in one territory per turn. If the leader or cheap hero is killed, the Kwisatz Haderach has no effect in the battle. A leader accompanied by Kwisatz Haderach cannot turn traitor. The Kwisatz Haderach can only be killed if blown up by a lasgun/ shield explosion. If killed, the Kwisatz Haderach must be revived like any other leader. Alive or dead, the Kwisatz Haderach has no effect on the rule governing revival of Atreides leaders.</p>
+        `
+    },
+    'harkonnen': {
+        title: 'Harkonnen', 
+        content: `
+            <h3>Alliance</h3>
+            <p>Traitor cards that you hold may be used against your ally's opponent if you so choose.</p>
+            
+            <h3>Advantages</h3>
+            <p><strong>TRAITORS:</strong> At the start of the game when you draw 4 Traitor Cards, you keep them all including your own, and any leader cards of other factions can be revealed in a battle as a traitor.</p>
+            
+            <p><strong>TREACHERY:</strong> You may hold up to 8 Treachery Cards. When you have 8 cards you must pass during bidding. At the beginning of the game you are dealt 2 cards instead of 1, and every time you buy a card you get an extra card for free from the Treachery Deck (unless you are at 7 cards, because you can never have more than 8 total Treachery Cards in hand).</p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><strong>CAPTURED LEADERS:</strong> Every time you win a battle, you can either randomly select 1 leader from the loser (including the leader used in the battle, if not killed, but excluding all leaders already used elsewhere that turn) and place the leader disc face down into the Tleilaxu Tanks to gain 2 spice from the Spice Bank; or you can keep the leader and use it once in a battle, after which, if it wasn't killed during that battle, you must return that leader to its faction. When all of your own leaders have been killed, you must return all captured leaders immediately to their factions. Killed captured leaders are put in the Tleilaxu Tanks from which their factions can revive them (subject to the revival rules). A captured leader used in battle may be claimed as a traitor.</p>
+        `
+    },
+    'fremen': {
+        title: 'Fremen',
+        content: `
+            <h3>Alliance</h3>
+            <p>You may decide to protect (or not protect) your allies from being devoured by worms and, at your discretion, may also allow them to revive 3 forces for free during revival. In addition, your allies win with you if you win with the Fremen Special Victory Condition.</p>
+            
+            <h3>Advantages</h3>
+            <p><strong>SHIPMENT:</strong> During shipment, you may bring any or all of your reserves for free onto the Great Flat or onto any one territory within two territories of the Great Flat (subject to storm and occupancy rules).</p>
+            
+            <p><strong>MOVEMENT:</strong> During movement you may move your forces two territories instead of one.</p>
+            
+            <p><strong>SHAI-HULUD:</strong> If Shai-Hulud appears in a territory where you have forces, they are not devoured. Upon conclusion of the Nexus, you may "ride the worm" and move some or all of the forces in the territory to any territory subject to storm and occupancy rules. Any forces in that territory are not devoured. If Shai-Hulud appears again and you still have forces in the original territory, you may do this again.</p>
+            
+            <p><strong>FREMEN SPECIAL VICTORY CONDITION:</strong> If no faction has won by the end of the last turn and if you (or no one) occupies Sietch Tabr and Habbanya Sietch and neither Harkonnen, Atreides nor Emperor occupies Tuek's Sietch, your plans to alter Dune have succeeded and you and your allies win the game.</p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><strong>STORM RULE:</strong> Move the storm marker normally using the battle wheels on the first turn of the game. Subsequent storm movement is determined by you using your storm cards. You randomly select one face down storm card, secretly look at it, and place it face down on the margin of the game board. In the next storm phase the number on that storm card is revealed; the storm is moved counterclockwise that number of sectors and your storm card is returned to the set of 6 face down storm cards. You then randomly select a storm token and look at it for the next turn's storm movement.</p>
+            
+            <p><strong>WORMS:</strong> During a Spice Blow, all additional worms which appear after the first worm can be placed by you in any sand territory you wish. Any forces there, except yours, are devoured.</p>
+            
+            <p><strong>STORM LOSSES:</strong> If your forces are caught in a storm, only half of them there are killed (any fractions are rounded up). You may also bring your reserves into a storm at half loss.</p>
+            
+            <p><strong>FEDAYKIN:</strong> Your three starred forces, Fedaykin, have a special fighting capability. They are worth two normal forces in battle and in taking losses. They are each treated a one force in revival. Only one Fedaykin force can be revived per turn.</p>
+            
+            <p><strong>BATTLES:</strong> Your forces do not require spice to count at their full strength.</p>
+        `
+    },
+    'emperor': {
+        title: 'Emperor',
+        content: `
+            <h3>Alliance</h3>
+            <p>You may share your great wealth with your allies as well as paying spice (directly to the bank) for the revival of up to 3 extra of their forces (for a possible total of 6 during each Revival Phase) from the Tleilaxu Tanks.</p>
+            
+            <h3>Advantages</h3>
+            <p><strong>BIDDING:</strong> Whenever any other faction pays spice for a Treachery Card, they pay it to you instead of the Spice Bank. You may not discount the price of Treachery Cards; the full price must be paid.</p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><strong>SARDAUKAR:</strong> Your five starred forces, elite Sardaukar, have a special fighting capability. They are worth two normal forces in battle and in taking losses against all opponents except Fremen. Your starred forces are worth just one force against Fremen. They are treated as one force in revival. Only one Sardaukar force can be revived per turn.</p>
+        `
+    },
+    'guild': {
+        title: 'Spacing Guild',
+        content: `
+            <h3>Alliance</h3>
+            <p>Allies may ship from their off-planet reserves onto Dune or cross-ship from one territory to another with forces that are already on Dune at the Spacing Guild half-price rate. Your allies win with you if you win with the Spacing Guild Special Victory Condition.</p>
+            
+            <h3>Advantages</h3>
+            <p><strong>PAYMENT FOR SHIPMENT:</strong> When other factions ship forces onto Dune from their off-planet reserves, they pay the spice to you instead of to the Spice Bank.</p>
+            
+            <p><strong>THREE TYPES OF SHIPMENT:</strong> You are capable of making one of three types of shipments each turn:<br>
+            • You may ship normally from off-planet reserves to Dune<br>
+            • You may ship any number of forces from any one territory to any other territory on the board<br>
+            • You may ship any number of forces from any one territory back to your reserves</p>
+            
+            <p><strong>HALF PRICE:</strong> You pay only half the normal fee when shipping your forces, and pay 1 spice for every 2 of your forces shipped back to reserves.</p>
+            
+            <p><strong>SPACING GUILD SPECIAL VICTORY CONDITION:</strong> If no faction has been able to win the game by the end of play, you have prevented control of Dune and automatically win the game.</p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><strong>SHIP AND MOVE WHEN YOU WISH:</strong> You may take your shipment and move action out of turn. This would allow you to go first or last or in between other players' turns, however you wish. The rest of the factions must make their shipments and moves in the proper sequence. You do not have to reveal when you intend to make your shipment and move until the moment you wish to take it.</p>
+        `
+    },
+    'gesserit': {
+        title: 'Bene Gesserit',
+        content: `
+            <h3>Alliance</h3>
+            <p>In an alliance you may Voice an ally's opponent.</p>
+            
+            <h3>Advantages</h3>
+            <p><strong>PREDICTION:</strong> After step 1 (Positions) in the Setup Phase, you secretly predict when one other faction will win, placing a turn number card and a faction card from your prediction cards face down behind your Player Shield. Place the unused prediction cards face down back in the box. If the faction you predicted wins (alone or as an ally, even your ally) in the turn you predicted, reveal your prediction and win alone. You also can win normally. You can't predict that the Spacing Guild or Fremen will win with their special victory conditions.</p>
+            
+            <p><strong>SPIRITUAL ADVISORS:</strong> Whenever any other faction ships forces onto Dune from off-planet, you may ship 1 force for free from your reserves into the Polar Sink. You may also ship normally, of course.</p>
+            
+            <p><strong>VOICE:</strong> You may Voice your opponent to do as you wish with respect to one of the cards they play in their Battle Plan. For instance, to play or not play a specific weapon (poison weapon, projectile weapon or lasgun) or defense (snooper or shield), a worthless card, or a cheap hero. If your opponent can't comply with your command, they may do as they wish.</p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><strong>START OF GAME:</strong> After the Fremen placement (if that faction is in the game), you start with one peaceful advisor in any territory of your choice. If you are alone in the territory, flip the advisor to a fighter.</p>
+            
+            <p><strong>CHARITY:</strong> You always receive CHOAM charity of 2 spice regardless of how many spice you already have.</p>
+            
+            <p><strong>KARAMA:</strong> You may use any worthless card as if it is a Karama Card.</p>
+            
+            <p><strong>ADVISORS:</strong> Whenever any other faction ships forces to Dune from off-planet, you may ship for free one advisor from your reserves into that same territory (instead of the Polar Sink). Advisors in this territory cannot flip to fighters during this turn unless no other forces exist in the territory. Advisors coexist peacefully with other faction forces in the same territory. Advisors have no effect on the play of the other factions whatsoever and cannot collect spice, be involved in combat, prevent another faction's control of a stronghold, prevent another faction from challenging a stronghold (second force), use ornithopters, or play Family Atomics. Advisors are still susceptible to storms, sandworms, lasgun/shield explosions, and atomics.</p>
+            
+            <p><strong>FIGHTERS:</strong> When you ship forces into an unoccupied territory, you must ship as fighters. If you move advisors into an unoccupied territory, you must flip them to fighters. If you move advisors into an occupied territory, they may remain as advisors or flip to fighters.</p>
+            
+            <p><strong>INTRUSION:</strong> When another faction ships or moves into a territory where you have fighters, you may flip them to advisors.</p>
+            
+            <p><strong>BATTLE:</strong> On each turn after the Spice Blow and NEXUS Phase and before any shipment occurs, in all territories in which you have advisors and wish to battle, announce you are doing so, and flip all of those advisors to fighters</p>
+        `
+    },
+    'tleilaxu': {
+        title: 'Tleilaxu',
+        content: `
+            <h3>Alliance</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+        `
+    },
+    'ixians': {
+        title: 'Ixians',
+        content: `
+            <h3>Alliance</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+        `
+    },
+    'richese': {
+        title: 'Richese',
+        content: `
+            <h3>Alliance</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+        `
+    },
+    'choam': {
+        title: 'Choam',
+        content: `
+            <h3>Alliance</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+        `
+    },
+    'moritani': {
+        title: 'Moritani',
+        content: `
+            <h3>Alliance</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+        `
+    },
+    'ecaz': {
+        title: 'Ecaz',
+        content: `
+            <h3>Alliance</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+            
+            <h3>Advanced Game Advantages</h3>
+            <p><em>Placeholder - Rules to be added</em></p>
+        `
+    }
+};
+
+// Show faction special rules
+function showFactionRules(factionKey) {
+    const modal = document.getElementById('factionRulesModal');
+    const title = document.getElementById('faction-rules-title');
+    const content = document.getElementById('faction-rules-content');
+    
+    const faction = factionRules[factionKey];
+    if (faction) {
+        title.textContent = faction.title;
+        content.innerHTML = faction.content;
+        modal.style.display = 'flex';
+    }
+}
+
+// Close faction rules modal
+function closeFactionRules() {
+    const modal = document.getElementById('factionRulesModal');
+    modal.style.display = 'none';
 }
 
 // Initialize event listeners
@@ -3426,6 +3778,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="cardModal" class="card-modal" onclick="closeCardModal()">
     <div id="cardSvgContainer" class="card-svg">
         <!-- SVG will be injected here -->
+    </div>
+</div>
+
+<!-- Faction Rules Popup Overlay -->
+<div id="factionRulesModal" class="card-modal" onclick="closeFactionRules()">
+    <div class="faction-rules-popup" onclick="event.stopPropagation();">
+        <span class="close-button" onclick="closeFactionRules()">&times;</span>
+        <h2 id="faction-rules-title">Faction Rules</h2>
+        <div id="faction-rules-content">
+            <!-- Content will be populated by JavaScript -->
+        </div>
     </div>
 </div>
 
