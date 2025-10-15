@@ -622,6 +622,57 @@ input[type="number"] {
     color: #666;
 }
 
+/* Responsive Design for Faction Columns */
+/* Tablet and Desktop improvements */
+@media (min-width: 769px) {
+    .faction-columns {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .faction-column {
+        padding: 0 10px;
+    }
+    
+    .faction-item-compact {
+        font-size: 13px;
+        padding: 6px 8px;
+        margin: 3px 0;
+    }
+    
+    .faction-column h4 {
+        font-size: 18px;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+}
+
+/* Large Desktop improvements */
+@media (min-width: 1200px) {
+    .faction-columns {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        max-width: 1200px;
+    }
+    
+    .faction-item-compact {
+        font-size: 14px;
+        padding: 8px 10px;
+        margin: 4px 0;
+    }
+    
+    .faction-column h4 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    
+    .cheat-section {
+        padding: 20px 0px;
+    }
+}
+
 @media (max-width: 768px) {
     .battle-calculator-single {
         flex-direction: column;
@@ -630,6 +681,31 @@ input[type="number"] {
     .battle-section,
     .battle-wheel-display {
         min-width: auto;
+    }
+}
+
+/* Leader Killed Button Styling */
+.leader-killed-btn {
+    position: absolute;
+    left: 0;
+    padding: 6px 8px;
+    font-size: 11px;
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    line-height: 1.1;
+    transition: all 0.2s ease;
+}
+
+/* Make Leader Killed button bigger on larger screens */
+@media (min-width: 501px) {
+    .leader-killed-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        border-radius: 6px;
+        line-height: 1.2;
     }
 }
 
@@ -2976,7 +3052,7 @@ function initializeBattleWheel() {
                     <div class="battle-dial-single">
                         <h3>Your Total Strength</h3>
                         <div style="display: flex; align-items: center; justify-content: center; position: relative; margin: 20px 0;">
-                            <button onclick="killLeader()" style="position: absolute; left: 0; padding: 6px 8px; font-size: 11px; background-color: #d32f2f; color: white; border: none; cursor: pointer; border-radius: 4px; line-height: 1.1;">
+                            <button onclick="killLeader()" class="leader-killed-btn">
                                 Leader<br>Killed
                             </button>
                             <div class="strength-circle">
