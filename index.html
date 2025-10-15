@@ -816,14 +816,14 @@ input[type="number"] {
     }
 }
 
-/* Custom Money Buttons */
-.money-controls {
+/* Custom Spice Buttons */
+.spice-controls {
   display: flex;
   gap: 15px;
   justify-content: center;
   margin: 10px 0;
 }
-.money-controls button {
+.spice-controls button {
   /* Reset all browser defaults */
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -849,18 +849,18 @@ input[type="number"] {
   cursor: pointer;
 }
 /* Button states */
-.money-controls button:hover {
+.spice-controls button:hover {
   background-color: #e0e0e0;
 }
-.money-controls button:active {
+.spice-controls button:active {
   background-color: #d0d0d0;
   transform: translateY(1px);
 }
 /* Specific button colors - doesn't seem to work */
-.money-controls button.decrease {
+.spice-controls button.decrease {
   color: #d32f2f;
 }
-.money-controls button.increase {
+.spice-controls button.increase {
   color: #388e3c;
 }
 
@@ -1740,21 +1740,21 @@ for (let card in cardPool) {
     discardPile[card] = 0;
 }
 
-// Define all available factions with their starting money
+// Define all available factions with their starting spice
 const allFactions = {
-  'atreides': { money: 10, name: 'Atreides', color: 'green' },
-  'gesserit': { money: 5, name: 'Gesserit', color: 'blue' },
-  'emperor': { money: 10, name: 'Emperor', color: '#c41e3a' },
-  'fremen': { money: 3, name: 'Fremen', color: 'yellow' },
-  'guild': { money: 5, name: 'Guild', color: 'orange' },
-  'harkonnen': { money: 10, name: 'Harkonnen', color: 'black' },
+  'atreides': { spice: 10, name: 'Atreides', color: 'green' },
+  'gesserit': { spice: 5, name: 'Gesserit', color: 'blue' },
+  'emperor': { spice: 10, name: 'Emperor', color: '#c41e3a' },
+  'fremen': { spice: 3, name: 'Fremen', color: 'yellow' },
+  'guild': { spice: 5, name: 'Guild', color: 'orange' },
+  'harkonnen': { spice: 10, name: 'Harkonnen', color: 'black' },
   // Expansion factions
-  'ecaz': { money: 12, name: 'Ecaz', color: 'pink' },
-  'moritani': { money: 12, name: 'Moritani', color: 'teal' },
-  'ixians': { money: 10, name: 'Ixians', color: 'greige' },
-  'tleilaxu': { money: 5, name: 'Tleilaxu', color: 'purple' },
-  'choam': { money: 2, name: 'Choam', color: 'red/black' },
-  'richese': { money: 5, name: 'Richese', color: 'light gray' }
+  'ecaz': { spice: 12, name: 'Ecaz', color: 'pink' },
+  'moritani': { spice: 12, name: 'Moritani', color: 'teal' },
+  'ixians': { spice: 10, name: 'Ixians', color: 'greige' },
+  'tleilaxu': { spice: 5, name: 'Tleilaxu', color: 'purple' },
+  'choam': { spice: 2, name: 'Choam', color: 'red/black' },
+  'richese': { spice: 5, name: 'Richese', color: 'light gray' }
 };
 
 // Initial active factions - will be overridden by localStorage if available
@@ -1814,7 +1814,7 @@ function generateFactionCards() {
   // Create cards for each active faction
   activeFactions.forEach(faction => {
     const factionData = allFactions[faction];
-    const factionMoney = getMoneyForFaction(faction);
+    const factionSpice = getSpiceForFaction(faction);
     
     const factionCard = document.createElement('div');
     factionCard.className = 'faction';
@@ -1822,12 +1822,12 @@ function generateFactionCards() {
     
     factionCard.innerHTML = `
       <h2>${factionData.name}</h2>
-      <h3>Money: <span id="money-${faction}">${factionMoney}</span></h3>
-      <div class="money-controls">
-        <button onclick="adjustMoney('${faction}', -5)">-5</button>
-        <button onclick="adjustMoney('${faction}', -1)">-1</button>
-        <button onclick="adjustMoney('${faction}', 1)">+1</button>
-        <button onclick="adjustMoney('${faction}', 5)">+5</button>
+      <h3>Spice: <span id="spice-${faction}">${factionSpice}</span></h3>
+      <div class="spice-controls">
+        <button onclick="adjustSpice('${faction}', -5)">-5</button>
+        <button onclick="adjustSpice('${faction}', -1)">-1</button>
+        <button onclick="adjustSpice('${faction}', 1)">+1</button>
+        <button onclick="adjustSpice('${faction}', 5)">+5</button>
       </div>
       <h3>Treachery Cards</h3>
       <select id="cardDropdown-${faction}">
@@ -1854,19 +1854,19 @@ function generateFactionCards() {
   restoreFactionData();
 }
 
-// Helper function to get money for a faction (either from saved state or default)
-function getMoneyForFaction(faction) {
+// Helper function to get spice for a faction (either from saved state or default)
+function getSpiceForFaction(faction) {
   // Try to get from saved state first
   let savedData = localStorage.getItem("duneTrackerData");
   if (savedData) {
     savedData = JSON.parse(savedData);
-    if (savedData.money && savedData.money[faction] !== undefined) {
-      return savedData.money[faction];
+    if (savedData.spice && savedData.spice[faction] !== undefined) {
+      return savedData.spice[faction];
     }
   }
   
   // If no saved state, return default
-  return allFactions[faction].money;
+  return allFactions[faction].spice;
 }
 
 // Helper function to restore cards and traitors after regenerating faction cards
@@ -2433,16 +2433,16 @@ function restoreAllCards() {
     saveData();
 }
 
-// Function to keep track of Money
-function adjustMoney(faction, amount) {
-    let moneyElement = document.getElementById(`money-${faction}`);
-    let currentMoney = parseInt(moneyElement.textContent);
+// Function to keep track of Spice
+function adjustSpice(faction, amount) {
+    let spiceElement = document.getElementById(`spice-${faction}`);
+    let currentSpice = parseInt(spiceElement.textContent);
     
     // Calculate new balance but don't let it go below 0
-    let newMoney = Math.max(0, currentMoney + amount);
+    let newSpice = Math.max(0, currentSpice + amount);
     
     // Update the display
-    moneyElement.textContent = newMoney;
+    spiceElement.textContent = newSpice;
     
     // Save the change
     saveData();
@@ -2451,7 +2451,7 @@ function adjustMoney(faction, amount) {
 // Save data to localStorage
 function saveData() {
     let gameState = {
-        money: {},
+        spice: {},
         treacheryCards: {},
         traitors: {},
         notes: document.getElementById("miscNotes")?.value || "",
@@ -2461,11 +2461,11 @@ function saveData() {
         activeFactions: activeFactions // Save active factions list
     };
 
-    // Save money values for active factions
+    // Save spice values for active factions
     activeFactions.forEach(faction => {
-        const moneyElement = document.getElementById(`money-${faction}`);
-        if (moneyElement) {
-            gameState.money[faction] = parseInt(moneyElement.textContent);
+        const spiceElement = document.getElementById(`spice-${faction}`);
+        if (spiceElement) {
+            gameState.spice[faction] = parseInt(spiceElement.textContent);
         }
     });
 
