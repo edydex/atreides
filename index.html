@@ -275,7 +275,7 @@ input[name="tab-selector"] {
 /* Styles for faction lines */
 #atreides h2 { border-color: green; }
 #gesserit h2 { border-color: blue; }
-#emperor h2 { border-color: red; }
+#emperor h2 { border-color: #c41e3a; }
 #fremen h2 { border-color: yellow; }
 #guild h2 { border-color: orange; }
 #harkonnen h2 { border-color: black; }
@@ -1344,7 +1344,7 @@ function getFactionColors() {
     return {
         'atreides': 'green',
         'gesserit': 'blue', 
-        'emperor': 'red',
+        'emperor': '#c41e3a',
         'fremen': 'yellow',
         'guild': 'orange',
         'harkonnen': 'black',
@@ -1617,7 +1617,7 @@ for (let card in cardPool) {
 const allFactions = {
   'atreides': { money: 10, name: 'Atreides', color: 'green' },
   'gesserit': { money: 5, name: 'Gesserit', color: 'blue' },
-  'emperor': { money: 10, name: 'Emperor', color: 'red' },
+  'emperor': { money: 10, name: 'Emperor', color: '#c41e3a' },
   'fremen': { money: 3, name: 'Fremen', color: 'yellow' },
   'guild': { money: 5, name: 'Guild', color: 'orange' },
   'harkonnen': { money: 10, name: 'Harkonnen', color: 'black' },
@@ -1834,7 +1834,7 @@ function restoreFactionData() {
           // Set border color based on faction
           if (traitorFaction === 'atreides') li.style.borderColor = 'green';
           else if (traitorFaction === 'gesserit') li.style.borderColor = 'blue';
-          else if (traitorFaction === 'emperor') li.style.borderColor = 'red';
+          else if (traitorFaction === 'emperor') li.style.borderColor = '#c41e3a';
           else if (traitorFaction === 'fremen') li.style.borderColor = 'yellow';
           else if (traitorFaction === 'guild') li.style.borderColor = 'orange';
           else if (traitorFaction === 'harkonnen') li.style.borderColor = 'black';
@@ -2049,7 +2049,7 @@ function addTraitor(faction) {
     // Set the underline color based on faction
     if (selectedTraitorFaction === 'atreides') li.style.borderColor = 'green';
     else if (selectedTraitorFaction === 'gesserit') li.style.borderColor = 'blue';
-    else if (selectedTraitorFaction === 'emperor') li.style.borderColor = 'red';
+    else if (selectedTraitorFaction === 'emperor') li.style.borderColor = '#c41e3a';
     else if (selectedTraitorFaction === 'fremen') li.style.borderColor = 'yellow';
     else if (selectedTraitorFaction === 'guild') li.style.borderColor = 'orange';
     else if (selectedTraitorFaction === 'harkonnen') li.style.borderColor = 'black';
@@ -2735,7 +2735,7 @@ function initializeBattleWheel() {
                                 <input type="number" id="spice-feeding" min="0" max="20" value="0" onchange="updateBattleDial()" inputmode="numeric">
                                 <div class="number-btn plus" onclick="incrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
                             </div>
-                            <small>Spice needed when Karama'd: Fed forces = 1, unfed = 0.5</small>
+                            <div class="description">Spice needed when Karama'd: Fed forces = 1, unfed = 0.5</div>
                         </div>
                     ` : selectedFaction === 'emperor' ? `
                         <div class="input-group">
@@ -2745,7 +2745,7 @@ function initializeBattleWheel() {
                                 <input type="number" id="special-troops" min="0" max="5" value="0" onchange="updateBattleDial()" inputmode="numeric">
                                 <div class="number-btn plus" onclick="incrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
                             </div>
-                            <small>Elite troops (2 strength when fed, 1 when unfed). Against Fremen they count as normal forces.</small>
+                            <div class="description">Elite troops (2 strength when fed, 1 when unfed). Against Fremen they count as normal forces.</div>
                         </div>
                         <div class="input-group">
                             <label>Spice to Feed Forces:</label>
@@ -2761,10 +2761,10 @@ function initializeBattleWheel() {
                             <label>Special Troops:</label>
                             <div class="number-input-container">
                                 <div class="number-btn minus" onclick="decrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
-                                <input type="number" id="special-troops" min="0" max="5" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                                <input type="number" id="special-troops" min="0" max="7" value="0" onchange="updateBattleDial()" inputmode="numeric">
                                 <div class="number-btn plus" onclick="incrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
                             </div>
-                            <small>Elite troops (2 strength when fed, 1 when unfed)</small>
+                            <div class="description">Elite troops (2 strength when fed, 1 when unfed)</div>
                         </div>
                         <div class="input-group">
                             <label>Spice to Feed Forces:</label>
@@ -2825,13 +2825,15 @@ function initializeBattleWheel() {
                             <option value="chemistry">Chemistry</option>
                             <option value="shield-snooper">Shield Snooper</option>
                         </select>
-                        ${selectedFaction !== 'ecaz' ? `
+                    </div>
+                    ${selectedFaction !== 'ecaz' ? `
+                        <div style="margin: 15px 0;">
                             <label class="kwisatz-checkbox">
                                 <input type="checkbox" id="ecaz-alliance" onchange="toggleEcazForces(); updateBattleDial();">
                                 <span class="kwisatz-checkbox-text">Allied to Ecaz?</span>
                             </label>
-                        ` : ''}
-                    </div>
+                        </div>
+                    ` : ''}
                     <div class="input-group" id="ecaz-forces-group" style="display: none;">
                         <label>Ecaz Forces:</label>
                         <div class="number-input-container">
