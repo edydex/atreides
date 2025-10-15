@@ -2848,8 +2848,13 @@ function initializeBattleWheel() {
                 <div class="battle-wheel-display">
                     <div class="battle-dial-single">
                         <h3>Your Total Strength</h3>
-                        <div class="strength-circle">
-                            <span id="your-total">0</span>
+                        <div style="display: flex; align-items: center; justify-content: center; position: relative; margin: 20px 0;">
+                            <button onclick="killLeader()" style="position: absolute; left: 0; padding: 6px 8px; font-size: 11px; background-color: #d32f2f; color: white; border: none; cursor: pointer; border-radius: 4px; line-height: 1.1;">
+                                Leader<br>Killed
+                            </button>
+                            <div class="strength-circle">
+                                <span id="your-total">0</span>
+                            </div>
                         </div>
                         <div id="strength-breakdown">
                             <small>0 forces + 0 leader + 0 weapon</small>
@@ -3203,6 +3208,24 @@ function toggleFremenSpiceFeeding() {
             }
         }
     }
+}
+
+// Kill Leader function - removes leader from battle
+function killLeader() {
+    // Set leader to "No Leader (0)"
+    const leaderSelect = document.getElementById('your-leader');
+    if (leaderSelect) {
+        leaderSelect.value = '0';
+    }
+    
+    // Uncheck Kwisatz Haderach if it exists (Atreides only)
+    const kwisatzCheckbox = document.getElementById('kwisatz-haderach');
+    if (kwisatzCheckbox) {
+        kwisatzCheckbox.checked = false;
+    }
+    
+    // Update the battle dial to reflect changes
+    updateBattleDial();
 }
 
 // Clear Battle Wheel function
