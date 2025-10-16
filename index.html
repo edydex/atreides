@@ -3612,78 +3612,195 @@ const factionRules = {
         title: 'Tleilaxu',
         content: `
             <h3>Alliance</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p>You may revive your allies' forces and leaders at half price (rounded up).</p>
             
             <h3>Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>FACE DANCERS:</strong> At the start of the game you are not dealt Traitor Cards. After traitors have been selected and unused Traitor Cards returned to the deck, you shuffle the deck and take the top 3 cards. These are your Face Dancers.</p>
+            
+            <p>When another faction wins a battle you may reveal their leader to be a Face Dancer, and the following occurs:</p>
+            <ol>
+                <li>The battle still counts as a win for that player (they keep or discard treachery cards, place tokens and killed leaders in the Tleilaxu Tanks, collect spice for any leaders killed, and claim a Tech Token if appropriate).</li>
+                <li>The Face Dancer leader is sent to the tanks if it was not already killed, but no spice is collected for it.</li>
+                <li>The remaining forces in the territory go back to their reserves and are replaced up to the total of those forces with your Tleilaxu forces from your reserves and/or from anywhere on the planet.</li>
+            </ol>
+            
+            <p>Once revealed you do not replace a Face Dancer (Traitor Card) until you have revealed all 3. When that happens, place all 3 cards in the Traitor deck, shuffle, and draw 3 new Face Dancers. During the Mentat pause, if there is one unrevealed Face Dancer you wish to replace, you may discard that Face Dancer (Traitor Card). Shuffle it into the Traitor Deck and draw a new Face Dancer.</p>
+            
+            <p><strong>REVIVAL:</strong></p>
+            <p><em>Tleilaxu Revival</em> - You have no revival limits, and make payments to the Spice Bank at half price (rounded up). Other factions make revival payments to you.</p>
+            
+            <p><em>Force Revival</em> - You may increase the 3 force revival limit for any other faction to 5. Also, for each faction using free revival or a ghola card, you take 1 spice from the Spice Bank.</p>
+            
+            <p><em>Leader Revival</em> - Upon request by a faction for a particular one of its leaders in the tanks, you can set a price and, if met, revive that leader (whether it is face up or face down). You may do this, however, only when fewer than five of that faction's leaders are in the tanks. When all five are there, normal revival rules apply.</p>
+            
+            <p><strong>ZOAL:</strong> Your leader Zoal's value in battle matches the value of the opponent's leader (zero against a Cheap Hero), and for collecting spice for his death.</p>
             
             <h3>Advanced Game Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>GHOLAS:</strong> When you have fewer than five leaders alive, you may revive dead leaders of other factions at your discounted rate, and add them to your leader pool up to a limit of 5 total active leaders for your faction.</p>
         `
     },
     'ixians': {
         title: 'Ixians',
         content: `
             <h3>Alliance</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p>After an ally purchases a Treachery Card during bidding, they may immediately discard it and draw the top card from the deck.</p>
             
             <h3>Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>START OF GAME:</strong> Before Treachery Cards are dealt, draw one card for each faction in the game. Choose one to keep, shuffle the remaining cards, and deal one to each of the other players.</p>
+            
+            <p><strong>BIDDING:</strong> Before the bidding phase begins, draw one more Treachery Card than the number up for bid, and look at all of them. Put one card of your choice face down either on the top or bottom of the deck. Then shuffle the remaining cards and place them face down for the bidding round.</p>
+            
+            <p><strong>CYBORGS:</strong> Your 7 Cyborg forces are each worth 2 normal forces in battle, are able to move 2 territories instead of 1 during movement, and can carry 3 spice. Your Cyborg forces ship normally, but each costs 3 spice to revive.</p>
+            
+            <p><strong>SUBOIDS:</strong> Your 13 Suboid forces ship normally but are worth ½ in battle. When dialing ½ for a Suboid use the hash marks between battle wheel numbers as needed. Suboids can also be used to absorb losses after a battle. After battle losses are calculated, any of your surviving Suboid forces in that territory can be exchanged for Cyborgs you lost in that battle.</p>
+            
+            <p>Suboids can also be used to maintain a presence in a territory, for controlling a stronghold and for collecting and carrying spice normally. Suboids move 2 if accompanied by at least one Cyborg, or 1 if they are not.</p>
+            
+            <p><strong>HIDDEN MOBILE STRONGHOLD:</strong> After the first Storm movement at the start of the game, place your Hidden Mobile Stronghold by pointing it at a sector in any non-stronghold territory. This stronghold counts towards the game win and is protected from worms and storms.</p>
+            
+            <p>Subsequently, before the Storm is dialed, as long as your forces occupy it, you may move your Hidden Mobile Stronghold up to 3 territories pointing at a sector in any non-stronghold territory. When you move into, from, or through a sector containing spice, you may immediately collect 2 spice per force in your stronghold.</p>
+            
+            <p>No other faction may ship forces directly into your Hidden Mobile Stronghold, or move it if they take control. Other factions must move or ship forces into the territory it is pointing at (including the Polar Sink), and then use one movement to enter.</p>
             
             <h3>Advanced Game Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>TECHNOLOGY:</strong> Once, during the bidding round, before bidding begins on a card and before Atreides gets to look at the card, you may take the Treachery Card about to be bid on, replacing it with one from your hand.</p>
+            
+            <p><strong>SUBOID STRENGTH:</strong> Suboids are always considered half strength for dialing. You can't increase the effectiveness of Suboids in battle by spending Spice.</p>
         `
     },
     'richese': {
         title: 'Richese',
         content: `
             <h3>Alliance</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p>You may offer to ship an ally's forces from off-planet using one of your available No-Field tokens, revealing the forces immediately upon shipping (if you already had a No-Field token on the planet, it must first be revealed). Place the used No-Field token faceup in front of your shield until you place another No-Field token.</p>
+            
+            <p>You may also give your ally a Richese Treachery Card that is in your hand at any time if their hand is not full.</p>
             
             <h3>Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>BIDDING:</strong> At the start of each Bidding Round, one fewer card is put up for auction. You must reveal and auction one Richese Treachery Card from your cache (either a Once Around or Silent Auction- see below), ignoring normal bidding order. Your card may be the first card for bid, or the last and you announce which it will be (before Ixians would use their Bidding advantage). You collect payment on your cards sold to other factions. If you buy any, the spice goes to the Emperor or the Spice Bank normally. Whenever discarded, they go to the normal discard pile. Your cards can't be bought or acquired with a Karama.</p>
+            
+            <p><em>Once Around</em> - Pick a direction (clockwise or counter-clockwise), and starting with the faction on one side of you, each faction around has only one opportunity to place a bid. Each faction may pass or bid higher, but once it gets back to you, you either outbid the highest bidder and get the card, or the highest bidder buys the card. If everyone else passes, you may get the card for free or remove it from the game.</p>
+            
+            <p><em>Silent Auction</em> - All factions able to bid put any amount of spice in one hand (including zero spice). Factions reveal simultaneously. The faction that had the most spice in hand wins the card (ties break according to Storm order). If all factions bid zero spice, you may either gain the card for free or remove it from the game.</p>
+            
+            <p><strong>NO-FIELD:</strong> When making a shipment of forces, you may pay for one force and use a No-Field token instead of shipping normally. When you do, place a No-Field token face down in the territory where your shipment lands.</p>
+            
+            <p>Other factions do not know how many of your forces are located there, but it is treated as if one is there. You may reveal a No-Field token at any time before the Battle Phase, placing the indicated number of forces from your reserves (or up to that amount if you have fewer forces left in reserves). You may move No-Field tokens like they are forces. A No-Field token is revealed when caught in a storm or by a worm, and you lose the number of forces indicated by the token.</p>
+            
+            <p>There may never be two No-Field tokens on the planet at the same time. You may not use the same No-Field token twice in a row (for yourself or an ally). Keep a used one faceup in front of your shield until you place another one.</p>
+            
+            <p>When you are in a battle, you must reveal the No-Field token in that territory when revealing your Battle Plan, and place the number of forces indicated by the No-Field token from your reserves (or up to that amount if you have fewer forces left in reserves). When you are in a Battle with a No-Field token, Atreides may not see your number dialed.</p>
             
             <h3>Advanced Game Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>BLACK MARKET:</strong> At the start of the Bidding Round, before Declaration, you may intervene and offer one Treachery Card from your hand up for auction. You may announce what you are selling, and you may lie, but you do not show any player what is up for auction (although the Atreides may still look). The card you offer from your hand may be auctioned the normal way, or via your alternative auction methods. If no player bids any spice for your card, you must keep it, and your intervention ends. If a card from your hand is sold, one fewer Treachery Card is put up for auction as part of the normal Bidding Round. You receive all spice payments for Black Market cards, and Karama cards cannot be used to acquire Black Market cards. Any bids on Black Market cards that use the normal bidding method proceed in storm order, and normal bidding resumes where normal bidding left off, or in storm order if Once Around or Silent auction was used.</p>
+            
+            <p><strong>FREMEN SPECIAL VICTORY CONDITION:</strong> Richese counts as one of the factions that cannot occupy Tuek's Sietch in order to fulfill the Fremen Special Victory Condition.</p>
         `
     },
     'choam': {
-        title: 'Choam',
+        title: 'CHOAM',
         content: `
             <h3>Alliance</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p>Once per game turn, at the end of any phase, you may trade a Treachery Card with your ally. The trade must be two-way (each faction giving and receiving a card). You may pay for some or all of your ally's forces in battle.</p>
             
             <h3>Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>CHARITY:</strong> Each turn, you collect 2 spice for each faction in the game during CHOAM Charity before any factions collect. If another faction collects CHOAM Charity, it is paid to them from your spice.</p>
+            
+            <p><strong>TREACHERY:</strong> You may hold up to 5 Treachery Cards. At the end of any phase, you may reveal duplicates of the same card (e.g., Snooper) from your hand, and discard the surplus ones for 3 spice each.</p>
+            
+            <p>You may also discard "Worthless" cards for 2 spice each. Alternatively, you may discard Worthless cards for special effects in the following manner (as applicable):</p>
+            <ul>
+                <li><strong>Baliset</strong> - Prevent a player from moving forces into a territory you occupy during Shipment and Movement. They may ship in normally.</li>
+                <li><strong>Jubba Cloak</strong> - Prevent a loss of your forces in one territory to the Storm when it moves.</li>
+                <li><strong>Kull Wahad</strong> - Prevent a player from playing a Karama card this phase as they attempt to do so.</li>
+                <li><strong>Kulon</strong> - Move your forces one extra territory on your turn in Shipping and Movement.</li>
+                <li><strong>La, La, La</strong> - Prevent a player from taking Free Revival during Revival.</li>
+                <li><strong>Trip to Gamont</strong> - Send any 1 force belonging to another player to that player's reserves during the Mentat Pause.</li>
+            </ul>
+            
+            <p><strong>REVIVAL:</strong> You have no free revival, but you have no limit to the number of forces you may pay to revive and it only costs you 1 spice for each force.</p>
+            
+            <p><strong>INFLATION:</strong> During the Mentat Pause, you may place your Inflation token on the CHOAM Charity phase of the phase track (with either the Double or Cancel side face up). In the following game turn, CHOAM Charity (including the amount you collect from your Charity advantage) is either doubled or canceled for that turn (even for the Bene Gesserit in the advanced game). In the next Mentat Pause, flip the Inflation token to the other side. If the token has already been flipped, you instead remove it from the game. No bribes can be made when your Inflation token is in play with the Double side face up.</p>
             
             <h3>Advanced Game Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>AUDITOR:</strong> Gain the Auditor Leader Disc and shuffle the Auditor Traitor card into the Traitor deck at the start of the game. Whenever you use the Auditor as a leader in a battle, if the Auditor survived, you may audit your opponent by looking at two cards in your opponent's hand at random (not counting any they used in battle), or one card if the Auditor is killed. That faction may pay you 1 spice per card you would get to see to cancel the entire audit. The Auditor may be revived from the Tleilaxu Tanks as your one revived leader per turn, as if all of your leaders were in the Tleilaxu Tanks. The Auditor cannot be a ghola for the Tleilaxu, nor captured by the Harkonnens. Also, the Auditor cannot be assigned a Leader Skill Card.</p>
+            
+            <p><strong>FORCES:</strong> When other players pay spice for their forces in battle, half of the spice (rounded down) goes to you. When you pay spice for forces, it goes to the Spice Bank. None of the spice goes to you if a Traitor is revealed.</p>
         `
     },
     'moritani': {
         title: 'Moritani',
         content: `
             <h3>Alliance</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p>When your ally loses a battle that had a winner, they may keep one Treachery Card they played in the battle that they would have been able to keep had they won.</p>
             
             <h3>Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>TERRORIZE:</strong> During the Mentat Pause, you may place a Terror token face down in any stronghold that doesn't have one (other than the Ixian Hidden Mobile Stronghold), even one under storm, or else move one to a stronghold that doesn't have one. You may reveal and activate a Terror token when another faction (other than your ally) enters a stronghold containing one (either moving or shipping in, including advisors), applying effects to that faction. Revealed tokens are removed from the game.</p>
+            
+            <p><strong>Terror Token Effects:</strong></p>
+            <ul>
+                <li><strong>Atomics</strong> - All forces in the territory go to the Tanks. Place the Atomics Aftermath token in the territory. No forces may ever ship into this territory (even Fremen). From this turn forward, your hand limit is reduced by 1 (as well as your ally's), discarding a random card if a hand exceeds the limit.</li>
+                <li><strong>Assassination</strong> - Choose a random leader from that player and send it to the Tanks. Collect spice for the killed leader (3 for Zoal).</li>
+                <li><strong>Extortion</strong> - Gain 5 spice from the Spice Bank, placed in front of your shield. Collect it in the Mentat Pause, then regain this Terror token unless any one player in storm order pays you 3 spice.</li>
+                <li><strong>Robbery</strong> - Steal half the spice (rounded up) from that player or take the top card of the Treachery Deck (then discarding a card of your choice if you exceed your hand size).</li>
+                <li><strong>Sabotage</strong> - Draw a random Treachery Card from that player and discard it if possible. Then you may give that player a Treachery Card of your choice from your hand.</li>
+                <li><strong>Sneak Attack</strong> - Send up to 5 of your forces in reserves into that territory at no cost (subject to storm and occupancy rules), even if the Atomics Aftermath token is there.</li>
+            </ul>
+            
+            <p><strong>ENEMY OF MY ENEMY:</strong> When a faction (other than Ecaz) would trigger a Terror token, you may offer to enter into an alliance with that faction before the token is revealed. If that faction accepts, you both are now allied (breaking existing alliances either or both of you were in). Your Terror token is not revealed, and returns to your supply. If that faction does not accept, the Terror token must be revealed.</p>
+            
+            <p><strong>DUKE VIDAL:</strong> You gain Duke Vidal at the end of Shipping and Movement if you are in at least two battles in strongholds (not counting battles involving Ecaz) if he is not in the Tanks, taking him from any faction currently controlling him. Set him aside at the end of the turn if he's not in the Tanks or captured.</p>
             
             <h3>Advanced Game Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>ASSASSINATE LEADERS:</strong> When you lose a battle in which the opposing player had a leader disc that was not killed (and no Traitor was called), you may reveal a Traitor Card for the same faction (other than the leader you opposed). If they are not in the Tanks, kill that leader and collect spice for them. During the Mentat Pause, set the revealed card aside face up as a marker, then draw a new Traitor Card. This advantage may only be used once against each faction in the game.</p>
+            
+            <p>You may reveal a Traitor Card normally, but then this advantage is lost.</p>
         `
     },
     'ecaz': {
         title: 'Ecaz',
         content: `
             <h3>Alliance</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p>You may choose to have your ally benefit from a triggered Ambassador's effect.</p>
             
             <h3>Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>AMBASSADORS:</strong> At the end of Revival you may spend spice to place Ambassador tokens from your supply in any stronghold not in storm that does not have one. The cost is 1 spice for a single Ambassador token, but it increases by 1 spice for each subsequent Ambassador token placed that turn.</p>
+            
+            <p>When another faction (other than your ally, advisors, or the faction matching the marker) enters a stronghold with an Ambassador, you may trigger its effect, then set it aside.</p>
+            
+            <p>After all 5 of your random markers have been triggered, return them to the unused tokens (with the exception of the Bene Gesserit, see below) and draw a new supply of 5 Ambassador tokens at random.</p>
+            
+            <p>Ambassadors are vulnerable to game effects like storm or explosions, returning to your supply.</p>
+            
+            <p><strong>Ambassador Effects:</strong></p>
+            <ul>
+                <li><strong>Ecaz</strong> - Gain Duke Vidal if he is not in the Tanks, captured, or a ghola until used in a battle, or form an alliance with the faction triggering the token (if neither of you are allied and they agree to form an alliance). You may then give control of Duke Vidal to that faction for this turn if they allied with you. This token returns to your available supply.</li>
+                <li><strong>Atreides</strong> - See that faction's hand.</li>
+                <li><strong>Bene Gesserit</strong> - Trigger the effect of any Ambassador that was not part of your supply, then remove the Bene Gesserit Ambassador token from the game.</li>
+                <li><strong>CHOAM</strong> - Discard any of your Treachery Cards and gain 3 spice for each one from the Spice Bank.</li>
+                <li><strong>Emperor</strong> - Gain 5 spice from the Spice Bank.</li>
+                <li><strong>Fremen</strong> - Move a group of your forces on the board to any territory (subject to storm and occupancy rules).</li>
+                <li><strong>Harkonnen</strong> - Look at a random Traitor Card that faction holds.</li>
+                <li><strong>Ixian</strong> - Discard a Treachery Card, then draw a new one from the deck.</li>
+                <li><strong>Richese</strong> - Pay 3 spice to the Spice Bank to draw the top card of the Treachery Deck if your hand is not full.</li>
+                <li><strong>Spacing Guild</strong> - Send up to 4 of your forces in reserves to any territory not in storm for free.</li>
+                <li><strong>Tleilaxu</strong> - Revive one of your leaders or up to 4 of your forces for free.</li>
+            </ul>
+            
+            <p><strong>OCCUPY:</strong> When you are in an alliance, you and your ally's forces are considered the same faction, and may enter and occupy the same territory. If you are both collecting spice from a desert territory, you split the collection however you both agree, or as evenly as possible with your ally gaining the remainder if you can't agree.</p>
+            
+            <p>If you are both in a battle with another faction, you decide which of you is considered the faction in the battle (choosing a leader and playing Treachery Cards) once battle order is determined. Regardless of who fights the battle, your ally's forces are the ones dialed, and half of your forces in the territory (rounded up) are added to the number dialed (without needing spice in the advanced game). After the battle, half of your forces (rounded down) remain in the territory if your side wins, and the rest go to the Tanks.</p>
+            
+            <p>If you and your ally both occupy a stronghold at the end of a turn, it only counts as one stronghold for both of you, and you control it.</p>
+            
+            <p>It only takes three strongholds for you and your ally to win, if you both are co-occupied in all three.</p>
+            
+            <p><strong>REVIVAL:</strong> You may always revive Duke Vidal for 5 spice, no matter how many of your leaders are in the Tanks. You may revive leaders normally when at least 5 are in the Tanks (counting Duke Vidal).</p>
             
             <h3>Advanced Game Advantages</h3>
-            <p><em>Placeholder - Rules to be added</em></p>
+            <p><strong>LOYALTY:</strong> At the start of the game, before Traitors are drawn, set aside a random Traitor Card for your faction face up for all players to see. It is never added to the Traitor deck. Draw Traitors normally.</p>
+            
+            <p><strong>COLLECTION:</strong> If you and your ally co-occupy Arrakeen, Carthag, and/or Tuek's Sietch, you both collect the full amount of spice for occupying the strongholds during the Spice Collection phase.</p>
         `
     }
 };
