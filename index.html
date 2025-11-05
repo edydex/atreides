@@ -506,11 +506,19 @@ body {
 }
 
 .phase-section h2 {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     margin-top: 0;
     margin-bottom: 8px;
-    padding-bottom: 5px;
+    padding: 10px;
+    padding-bottom: 8px;
+    margin-left: -10px;
+    margin-right: -10px;
+    background-color: #f9f9f9;
     border-bottom: 3px solid #333;
     font-size: 22px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .phase-section h3 {
@@ -2124,7 +2132,29 @@ function renderRules(rules, advancedEnabled, alliancesEnabled, landsraadEnabled)
         const isFactionRule = rule.factions && rule.factions.length > 0;
         const factionClass = isFactionRule ? `faction-rule ${rule.factions[0]}` : '';
         
-        html += `<div class="rule-item ${factionClass}">`;
+        // Get faint background color for faction-specific rules
+        let bgColorStyle = '';
+        if (isFactionRule) {
+            const faction = rule.factions[0];
+            const factionBgColors = {
+                'atreides': 'rgba(0, 128, 0, 0.08)',      // faint green
+                'harkonnen': 'rgba(0, 0, 0, 0.05)',       // faint black/gray
+                'emperor': 'rgba(196, 30, 58, 0.08)',     // faint red
+                'fremen': 'rgba(238, 210, 2, 0.12)',      // faint yellow
+                'guild': 'rgba(255, 165, 0, 0.08)',       // faint orange
+                'gesserit': 'rgba(65, 105, 225, 0.08)',   // faint blue
+                'ecaz': 'rgba(255, 105, 180, 0.08)',      // faint pink
+                'moritani': 'rgba(0, 128, 128, 0.08)',    // faint teal
+                'ixians': 'rgba(187, 176, 165, 0.12)',    // faint greige
+                'tleilaxu': 'rgba(128, 0, 128, 0.08)',    // faint purple
+                'choam': 'rgba(196, 30, 58, 0.08)',       // faint red
+                'richese': 'rgba(211, 211, 211, 0.15)',   // faint light gray
+                'spacing_guild': 'rgba(255, 165, 0, 0.08)' // faint orange
+            };
+            bgColorStyle = factionBgColors[faction] ? ` style="background-color: ${factionBgColors[faction]};"` : '';
+        }
+        
+        html += `<div class="rule-item ${factionClass}"${bgColorStyle}>`;
         
         // Add faction tags if applicable
         if (isFactionRule) {
