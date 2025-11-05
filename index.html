@@ -2020,15 +2020,11 @@ function initializeGameFlow() {
     
     // Add event listeners for toggles
     const advancedToggle = document.getElementById('advancedRules');
-    const alliancesToggle = document.getElementById('alliancesRules');
     const landsraadToggle = document.getElementById('landsraadRules');
     const techTokenToggle = document.getElementById('techTokenRules');
     
     if (advancedToggle) {
         advancedToggle.addEventListener('change', renderGameFlow);
-    }
-    if (alliancesToggle) {
-        alliancesToggle.addEventListener('change', renderGameFlow);
     }
     if (landsraadToggle) {
         landsraadToggle.addEventListener('change', renderGameFlow);
@@ -2083,12 +2079,10 @@ function renderGameFlow() {
     if (!container) return;
     
     const advancedToggle = document.getElementById('advancedRules');
-    const alliancesToggle = document.getElementById('alliancesRules');
     const landsraadToggle = document.getElementById('landsraadRules');
     const techTokenToggle = document.getElementById('techTokenRules');
     
     const advancedEnabled = advancedToggle ? advancedToggle.checked : true;
-    const alliancesEnabled = alliancesToggle ? alliancesToggle.checked : false;
     const landsraadEnabled = landsraadToggle ? landsraadToggle.checked : false;
     const techTokenEnabled = techTokenToggle ? techTokenToggle.checked : false;
     
@@ -2105,10 +2099,10 @@ function renderGameFlow() {
                 if (subsection.subtitle) {
                     html += `<h3>${subsection.subtitle}</h3>`;
                 }
-                html += renderRules(subsection.rules, advancedEnabled, alliancesEnabled, landsraadEnabled, techTokenEnabled);
+                html += renderRules(subsection.rules, advancedEnabled, landsraadEnabled, techTokenEnabled);
             });
         } else {
-            html += renderRules(phaseData.rules, advancedEnabled, alliancesEnabled, landsraadEnabled, techTokenEnabled);
+            html += renderRules(phaseData.rules, advancedEnabled, landsraadEnabled, techTokenEnabled);
         }
         
         html += `</div>`;
@@ -2117,15 +2111,15 @@ function renderGameFlow() {
     container.innerHTML = html;
 }
 
-function renderRules(rules, advancedEnabled, alliancesEnabled, landsraadEnabled, techTokenEnabled) {
+function renderRules(rules, advancedEnabled, landsraadEnabled, techTokenEnabled) {
     let html = '';
     
     rules.forEach(rule => {
         // Filter by advanced rules toggle
         if (rule.advanced && !advancedEnabled) return;
         
-        // Filter by alliances toggle
-        if (rule.alliance && !alliancesEnabled) return;
+        // Show alliance rules automatically when ECAZ is in the game
+        if (rule.alliance && !activeFactions.includes('ecaz')) return;
         
         // Filter by Landsraad (LAS) toggle
         if (rule.tag === 'LAS' && !landsraadEnabled) return;
@@ -4674,11 +4668,6 @@ function initializeBottomNav() {
             <input type="checkbox" id="advancedRules" checked>
             <span class="toggle-slider"></span>
             <span class="toggle-label">Advanced Rules</span>
-        </label>
-        <label class="toggle-switch" style="margin-left: 20px;">
-            <input type="checkbox" id="alliancesRules">
-            <span class="toggle-slider"></span>
-            <span class="toggle-label">Alliances</span>
         </label>
         <label class="toggle-switch" style="margin-left: 20px;">
             <input type="checkbox" id="landsraadRules">
