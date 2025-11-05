@@ -2022,6 +2022,7 @@ function initializeGameFlow() {
     const advancedToggle = document.getElementById('advancedRules');
     const alliancesToggle = document.getElementById('alliancesRules');
     const landsraadToggle = document.getElementById('landsraadRules');
+    const techTokenToggle = document.getElementById('techTokenRules');
     
     if (advancedToggle) {
         advancedToggle.addEventListener('change', renderGameFlow);
@@ -2031,6 +2032,9 @@ function initializeGameFlow() {
     }
     if (landsraadToggle) {
         landsraadToggle.addEventListener('change', renderGameFlow);
+    }
+    if (techTokenToggle) {
+        techTokenToggle.addEventListener('change', renderGameFlow);
     }
     
     // Apply faction colors to toggles
@@ -2081,10 +2085,12 @@ function renderGameFlow() {
     const advancedToggle = document.getElementById('advancedRules');
     const alliancesToggle = document.getElementById('alliancesRules');
     const landsraadToggle = document.getElementById('landsraadRules');
+    const techTokenToggle = document.getElementById('techTokenRules');
     
     const advancedEnabled = advancedToggle ? advancedToggle.checked : true;
     const alliancesEnabled = alliancesToggle ? alliancesToggle.checked : false;
     const landsraadEnabled = landsraadToggle ? landsraadToggle.checked : false;
+    const techTokenEnabled = techTokenToggle ? techTokenToggle.checked : false;
     
     let html = '';
     
@@ -2099,10 +2105,10 @@ function renderGameFlow() {
                 if (subsection.subtitle) {
                     html += `<h3>${subsection.subtitle}</h3>`;
                 }
-                html += renderRules(subsection.rules, advancedEnabled, alliancesEnabled, landsraadEnabled);
+                html += renderRules(subsection.rules, advancedEnabled, alliancesEnabled, landsraadEnabled, techTokenEnabled);
             });
         } else {
-            html += renderRules(phaseData.rules, advancedEnabled, alliancesEnabled, landsraadEnabled);
+            html += renderRules(phaseData.rules, advancedEnabled, alliancesEnabled, landsraadEnabled, techTokenEnabled);
         }
         
         html += `</div>`;
@@ -2111,7 +2117,7 @@ function renderGameFlow() {
     container.innerHTML = html;
 }
 
-function renderRules(rules, advancedEnabled, alliancesEnabled, landsraadEnabled) {
+function renderRules(rules, advancedEnabled, alliancesEnabled, landsraadEnabled, techTokenEnabled) {
     let html = '';
     
     rules.forEach(rule => {
@@ -2123,6 +2129,9 @@ function renderRules(rules, advancedEnabled, alliancesEnabled, landsraadEnabled)
         
         // Filter by Landsraad (LAS) toggle
         if (rule.tag === 'LAS' && !landsraadEnabled) return;
+        
+        // Filter by Tech Token toggle
+        if (rule.tag === 'TECH TOKEN' && !techTokenEnabled) return;
         
         // Filter by active factions
         if (rule.factions && rule.factions.length > 0) {
@@ -4675,6 +4684,11 @@ function initializeBottomNav() {
             <input type="checkbox" id="landsraadRules">
             <span class="toggle-slider"></span>
             <span class="toggle-label">Landsraad (LAS)</span>
+        </label>
+        <label class="toggle-switch" style="margin-left: 20px;">
+            <input type="checkbox" id="techTokenRules">
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Tech Tokens</span>
         </label>
     </div>
     
