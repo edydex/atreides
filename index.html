@@ -1626,7 +1626,7 @@ function updateFactionSelector() {
         // Show/hide Tracker tab based on faction
         const trackerTab = document.querySelector('label[for="page-atreides"]');
         const trackerRadio = document.getElementById('page-atreides');
-        const bottomTrackerTab = document.getElementById('bottom-tab-tracker');
+        const bottomTrackerTab = document.getElementById('bottom-tab-atreides');
         
         if (selectedFaction === 'atreides') {
             if (trackerTab) trackerTab.style.display = 'inline-block';
@@ -1743,8 +1743,8 @@ function applyFactionStyling() {
             header.style.webkitTextFillColor = 'transparent';
             header.style.color = 'transparent';
             header.style.borderBottomColor = '#ff0000';
-        } else if (selectedFaction === 'fremen' || selectedFaction === 'richese') {
-            // For light colors, no text shadow needed with new yellow
+        } else if (selectedFaction === 'fremen') {
+            // Fremen - no text shadow needed with new yellow
             header.style.background = 'none';
             header.style.webkitBackgroundClip = 'unset';
             header.style.backgroundClip = 'unset';
@@ -1752,6 +1752,15 @@ function applyFactionStyling() {
             header.style.color = factionColor;
             header.style.borderBottomColor = factionColor;
             header.style.textShadow = 'none';
+        } else if (selectedFaction === 'richese') {
+            // Richese - add black text stroke for visibility on light gray
+            header.style.background = 'none';
+            header.style.webkitBackgroundClip = 'unset';
+            header.style.backgroundClip = 'unset';
+            header.style.webkitTextFillColor = 'unset';
+            header.style.color = factionColor;
+            header.style.borderBottomColor = factionColor;
+            header.style.textShadow = '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000';
         } else {
             header.style.background = 'none';
             header.style.webkitBackgroundClip = 'unset';
@@ -4448,9 +4457,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize bottom navigation
     initializeBottomNav();
     
-    // Initialize the default Battle Wheel page
-    showPage('battle');
-    switchTab('battle');
+    // Determine which page should be active
+    let activePage = 'battle'; // default
+    if (document.getElementById('page-atreides').checked && selectedFaction === 'atreides') {
+        activePage = 'atreides';
+    } else if (document.getElementById('page-cheat').checked) {
+        activePage = 'cheat';
+    } else if (document.getElementById('page-gameflow').checked) {
+        activePage = 'gameflow';
+    }
+    
+    // Initialize the active page
+    showPage(activePage);
+    switchTab(activePage);
     
     // If not Atreides and Tracker tab is selected, switch to Battle Wheel
     if (selectedFaction !== 'atreides' && document.getElementById('page-atreides').checked) {
@@ -4477,7 +4496,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize bottom navigation visibility based on faction
 function initializeBottomNav() {
-    const trackerTab = document.getElementById('bottom-tab-tracker');
+    const trackerTab = document.getElementById('bottom-tab-atreides');
     if (trackerTab) {
         if (selectedFaction === 'atreides') {
             trackerTab.style.display = 'flex';
@@ -4704,7 +4723,7 @@ function initializeBottomNav() {
     <button class="bottom-nav-tab active" id="bottom-tab-battle" onclick="switchTab('battle')">Battle Wheel</button>
     <button class="bottom-nav-tab" id="bottom-tab-cheat" onclick="switchTab('cheat')">Cheat Sheet</button>
     <button class="bottom-nav-tab" id="bottom-tab-gameflow" onclick="switchTab('gameflow')">Game Flow</button>
-    <button class="bottom-nav-tab" id="bottom-tab-tracker" onclick="switchTab('atreides')" style="display: none;">Tracker</button>
+    <button class="bottom-nav-tab" id="bottom-tab-atreides" onclick="switchTab('atreides')" style="display: none;">Tracker</button>
 </div>
 
 </body>
