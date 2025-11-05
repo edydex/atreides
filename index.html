@@ -526,10 +526,10 @@ body {
     background-color: white;
     border-radius: 4px;
     line-height: 1.4;
+    border-left: 4px solid white;
 }
 
 .rule-item.faction-rule {
-    border-left: 4px solid;
     padding-left: 8px;
     font-weight: 500;
 }
@@ -545,7 +545,7 @@ body {
     color: white;
 }
 
-.faction-tag.atreides { background-color: #2d5016; }
+.faction-tag.atreides { background-color: green; }
 .faction-tag.harkonnen { background-color: #000000; }
 .faction-tag.emperor { background-color: #8B0000; }
 .faction-tag.fremen { background-color: #b8860b; }
@@ -560,7 +560,7 @@ body {
 .faction-tag.spacing_guild { background-color: #FF8C00; }
 
 /* Faction-specific rule borders */
-.rule-item.atreides { border-left-color: #2d5016; }
+.rule-item.atreides { border-left-color: green; }
 .rule-item.harkonnen { border-left-color: #000000; }
 .rule-item.emperor { border-left-color: #8B0000; }
 .rule-item.fremen { border-left-color: #b8860b; }
@@ -930,6 +930,7 @@ input[type="number"] {
     border-bottom: 2px solid #4CAF50;
     padding-bottom: 8px;
     margin-bottom: 12px;
+    transition: color 0.3s, border-color 0.3s;
 }
 
 .card-grid {
@@ -992,7 +993,7 @@ input[type="number"] {
 .rule-item {
     padding: 15px;
     background-color: #f9f9f9;
-    border-left: 4px solid #4CAF50;
+    border-left: 4px solid white;
     border-radius: 4px;
 }
 
@@ -1645,6 +1646,17 @@ function updateFactionSelector() {
         // Apply faction-specific styling to page tabs
         applyFactionStyling();
         
+        // Apply faction-specific colors to Game Flow toggles
+        applyFactionColorsToToggles();
+        
+        // Update bottom nav active tab styling
+        const activeBottomTab = document.querySelector('.bottom-nav-tab.active');
+        if (activeBottomTab) {
+            // Find which page is currently active
+            const currentPageId = activeBottomTab.id.replace('bottom-tab-', '');
+            switchTab(currentPageId);
+        }
+        
         // Update battle wheel if visible
         const battlePage = document.querySelector('.page-content-battle');
         const battleContainer = document.getElementById('battle-wheel-container');
@@ -1719,6 +1731,37 @@ function applyFactionStyling() {
         // Store faction color for potential future use
         tab.setAttribute('data-faction-color', factionColor);
     });
+    
+    // Apply faction colors to cheat sheet section headers
+    const cheatHeaders = document.querySelectorAll('.cheat-section h3');
+    cheatHeaders.forEach(header => {
+        if (selectedFaction === 'choam') {
+            // Special styling for CHOAM with red/black stripes
+            header.style.background = 'repeating-linear-gradient(45deg, #ff0000, #ff0000 10px, #000 10px, #000 20px)';
+            header.style.webkitBackgroundClip = 'text';
+            header.style.backgroundClip = 'text';
+            header.style.webkitTextFillColor = 'transparent';
+            header.style.color = 'transparent';
+            header.style.borderBottomColor = '#ff0000';
+        } else if (selectedFaction === 'fremen' || selectedFaction === 'richese') {
+            // For light colors, add black text stroke for visibility
+            header.style.background = 'none';
+            header.style.webkitBackgroundClip = 'unset';
+            header.style.backgroundClip = 'unset';
+            header.style.webkitTextFillColor = 'unset';
+            header.style.color = factionColor;
+            header.style.borderBottomColor = factionColor;
+            header.style.textShadow = '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000';
+        } else {
+            header.style.background = 'none';
+            header.style.webkitBackgroundClip = 'unset';
+            header.style.backgroundClip = 'unset';
+            header.style.webkitTextFillColor = 'unset';
+            header.style.color = factionColor;
+            header.style.borderBottomColor = factionColor;
+            header.style.textShadow = 'none';
+        }
+    });
 }
 
 // Initialize faction selector on page load
@@ -1738,11 +1781,42 @@ function switchTab(pageId) {
     
     // Update bottom nav active states
     const tabs = document.querySelectorAll('.bottom-nav-tab');
-    tabs.forEach(tab => tab.classList.remove('active'));
+    tabs.forEach(tab => {
+        tab.classList.remove('active');
+        // Reset to default inactive state
+        tab.style.background = 'none';
+        tab.style.backgroundColor = '#3a3a3a';
+        tab.style.color = '#aaa';
+    });
     
     const activeTab = document.getElementById('bottom-tab-' + pageId);
     if (activeTab) {
         activeTab.classList.add('active');
+        
+        // Apply faction-specific color to active tab
+        const factionColors = getFactionColors();
+        const factionColor = factionColors[selectedFaction] || '#4CAF50';
+        
+        if (selectedFaction === 'choam') {
+            // Special styling for CHOAM with red/black stripes
+            activeTab.style.background = 'repeating-linear-gradient(45deg, #ff0000, #ff0000 10px, #000 10px, #000 20px)';
+            activeTab.style.backgroundColor = 'transparent';
+            activeTab.style.color = 'white';
+        } else if (selectedFaction === 'fremen') {
+            // Yellow - use darker text for visibility
+            activeTab.style.background = 'none';
+            activeTab.style.backgroundColor = factionColor;
+            activeTab.style.color = 'black';
+        } else if (selectedFaction === 'richese') {
+            // Light gray - use darker text
+            activeTab.style.background = 'none';
+            activeTab.style.backgroundColor = factionColor;
+            activeTab.style.color = 'black';
+        } else {
+            activeTab.style.background = 'none';
+            activeTab.style.backgroundColor = factionColor;
+            activeTab.style.color = 'white';
+        }
     }
     
     // Show the page
@@ -1916,6 +1990,9 @@ to three forces or one leader for free.
             showCardSvg(cardName);
         };
     });
+    
+    // Apply faction styling to cheat sheet headers
+    applyFactionStyling();
 }
 
 // Game Flow functionality
@@ -1936,6 +2013,46 @@ function initializeGameFlow() {
     if (landsraadToggle) {
         landsraadToggle.addEventListener('change', renderGameFlow);
     }
+    
+    // Apply faction colors to toggles
+    applyFactionColorsToToggles();
+}
+
+// Apply faction-specific colors to Game Flow toggles
+function applyFactionColorsToToggles() {
+    const factionColors = getFactionColors();
+    const factionColor = factionColors[selectedFaction] || '#4CAF50';
+    
+    // Update all toggle sliders
+    const allSliders = document.querySelectorAll('.toggle-switch .toggle-slider');
+    
+    allSliders.forEach(slider => {
+        const checkbox = slider.previousElementSibling;
+        
+        if (checkbox && checkbox.checked) {
+            // Apply faction color to checked toggles
+            if (selectedFaction === 'choam') {
+                // Special styling for CHOAM with red/black stripes
+                slider.style.background = 'repeating-linear-gradient(45deg, #ff0000, #ff0000 10px, #000 10px, #000 20px)';
+                slider.style.backgroundColor = 'transparent';
+            } else {
+                slider.style.background = 'none';
+                slider.style.backgroundColor = factionColor;
+            }
+        } else {
+            // Return to gray for unchecked toggles
+            slider.style.background = 'none';
+            slider.style.backgroundColor = '#ccc';
+        }
+    });
+    
+    // Add change event listeners to update colors dynamically
+    const allToggles = document.querySelectorAll('.toggle-switch input[type="checkbox"]');
+    allToggles.forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            setTimeout(() => applyFactionColorsToToggles(), 10);
+        });
+    });
 }
 
 function renderGameFlow() {
