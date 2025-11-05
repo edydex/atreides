@@ -2156,7 +2156,7 @@ function renderRules(rules, advancedEnabled, alliancesEnabled, landsraadEnabled)
             
             // Special handling for CHOAM with striped pattern
             if (faction === 'choam') {
-                bgColorStyle = ` style="background: repeating-linear-gradient(45deg, rgba(255, 0, 0, 0.05), rgba(255, 0, 0, 0.05) 10px, rgba(0, 0, 0, 0.02) 10px, rgba(0, 0, 0, 0.02) 20px);"`;
+                bgColorStyle = ` style="background: repeating-linear-gradient(45deg, rgba(255, 0, 0, 0.05), rgba(255, 0, 0, 0.05) 30px, rgba(0, 0, 0, 0.02) 30px, rgba(0, 0, 0, 0.02) 60px);"`;
             } else {
                 bgColorStyle = factionBgColors[faction] ? ` style="background-color: ${factionBgColors[faction]};"` : '';
             }
@@ -2278,7 +2278,7 @@ const gameFlowRules = {
     title: "START",
     rules: [
       { text: "BENE GESSERIT secretly predict what faction will win and on what round.", factions: ["gesserit"], advanced: false, karama: false },
-      { text: "ECAZ set aside a random Traitor Card of their faction face up for all factions to see.", factions: ["ecaz"], advanced: true, karama: true },
+      { text: "ECAZ set aside a random Traitor Card of their faction face up for all factions to see.", factions: ["ecaz"], advanced: true, karama: false },
       { text: "Factions receive 4 random Traitor Cards and keep 1 (either opponent or own leader).", factions: [], advanced: false, karama: false },
       { text: "Before all other factions, HARKONNEN draw 4 random Traitor Cards and keep all 4. (Optional): Once and only once, HARKONNEN is allowed to discard hand and redraw 4 other Traitor Cards.", factions: ["harkonnen"], advanced: false, karama: false },
       { text: "After all other factions, TLEILAXU draw 3 cards from the Traitor Deck as Face Dancers.", factions: ["tleilaxu"], advanced: false, karama: false },
@@ -2296,6 +2296,7 @@ const gameFlowRules = {
   storm: {
     title: "1. STORM",
     rules: [
+      { text: "If playing with Advanced Rules and with FREMEN, skip the normal storm rules. The two factions to the right and to the left of the storm take the Battle Wheel, and secretly choose a number between 1-3. They reveal the number chosen at the same time, and the storm advances that many spaces counter-clockwise.", factions: [], advanced: true, karama: false },
       { text: "After round one, IXIAN may, if Ixian Forces occupy Hidden Mobile Stronghold, move the HMS up to 3 territories distance to a non-Stronghold territory, pointing at a sector of that territory. If Ixian Forces occupy Hidden Mobile Stronghold, as the HMS moves from, into, or through a sector containing Spice, immediately collect 2 of those Spice per Ixian Force in HMS.", factions: ["ixians"], advanced: false, karama: true },
       { text: "FREMEN randomly pick and look at a Storm Card to be revealed next round. The following round, FREMEN advance the storm as indicated by card, then shuffle the Storm Card back into the Storm Deck before drawing a new one to look at.", factions: ["fremen"], advanced: true, karama: false },
       { text: "Forces & Spice in desert touched by Storm and are not protected are sent to Tleilaxu Tanks and Spice Bank.", factions: [], advanced: false, karama: false },
@@ -2327,13 +2328,13 @@ const gameFlowRules = {
   bidding: {
     title: "4. BIDDING",
     rules: [
-      { text: "RICHESE may intervene and auction up one card from hand in a special Black Market bidding round. The auction type may be chosen, and RICHESE can say anything they want about that card. If this card is sold, Spice is given to the RICHESE, and one fewer card will be put on auction in the normal bidding round (this one fewer card is in addition to the one fewer card that won't be auctioned by default because of the Richese Treachery Card). ATREIDES may still peek at this card, and Karama cannot be used to buy the Black Market card.", factions: ["richese"], advanced: true, karama: true },
+      { text: "RICHESE may intervene and auction up one card from hand in a special Black Market bidding round. The auction type may be chosen, and RICHESE can say anything they want about that card. If this card is sold, Spice is given to the RICHESE, and one fewer card will be put on auction in the normal bidding round (this one fewer card is in addition to the one fewer card that won't be auctioned by default because of the Richese Treachery Card). ATREIDES may still peek at this card, and Karama cannot be used to buy the Black Market card.", factions: ["richese"], advanced: true, karama: false },
       { text: "Factions must announce how many cards they hold.", factions: [], advanced: false, karama: false },
-      { text: "RICHESE must reveal and auction one Richese Treachery Card from their cache. The auction type may be chosen, and the card can be first or the last card for bid (this is announced before IXIAN uses their bidding advantage). RICHESE collects Spice for the Richese Treachery Card if sold to other factions, and to the EMPEROR if bought by the RICHESE. If the card was not bid for (no faction bid any Spice for it), RICHESE may take the card for free. Karama cannot be used to buy the Richese Treachery Card card.", factions: ["richese"], advanced: false, karama: true },
+      { text: "RICHESE must reveal and auction one Richese Treachery Card from their cache. The auction type may be chosen, and the card can be first or the last card for bid (this is announced before IXIAN uses their bidding advantage). RICHESE collects Spice for the Richese Treachery Card if sold to other factions, and to the EMPEROR if bought by the RICHESE. If the card was not bid for (no faction bid any Spice for it), RICHESE may take the card for free. Karama cannot be used to buy the Richese Treachery Card card.", factions: ["richese"], advanced: false, karama: false },
       { text: "IXIAN draws one more Treachery Cards than the number up for bid and looks at them. IXIAN puts one card of their choice to the top or bottom of the deck. Remaining cards are shuffled and placed face down for auction.", factions: ["ixians"], advanced: false, karama: true },
       { text: "IXIAN may swap out a Treachery Card about to be auctioned with one from their hand once per Bidding Phase, before ATREIDES peeks at the card for auction.", factions: ["ixians"], advanced: true, karama: true },
       { text: "ATREIDES may look at each card as it is offered for auction.", factions: ["atreides"], advanced: false, karama: true },
-      { text: "Factions take turns to initiate bidding (starting with the first faction and then to the right of the previous first bidder). Min bid 1 Spice. Pay to EMPEROR (EMPEROR always pays to the Bank).", factions: [], advanced: false, karama: true },
+      { text: "Factions take turns to initiate bidding (starting with the first faction and then to the right of the previous first bidder). Min bid 1 Spice. Pay to EMPEROR (EMPEROR always pays to the Bank).", factions: ["emperor"], advanced: false, karama: true },
       { text: "Auction until all cards claimed, or 1 card unwanted (remaining cards return to top of deck).", factions: [], advanced: false, karama: false },
       { text: "HARKONNEN may take an additional Treachery Card from the deck for each one they win at auction.", factions: ["harkonnen"], advanced: false, karama: true },
       { text: "At the end of any phase, CHOAM may discard duplicates of the same Treachery Cards for 3 Spice each or Worthless Cards for 2 each.", factions: ["choam"], advanced: false, karama: false },
@@ -2371,9 +2372,9 @@ const gameFlowRules = {
         rules: [
           { text: "Activate the Carthag Stronghold Card. Before any player takes their shipment and movement action you may pay 1 Spice to ship one of your Forces here.", factions: [], advanced: false, tag: "LAS", karama: false },
           { text: "ATREIDES may look at the top card of the Spice Deck before any faction acts in this phase.", factions: ["atreides"], advanced: false, karama: true },
-          { text: "MORITANI may reveal and activate a Terror Token in a Stronghold when any non-allied faction enters it.", factions: ["moritani"], advanced: false, karama: true },
+          { text: "MORITANI may reveal and activate a Terror Token in a Stronghold when any non-allied faction enters it.", factions: ["moritani"], advanced: false, karama: false },
           { text: "Alternatively, MORITANI forms an alliance with them (barring ECAZ), returning the Terror Token to the pool. Can break existing alliances. Refusal of allying will activate the Terror Token.", factions: ["moritani"], advanced: false, karama: true },
-          { text: "ECAZ may trigger the effect of an Ambassador Token if another faction (other than an ally, Advisor, or the faction matching the marker) enters a Stronghold with that token. After triggering, set it aside (except the Bene Gesseret Ambassador token, which is removed from the game). Once all 5 of the random Ambassador tokens have been triggered, draw a new supply of 5.", factions: ["ecaz"], advanced: false, karama: true },
+          { text: "ECAZ may trigger the effect of an Ambassador Token if another faction (other than an ally, Advisor, or the faction matching the marker) enters a Stronghold with that token. After triggering, set it aside (except the Bene Gesseret Ambassador token, which is removed from the game). Once all 5 of the random Ambassador tokens have been triggered, draw a new supply of 5.", factions: ["ecaz"], advanced: false, karama: false },
           { text: "No Shipment/Movement: from / through / into sector in Storm, territory with ally, Stronghold with Forces of 2 other factions.", factions: [], advanced: false, karama: false },
           { text: "FREMEN allowed to move through/ship in Storm at half loss (rounded up).", factions: ["fremen"], advanced: true, karama: false },
           { text: "SPACING GUILD may choose to make their shipment and movement at any time they choose in this phase.", factions: ["guild"], advanced: true, karama: true }
@@ -2383,7 +2384,7 @@ const gameFlowRules = {
         subtitle: "Shipment",
         rules: [
           { text: "Activate the Shield Wall Stronghold Card (If 4 Worms have been revealed). You may ship off-planet reserves here at Stronghold Rates. If you are the FREMEN, you may use your shipment action to send your reserves into this territory, those forces cannot move this turn.", factions: [], advanced: false, tag: "LAS", karama: false },
-          { text: "Factions may add Forces from reserves to any one territory. 1 Spice per Force into Stronghold, 2 Spice per Force into other territory. Pay to SPACING GUILD (SPACING GUILD pays to the Bank).", factions: [], advanced: false, karama: true },
+          { text: "Factions may add Forces from reserves to any one territory. 1 Spice per Force into Stronghold, 2 Spice per Force into other territory. Pay to SPACING GUILD (SPACING GUILD pays to the Bank).", factions: ["guild"], advanced: false, karama: true },
           { text: "SPACING GUILD may make one of three types of shipments: [1] Ship from home planet to Dune. [2] Ship from one territory to another. [3] Ship from Dune to home planet.", factions: ["guild"], advanced: false, karama: true },
           { text: "SPACING GUILD only pays half when shipping Forces, and shipping back to the reserve (home planet) costs 1 Spice for every 2 Forces.", factions: ["guild"], advanced: false, karama: true },
           { text: "Anytime a faction ships from off-planet, BENE GESSERIT may ship 1 Force for free to the Polar Sink.", factions: ["gesserit"], advanced: false, karama: true },
@@ -2454,7 +2455,7 @@ const gameFlowRules = {
     rules: [
       { text: "Factions gather the Spice they received as bribes (from in front of their shields).", factions: [], advanced: false, karama: false },
       { text: "TLEILAXU may discard one of the unrevealed Face Dancers, shuffle the Traitor Deck, and draw a new one, once per Mentat Phase.", factions: ["tleilaxu"], advanced: false, karama: true },
-      { text: "If MORITANI assassinated a Leader this round, they may draw a new Traitor Card leaving the old one visible face up.", factions: ["moritani"], advanced: true, karama: true },
+      { text: "If MORITANI assassinated a Leader this round, they may draw a new Traitor Card leaving the old one visible face up.", factions: ["moritani"], advanced: true, karama: false },
       { text: "MORITANI may place or move a Terror Token to a Stronghold without one (Except the HMS).", factions: ["moritani"], advanced: false, karama: true },
       { text: "CHOAM once may choose to use the Inflation Token and make the subsequent CHOAM Charity double or negate in next round. The opposite action happens on the following turn and then the token is removed from the game.", factions: ["choam"], advanced: false, karama: true },
       { text: "If a faction has 3 Tech Tokens (Tech Tokens cannot be shared among allies, all 3 must be held by one faction), The Tech Tokens count as a Stronghold.", factions: [], advanced: false, tag: "TECH TOKEN", karama: false },
