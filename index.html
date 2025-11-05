@@ -356,8 +356,70 @@ input[name="tab-selector"] {
     display: none;
 }
 
+.page-content-gameflow {
+    display: none;
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #2c2c2c;
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+    z-index: 100;
+    height: 60px;
+}
+
+.bottom-nav-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3a3a3a;
+    color: #aaa;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-right: 1px solid #2c2c2c;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bottom-nav-tab:last-child {
+    border-right: none;
+}
+
+.bottom-nav-tab:hover {
+    background-color: #4a4a4a;
+    color: #fff;
+}
+
+.bottom-nav-tab.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Add padding to body to account for fixed bottom nav */
+body {
+    padding-bottom: 60px;
+}
+
+/* Old top navigation - hide it */
+.page-navigation {
+    display: none;
+}
+
 #page-atreides:checked ~ .page-navigation label[for="page-atreides"],
 #page-battle:checked ~ .page-navigation label[for="page-battle"],
+#page-gameflow:checked ~ .page-navigation label[for="page-gameflow"],
 #page-cheat:checked ~ .page-navigation label[for="page-cheat"] {
     background-color: #4CAF50 !important;
     color: white !important;
@@ -372,6 +434,145 @@ input[name="tab-selector"] {
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
+
+/* Game Flow Styling */
+.gameflow-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.toggle-switch {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-switch input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-slider {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 24px;
+    transition: background-color 0.3s;
+    margin-right: 8px;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: white;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s;
+}
+
+.toggle-switch input[type="checkbox"]:checked + .toggle-slider {
+    background-color: #4CAF50;
+}
+
+.toggle-switch input[type="checkbox"]:checked + .toggle-slider::before {
+    transform: translateX(26px);
+}
+
+.toggle-label {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#game-flow-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.phase-section {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.phase-section h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 3px solid #333;
+    font-size: 22px;
+}
+
+.phase-section h3 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #555;
+}
+
+.rule-item {
+    margin: 2px 0;
+    padding: 4px 8px;
+    background-color: white;
+    border-radius: 4px;
+    line-height: 1.4;
+}
+
+.rule-item.faction-rule {
+    border-left: 4px solid;
+    padding-left: 8px;
+    font-weight: 500;
+}
+
+/* Faction color tags */
+.faction-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 6px;
+    color: white;
+}
+
+.faction-tag.atreides { background-color: #2d5016; }
+.faction-tag.harkonnen { background-color: #000000; }
+.faction-tag.emperor { background-color: #8B0000; }
+.faction-tag.fremen { background-color: #b8860b; }
+.faction-tag.guild { background-color: #FF8C00; }
+.faction-tag.gesserit { background-color: #4169E1; }
+.faction-tag.ecaz { background-color: #FF69B4; }
+.faction-tag.moritani { background-color: #008B8B; }
+.faction-tag.ixians { background-color: #8B7D6B; }
+.faction-tag.tleilaxu { background-color: #8B008B; }
+.faction-tag.choam { background-color: #8B0000; }
+.faction-tag.richese { background-color: #D3D3D3; color: #333; }
+.faction-tag.spacing_guild { background-color: #FF8C00; }
+
+/* Faction-specific rule borders */
+.rule-item.atreides { border-left-color: #2d5016; }
+.rule-item.harkonnen { border-left-color: #000000; }
+.rule-item.emperor { border-left-color: #8B0000; }
+.rule-item.fremen { border-left-color: #b8860b; }
+.rule-item.guild { border-left-color: #FF8C00; }
+.rule-item.gesserit { border-left-color: #4169E1; }
+.rule-item.ecaz { border-left-color: #FF69B4; }
+.rule-item.moritani { border-left-color: #008B8B; }
+.rule-item.ixians { border-left-color: #8B7D6B; }
+.rule-item.tleilaxu { border-left-color: #8B008B; }
+.rule-item.choam { border-left-color: #8B0000; }
+.rule-item.richese { border-left-color: #D3D3D3; }
+.rule-item.spacing_guild { border-left-color: #FF8C00; }
 
 /* Battle Calculator Styling */
 .battle-calculator {
@@ -1177,10 +1378,12 @@ input[type="text"] {
     <div class="page-navigation" style="text-align: center; margin: 20px 0;">
         <input type="radio" id="page-battle" name="page-selector" checked style="display: none;">
         <input type="radio" id="page-cheat" name="page-selector" style="display: none;">
+        <input type="radio" id="page-gameflow" name="page-selector" style="display: none;">
         <input type="radio" id="page-atreides" name="page-selector" style="display: none;">
         
         <label for="page-battle" class="page-tab" style="padding: 10px 20px; margin: 0 5px; background: #4CAF50; color: white; border-radius: 4px; cursor: pointer; display: inline-block;">Battle Wheel</label>
         <label for="page-cheat" class="page-tab" style="padding: 10px 20px; margin: 0 5px; background: #ccc; color: black; border-radius: 4px; cursor: pointer; display: inline-block;">Cheat Sheet</label>
+        <label for="page-gameflow" class="page-tab" style="padding: 10px 20px; margin: 0 5px; background: #ccc; color: black; border-radius: 4px; cursor: pointer; display: inline-block;">Game Flow</label>
         <label for="page-atreides" class="page-tab" id="tracker-tab" style="padding: 10px 20px; margin: 0 5px; background: #ccc; color: black; border-radius: 4px; cursor: pointer; display: inline-block;">Tracker</label>
     </div>
 
@@ -1197,72 +1400,6 @@ input[type="text"] {
 <!-- "Manage Factions" button and its contents" -->
 <div class="faction-management">
   <button id="manageFactions" class="manage-factions-btn">Manage Factions</button>
-  
-  <!-- Faction Selection Modal -->
-  <div id="factionModal" class="faction-modal">
-    <div class="faction-modal-content">
-      <div class="faction-modal-header">
-        <h3>Select Factions</h3>
-        <span class="close-modal">&times;</span>
-      </div>
-      <div class="faction-selection">
-        <!-- Original factions -->
-        <div class="faction-option">
-          <input type="checkbox" id="faction-atreides" checked>
-          <label for="faction-atreides">Atreides (Green) - 10 spice</label>
-        </div>
-        <div class="faction-option">
-          <input type="checkbox" id="faction-harkonnen">
-          <label for="faction-harkonnen">Harkonnen (Black) - 10 spice</label>
-        </div>
-        <div class="faction-option">
-          <input type="checkbox" id="faction-emperor">
-          <label for="faction-emperor">Emperor (Red) - 10 spice</label>
-        </div>
-        <div class="faction-option">
-          <input type="checkbox" id="faction-fremen">
-          <label for="faction-fremen">Fremen (Yellow) - 3 spice</label>
-        </div>
-        <div class="faction-option">
-          <input type="checkbox" id="faction-guild">
-          <label for="faction-guild">Guild (Orange) - 5 spice</label>
-        </div>
-        <div class="faction-option">
-          <input type="checkbox" id="faction-gesserit">
-          <label for="faction-gesserit">Gesserit (Blue) - 5 spice</label>
-        </div>
-        
-        <!-- Expansion factions -->
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-ecaz">
-          <label for="faction-ecaz">Ecaz (Pink) - 12 spice</label>
-        </div>
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-moritani">
-          <label for="faction-moritani">Moritani (Teal) - 12 spice</label>
-        </div>
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-ixians">
-          <label for="faction-ixians">Ixians (Greige) - 10 spice</label>
-        </div>
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-tleilaxu">
-          <label for="faction-tleilaxu">Tleilaxu (Purple) - 5 spice</label>
-        </div>
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-choam">
-          <label for="faction-choam">Choam (Red/Black) - 2 spice</label>
-        </div>
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-richese">
-          <label for="faction-richese">Richese (Light Gray) - 5 spice</label>
-        </div>
-      </div>
-      <div class="faction-modal-footer">
-        <button id="applyFactions" class="apply-factions-btn">Apply Changes</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Treachery, Discard, and Expansion Piles tabs (radio) -->
@@ -1488,16 +1625,20 @@ function updateFactionSelector() {
         // Show/hide Tracker tab based on faction
         const trackerTab = document.querySelector('label[for="page-atreides"]');
         const trackerRadio = document.getElementById('page-atreides');
+        const bottomTrackerTab = document.getElementById('bottom-tab-tracker');
         
         if (selectedFaction === 'atreides') {
-            trackerTab.style.display = 'inline-block';
+            if (trackerTab) trackerTab.style.display = 'inline-block';
+            if (bottomTrackerTab) bottomTrackerTab.style.display = 'flex';
         } else {
-            trackerTab.style.display = 'none';
+            if (trackerTab) trackerTab.style.display = 'none';
+            if (bottomTrackerTab) bottomTrackerTab.style.display = 'none';
             // If Tracker tab was selected and we're switching away from Atreides,
             // automatically switch to Battle Wheel
             if (trackerRadio.checked) {
                 document.getElementById('page-battle').checked = true;
                 showPage('battle');
+                switchTab('battle');
             }
         }
         
@@ -1590,12 +1731,31 @@ function initializeFactionSelector() {
     }
 }
 
+// Bottom navigation tab switching
+function switchTab(pageId) {
+    // Update radio buttons for compatibility
+    document.getElementById('page-' + pageId).checked = true;
+    
+    // Update bottom nav active states
+    const tabs = document.querySelectorAll('.bottom-nav-tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    const activeTab = document.getElementById('bottom-tab-' + pageId);
+    if (activeTab) {
+        activeTab.classList.add('active');
+    }
+    
+    // Show the page
+    showPage(pageId);
+}
+
 // Page switching functionality
 function showPage(pageId) {
     // Hide all pages
     document.querySelector('.page-content-atreides').style.display = 'none';
     document.querySelector('.page-content-battle').style.display = 'none';
     document.querySelector('.page-content-cheat').style.display = 'none';
+    document.querySelector('.page-content-gameflow').style.display = 'none';
     
     // Show selected page
     document.querySelector('.page-content-' + pageId).style.display = 'block';
@@ -1618,6 +1778,8 @@ function showPage(pageId) {
         initializeBattleWheel();
     } else if (pageId === 'cheat') {
         initializeCheatSheet();
+    } else if (pageId === 'gameflow') {
+        initializeGameFlow();
     }
 }
 
@@ -1630,6 +1792,9 @@ function initializePageNavigation() {
     });
     document.getElementById('page-cheat').addEventListener('change', function() {
         if (this.checked) showPage('cheat');
+    });
+    document.getElementById('page-gameflow').addEventListener('change', function() {
+        if (this.checked) showPage('gameflow');
     });
 }
 
@@ -1753,6 +1918,108 @@ to three forces or one leader for free.
     });
 }
 
+// Game Flow functionality
+function initializeGameFlow() {
+    renderGameFlow();
+    
+    // Add event listeners for toggles
+    const advancedToggle = document.getElementById('advancedRules');
+    const alliancesToggle = document.getElementById('alliancesRules');
+    const landsraadToggle = document.getElementById('landsraadRules');
+    
+    if (advancedToggle) {
+        advancedToggle.addEventListener('change', renderGameFlow);
+    }
+    if (alliancesToggle) {
+        alliancesToggle.addEventListener('change', renderGameFlow);
+    }
+    if (landsraadToggle) {
+        landsraadToggle.addEventListener('change', renderGameFlow);
+    }
+}
+
+function renderGameFlow() {
+    const container = document.getElementById('game-flow-container');
+    if (!container) return;
+    
+    const advancedToggle = document.getElementById('advancedRules');
+    const alliancesToggle = document.getElementById('alliancesRules');
+    const landsraadToggle = document.getElementById('landsraadRules');
+    
+    const advancedEnabled = advancedToggle ? advancedToggle.checked : true;
+    const alliancesEnabled = alliancesToggle ? alliancesToggle.checked : false;
+    const landsraadEnabled = landsraadToggle ? landsraadToggle.checked : false;
+    
+    let html = '';
+    
+    // Render each phase
+    for (const [phaseKey, phaseData] of Object.entries(gameFlowRules)) {
+        html += `<div class="phase-section">`;
+        html += `<h2>${phaseData.title}</h2>`;
+        
+        // Check if phase has subsections (like Shipment & Movement)
+        if (phaseData.subsections) {
+            phaseData.subsections.forEach(subsection => {
+                if (subsection.subtitle) {
+                    html += `<h3>${subsection.subtitle}</h3>`;
+                }
+                html += renderRules(subsection.rules, advancedEnabled, alliancesEnabled, landsraadEnabled);
+            });
+        } else {
+            html += renderRules(phaseData.rules, advancedEnabled, alliancesEnabled, landsraadEnabled);
+        }
+        
+        html += `</div>`;
+    }
+    
+    container.innerHTML = html;
+}
+
+function renderRules(rules, advancedEnabled, alliancesEnabled, landsraadEnabled) {
+    let html = '';
+    
+    rules.forEach(rule => {
+        // Filter by advanced rules toggle
+        if (rule.advanced && !advancedEnabled) return;
+        
+        // Filter by alliances toggle
+        if (rule.alliance && !alliancesEnabled) return;
+        
+        // Filter by Landsraad (LAS) toggle
+        if (rule.tag === 'LAS' && !landsraadEnabled) return;
+        
+        // Filter by active factions
+        if (rule.factions && rule.factions.length > 0) {
+            const hasFaction = rule.factions.some(f => activeFactions.includes(f));
+            if (!hasFaction) return;
+        }
+        
+        // Determine if this is a faction-specific rule
+        const isFactionRule = rule.factions && rule.factions.length > 0;
+        const factionClass = isFactionRule ? `faction-rule ${rule.factions[0]}` : '';
+        
+        html += `<div class="rule-item ${factionClass}">`;
+        
+        // Add faction tags if applicable
+        if (isFactionRule) {
+            rule.factions.forEach(faction => {
+                const factionName = allFactions[faction]?.name || faction.toUpperCase();
+                html += `<span class="faction-tag ${faction}">${factionName}</span>`;
+            });
+        }
+        
+        // Add special tags like LAS or TECH TOKEN
+        if (rule.tag) {
+            html += `<span class="faction-tag" style="background-color: #666;">${rule.tag}</span>`;
+        }
+        
+        html += rule.text;
+        html += `</div>`;
+    });
+    
+    return html;
+}
+
 // Define all cards, all faction related values here 
 // Card pool contents (Treachery Deck)
 let cardPool = {
@@ -1836,6 +2103,203 @@ const allFactions = {
 // Initial active factions - will be overridden by localStorage if available
 let activeFactions = ['atreides'];
 
+// Game Flow Rules Data Structure
+const gameFlowRules = {
+  start: {
+    title: "START",
+    rules: [
+      { text: "BENE GESSERIT secretly predict what faction will win and on what round.", factions: ["gesserit"], advanced: false },
+      { text: "ECAZ set aside a random Traitor Card of their faction face up for all factions to see.", factions: ["ecaz"], advanced: true },
+      { text: "Factions receive 4 random Traitor Cards and keep 1 (either opponent or own leader).", factions: [], advanced: false },
+      { text: "Before all other factions, HARKONNEN draw 4 random Traitor Cards and keep all 4. (Optional): Once and only once, HARKONNEN is allowed to discard hand and redraw 4 other Traitor Cards.", factions: ["harkonnen"], advanced: false },
+      { text: "After all other factions, TLEILAXU draw 3 cards from the Traitor Deck as Face Dancers.", factions: ["tleilaxu"], advanced: false },
+      { text: "Factions receive Treachery Cards based on setup.", factions: [], advanced: false },
+      { text: "Set up Spice, Storm, and alliances as per game rules.", factions: [], advanced: false },
+      { text: "Place troops as per faction rules.", factions: [], advanced: false },
+      { text: "In addition to starting in the Polar Sink, BENE GESSERIT place one peaceful Advisor in any territory of their choice (after the FREMEN place Forces). If they are alone in the territory, flip the Advisor to a Fighter.", factions: ["gesserit"], advanced: true },
+      { text: "Special faction setup rules may apply.", factions: [], advanced: false },
+      { text: "Factions to the left and right of the storm each use a battle wheel to dial a number from 0 to 20. The sum advances the storm for Round 1.", factions: [], advanced: false },
+      { text: "IXIAN place Hidden Mobile Stronghold in any non-Stronghold territory, pointing at a sector of that territory.", factions: ["ixians"], advanced: false },
+      { text: "Distribute the Landsraad Advanced Strongholds Cards to each faction that is occupying Strongholds. Shield Wall LAS Card will not be given out (Shield Wall does not become a Stronghold until 4 Worms have been revealed).", factions: [], advanced: true, tag: "LAS" },
+      { text: "Distribute the Tech Tokens to the starting factions. If any of these factions are not present, control is assigned randomly to factions without a Tech Token, according to turn order.", factions: [], advanced: false, tag: "TECH TOKEN" }
+    ]
+  },
+  storm: {
+    title: "1. STORM",
+    rules: [
+      { text: "After round one, IXIAN may, if Ixian Forces occupy Hidden Mobile Stronghold, move the HMS up to 3 territories distance to a non-Stronghold territory, pointing at a sector of that territory. If Ixian Forces occupy Hidden Mobile Stronghold, as the HMS moves from, into, or through a sector containing Spice, immediately collect 2 of those Spice per Ixian Force in HMS.", factions: ["ixians"], advanced: false },
+      { text: "FREMEN randomly pick and look at a Storm Card to be revealed next round. The following round, FREMEN advance the storm as indicated by card, then shuffle the Storm Card back into the Storm Deck before drawing a new one to look at.", factions: ["fremen"], advanced: true },
+      { text: "Forces & Spice in desert touched by Storm and are not protected are sent to Tleilaxu Tanks and Spice Bank.", factions: [], advanced: false },
+      { text: "FREMEN only lose Forces to the Storm at half loss (rounded up).", factions: ["fremen"], advanced: true }
+    ]
+  },
+  spiceBlow: {
+    title: "2. SPICE BLOW",
+    rules: [
+      { text: "Reveal top card of the Spice Blow Deck.", factions: [], advanced: false },
+      { text: "Two cards are revealed, and two discard piles are used (Pile A and Pile B). Treat each pile independently.", factions: [], advanced: true },
+      { text: "ROUND ONE ONLY: Ignore Worms and Nexus.", factions: [], advanced: false },
+      { text: "If Territory card, place Spice unless Storm in sector.", factions: [], advanced: false },
+      { text: "If Worm, Forces and Spice is removed from previous territory, then draw until a Territory card is revealed. Then Nexus happens.", factions: [], advanced: false },
+      { text: "FREMEN are not devoured by Shai-Hulud. They may ride the Worm to any location on the board before the resolution of the Nexus.", factions: ["fremen"], advanced: false },
+      { text: "If additional Worms are drawn, FREMEN may redirect it to any sand territory, and may ride it again.", factions: ["fremen"], advanced: true },
+      { text: "BENE GESSERIT may now flip Advisors to Fighters in all territories where you want to battle this turn.", factions: ["gesserit"], advanced: true }
+    ]
+  },
+  choamCharity: {
+    title: "3. CHOAM CHARITY",
+    rules: [
+      { text: "Factions with 0 or 1 Spice can collect Spice to bring their total to 2 Spice by calling out 'CHOAM Charity'.", factions: [], advanced: false },
+      { text: "Instead of normal CHOAM Charity collection, CHOAM collects 2 Spice from the Spice Bank for each faction in the game, and pay other factions that claim CHOAM Charity. The Inflation Token doubles or cancels all amounts in this step. No bribes can be made when the Inflation Token Shows double.", factions: ["choam"], advanced: false },
+      { text: "BENE GESSERIT always collects 2 Spice from 'CHOAM Charity'.", factions: ["gesserit"], advanced: true },
+      { text: "Spice Production Tech Token triggers if at least one faction, including you, takes CHOAM Charity this phase (BENE GESSERIT will not trigger). Collect 1 Spice per Tech Token you control.", factions: [], advanced: false, tag: "TECH TOKEN" }
+    ]
+  },
+  bidding: {
+    title: "4. BIDDING",
+    rules: [
+      { text: "RICHESE may intervene and auction up one card from hand in a special Black Market bidding round. The auction type may be chosen, and RICHESE can say anything they want about that card. If this card is sold, Spice is given to the RICHESE, and one fewer card will be put on auction in the normal bidding round (this one fewer card is in addition to the one fewer card that won't be auctioned by default because of the Richese Treachery Card). ATREIDES may still peek at this card, and Karama cannot be used to buy the Black Market card.", factions: ["richese"], advanced: true },
+      { text: "Factions must announce how many cards they hold.", factions: [], advanced: false },
+      { text: "RICHESE must reveal and auction one Richese Treachery Card from their cache. The auction type may be chosen, and the card can be first or the last card for bid (this is announced before IXIAN uses their bidding advantage). RICHESE collects Spice for the Richese Treachery Card if sold to other factions, and to the EMPEROR if bought by the RICHESE. If the card was not bid for (no faction bid any Spice for it), RICHESE may take the card for free. Karama cannot be used to buy the Richese Treachery Card card.", factions: ["richese"], advanced: false },
+      { text: "IXIAN draws one more Treachery Cards than the number up for bid and looks at them. IXIAN puts one card of their choice to the top or bottom of the deck. Remaining cards are shuffled and placed face down for auction.", factions: ["ixians"], advanced: false },
+      { text: "IXIAN may swap out a Treachery Card about to be auctioned with one from their hand once per Bidding Phase, before ATREIDES peeks at the card for auction.", factions: ["ixians"], advanced: true },
+      { text: "ATREIDES may look at each card as it is offered for auction.", factions: ["atreides"], advanced: false },
+      { text: "Factions take turns to initiate bidding (starting with the first faction and then to the right of the previous first bidder). Min bid 1 Spice. Pay to EMPEROR (EMPEROR always pays to the Bank).", factions: [], advanced: false },
+      { text: "Auction until all cards claimed, or 1 card unwanted (remaining cards return to top of deck).", factions: [], advanced: false },
+      { text: "HARKONNEN may take an additional Treachery Card from the deck for each one they win at auction.", factions: ["harkonnen"], advanced: false },
+      { text: "At the end of any phase, CHOAM may discard duplicates of the same Treachery Cards for 3 Spice each or Worthless Cards for 2 each.", factions: ["choam"], advanced: false },
+      { text: "At the end of any phase, CHOAM may use Worthless Cards for special effects.", factions: ["choam"], advanced: false },
+      { text: "Activate the Ixian Hidden Mobile Stronghold Card. Copy one LAS Card you control, this lasts until the end of the turn.", factions: [], advanced: false, tag: "LAS" }
+    ]
+  },
+  revival: {
+    title: "5. REVIVAL",
+    rules: [
+      { text: "Factions may revive up to 3 Forces to their reserve, paying 2 Spice per Force after free revivals limits. Pay for all revivals (Forces and Leaders) to TLEILAXU (TLEILAXU always pays to the Bank).", factions: [], advanced: false },
+      { text: "Activate the Sietch Tabr Stronghold Card. Increase your free revival by one. This ability may allow you to break the current revival limit, however, this ability does not allow you to pay for revival beyond the regular limit.", factions: [], advanced: false, tag: "LAS" },
+      { text: "TLEILAXU may increase the revival limit of their factions to 5 as they wish.", factions: ["tleilaxu"], advanced: false },
+      { text: "CHOAM revivals cost 1 Spice per Force, and there is no limit to the amount of revivals.", factions: ["choam"], advanced: false },
+      { text: "FREMEN can only revive 1 Fedaykin (starred) Force per turn.", factions: ["fremen"], advanced: true },
+      { text: "EMPEROR can only revive 1 Sardaukar (starred) Force per turn.", factions: ["emperor"], advanced: true },
+      { text: "IXIAN Cyborg cost 3 Spice to revive.", factions: ["ixians"], advanced: false },
+      { text: "TLEILAXU may revive additional Forces at half cost (rounded up), paid to the Spice Bank with no limit on the Forces revived.", factions: ["tleilaxu"], advanced: false },
+      { text: "TLEILAXU get 1 Spice from the Spice Bank for every other faction that used free revival.", factions: ["tleilaxu"], advanced: false },
+      { text: "Factions may revive 1 Leader per turn once all their Leaders have been sent to Tanks. Must pay the Leader's combat value in Spice, paid to TLEILAXU in the same instance as paying for Forces.", factions: [], advanced: false },
+      { text: "TLEILAXU may revive other factions' dead Leaders (face up or face down) for a negotiated price before all 5 Leaders are dead. This is different than standard Leader revival, and Spice will be paid to the TLEILAXU.", factions: ["tleilaxu"], advanced: false },
+      { text: "TLEILAXU can optionally revive them to use as your own to a max of 5 active Leaders.", factions: ["tleilaxu"], advanced: true },
+      { text: "Revived Leaders may not be revived again until all Leaders for that faction have been revived and sent back to the Tanks.", factions: [], advanced: false },
+      { text: "CHOAM may revive the Auditor for 2 Spice regardless of how many Leaders are in the Tanks.", factions: ["choam"], advanced: true },
+      { text: "ECAZ may always revive Duke Vidal for 5 Spice, no matter how many Leaders are in the Tanks. ECAZ may revive Leaders normally when at least 5 are in the Tanks (including Duke Vidal).", factions: ["ecaz"], advanced: false },
+      { text: "ECAZ may spend Spice to place Ambassador Tokens from supply in any Stronghold not in Storm that does not have one. The cost is 1 Spice for a single token, but increases by 1 for each subsequent token placed this turn.", factions: ["ecaz"], advanced: false },
+      { text: "Axlotl Tanks Tech Token triggers if at least one faction, including you, takes free revival this phase (TLEILAXU will not trigger). Collect 1 Spice per Tech Token you control.", factions: [], advanced: false, tag: "TECH TOKEN" }
+    ]
+  },
+  shipmentMovement: {
+    title: "6. SHIPMENT & MOVEMENT",
+    subsections: [
+      {
+        subtitle: "General",
+        rules: [
+          { text: "Activate the Carthag Stronghold Card. Before any player takes their shipment and movement action you may pay 1 Spice to ship one of your Forces here.", factions: [], advanced: false, tag: "LAS" },
+          { text: "ATREIDES may look at the top card of the Spice Deck before any faction acts in this phase.", factions: ["atreides"], advanced: false },
+          { text: "MORITANI may reveal and activate a Terror Token in a Stronghold when any non-allied faction enters it.", factions: ["moritani"], advanced: false },
+          { text: "Alternatively, MORITANI forms an alliance with them (barring ECAZ), returning the Terror Token to the pool. Can break existing alliances. Refusal of allying will activate the Terror Token.", factions: ["moritani"], advanced: false },
+          { text: "ECAZ may trigger the effect of an Ambassador Token if another faction (other than an ally, Advisor, or the faction matching the marker) enters a Stronghold with that token. After triggering, set it aside (except the Bene Gesseret Ambassador token, which is removed from the game). Once all 5 of the random Ambassador tokens have been triggered, draw a new supply of 5.", factions: ["ecaz"], advanced: false },
+          { text: "No Shipment/Movement: from / through / into sector in Storm, territory with ally, Stronghold with Forces of 2 other factions.", factions: [], advanced: false },
+          { text: "FREMEN allowed to move through/ship in Storm at half loss (rounded up).", factions: ["fremen"], advanced: true },
+          { text: "SPACING GUILD may choose to make their shipment and movement at any time they choose in this phase.", factions: ["guild"], advanced: true }
+        ]
+      },
+      {
+        subtitle: "Shipment",
+        rules: [
+          { text: "Activate the Shield Wall Stronghold Card (If 4 Worms have been revealed). You may ship off-planet reserves here at Stronghold Rates. If you are the FREMEN, you may use your shipment action to send your reserves into this territory, those forces cannot move this turn.", factions: [], advanced: false, tag: "LAS" },
+          { text: "Factions may add Forces from reserves to any one territory. 1 Spice per Force into Stronghold, 2 Spice per Force into other territory. Pay to SPACING GUILD (SPACING GUILD pays to the Bank).", factions: [], advanced: false },
+          { text: "SPACING GUILD may make one of three types of shipments: [1] Ship from home planet to Dune. [2] Ship from one territory to another. [3] Ship from Dune to home planet.", factions: ["guild"], advanced: false },
+          { text: "SPACING GUILD only pays half when shipping Forces, and shipping back to the reserve (home planet) costs 1 Spice for every 2 Forces.", factions: ["guild"], advanced: false },
+          { text: "Anytime a faction ships from off-planet, BENE GESSERIT may ship 1 Force for free to the Polar Sink.", factions: ["gesserit"], advanced: false },
+          { text: "Optionally, BENE GESSERIT may ship 1 Advisor for free to the same territory (including Mobile Stronghold) instead.", factions: ["gesserit"], advanced: true },
+          { text: "FREMEN do not 'ship' like other factions. They bring any or all of their reserves for free onto or within two territories of the Great Flat.", factions: ["fremen"], advanced: false },
+          { text: "RICHESE may ship a No-Field Token instead of normal shipment.", factions: ["richese"], advanced: false }
+        ]
+      },
+      {
+        subtitle: "Movement",
+        rules: [
+          { text: "Factions may move any number of Forces from any 1 territory to adjacent territory. Move up to 3 territories if they have presence in Arrakeen or Carthag. (sectors don't count for movement distance)", factions: [], advanced: false },
+          { text: "Activate the Habbanya Sietch Stronghold Card. Forces starting their movement action here have an additional two movements beyond any current limits.", factions: [], advanced: false, tag: "LAS" },
+          { text: "You may move the same Forces you shipped.", factions: [], advanced: false },
+          { text: "RICHESE move No-Field Tokens as one Force. They can be revealed at any time but there can only be one on Dune at any time. The same one cannot be used twice in a row.", factions: ["richese"], advanced: false },
+          { text: "BENE GESSERIT Advisors moving into unoccupied territory must flip to Fighters, but may enter occupied territory as either Advisors or Fighters. When another faction ships or moves into a territory where you have Fighters you may flip them to Advisors.", factions: ["gesserit"], advanced: true },
+          { text: "IXIAN Cyborg (starred) Forces, and any Suboid Forces with them, move up to 2 territories distance. Otherwise, Suboid Forces move a distance of 1.", factions: ["ixians"], advanced: false },
+          { text: "FREMEN Forces may move two territories on foot.", factions: ["fremen"], advanced: false },
+          { text: "Moving to a different sector within the same territory counts as a movement action.", factions: [], advanced: false },
+          { text: "Heighliners Tech Token triggers if at least one faction, including you, takes shipment this phase (SPACING GUILD will not trigger). Collect 1 Spice per Tech Token you control.", factions: [], advanced: false, tag: "TECH TOKEN" }
+        ]
+      }
+    ]
+  },
+  battle: {
+    title: "7. BATTLE",
+    rules: [
+      { text: "If MORITANI Forces are in 2 or more Strongholds (not with ECAZ), gain control of Duke Vidal from any faction for this Battle Phase, if he is not in the Tanks.", factions: ["moritani"], advanced: false },
+      { text: "Factions must battle in all territories with 2 or more factions, except if separated by Storm, or at Polar Sink.", factions: [], advanced: false },
+      { text: "The First Faction is the aggressor and must resolve ALL their battles. Then the aggressor passes to the right and so on. Aggressor wins ties.", factions: [], advanced: false },
+      { text: "Combatants secretly dial a number from 0 to total strength of Forces in territory, and Leader/cheap hero (mandatory unless none available, must announce if no Leader is available), and optionally 1 weapon and/or 1 defense treachery card if Leader/cheap hero present. (Useless cards replace a weapon/defense card). Weapon kills Leader unprotected by defense. Killed Leaders don't count in battle.", factions: [], advanced: false },
+      { text: "Activate the Arrakeen Stronghold Card. Collect two Spice from the Spice Bank.", factions: [], advanced: false, tag: "LAS" },
+      { text: "Spice Dialing: Forces have 0.5 combat strength per token (ex. Emperor Sardaukar is 1) unless fed 1 spice per Force, then they are worth 1 strength (ex. Sardaukar is 2).", factions: [], advanced: true },
+      { text: "CHOAM receives half the Spice spent for Forces in battle (rounded down), unless a traitor is revealed.", factions: ["choam"], advanced: true },
+      { text: "EMPEROR Sardaukar Forces are worth 2 normal Forces in battle and when taking losses, except against FREMEN, which will only be worth 1 each in battle.", factions: ["emperor"], advanced: true },
+      { text: "FREMEN Fedaykin Forces are worth 2 normal Forces in battle and when taking losses.", factions: ["fremen"], advanced: true },
+      { text: "FREMEN Forces fight at full strength without paying spice.", factions: ["fremen"], advanced: true },
+      { text: "IXIAN Suboid Forces have 0.5 combat strength per token (and will always be considered at 0.5, even with advance rules spice dialing), Cyborg (starred) Forces have 2 combat strength per token.", factions: ["ixians"], advanced: false },
+      { text: "RICHESE No-Field Tokens are dialed as the Forces they represent, but you must have the required number of Forces in reserve. ATREIDES may not see the RICHESE dialed number if there is a No-Field Token.", factions: ["richese"], advanced: false },
+      { text: "ATREIDES may force their opponent to reveal either their dial value, Leader, weapon card, or defence card.", factions: ["atreides"], advanced: false },
+      { text: "BENE GESSERIT may Voice opponents to play or not play cards.", factions: ["gesserit"], advanced: false },
+      { text: "ATREIDES may add the Kwisatz Haderach (if available) to the Battle Plan, but can only be used with a Leader (or Cheap Hero). Leaders accompanied by the Kwisatz Haderach cannot turn traitor. The Kwisatz Haderach can only be killed in a lasgun-shield explosion.", factions: ["atreides"], advanced: true },
+      { text: "IXIAN Each surviving Suboids Force can be swapped with a Cyborg Force that is lost after battle.", factions: ["ixians"], advanced: false },
+      { text: "After the total strength from each side is revealed, each participating faction has a chance to reveal traitors, if any (you may choose not to).", factions: [], advanced: false },
+      { text: "The winner of the battle receives Spice equal to the value of the killed Leaders (including their own). The killed Leaders are then placed into the Tanks. Surviving Leaders are returned, but cannot be used in another battle this Battle Phase.", factions: [], advanced: false },
+      { text: "The losing faction puts all Forces into the Tanks. The winning faction puts all dialed forces into the Tanks.", factions: [], advanced: false },
+      { text: "Activate the Tuek's Sietch Stronghold Card. After a battle here you may send two Forces that would have gone to the tanks to your reserves instead.", factions: [], advanced: false, tag: "LAS" },
+      { text: "The winner of the battle may take a Tech Token from the losing faction. If they have more than one Tech Token, choose any that you'd like to take.", factions: [], advanced: false, tag: "TECH TOKEN" },
+      { text: "If MORITANI lose a battle in which the opponent had a Leader disc that was not killed (and no Traitor was called), MORITANI may reveal a Traitor Card for the same faction (other than the Leader opposed). If they are not in the Tanks, kill that leader and collect spice for them. MORITANI can only do this to each faction once per game.", factions: ["moritani"], advanced: true },
+      { text: "If an Auditor Leader is in battle, CHOAM can audit (look at) cards randomly in the opponent's hand. Two cards if they survived, one if they died. The subject can cancel the audit by paying 1 Spice per card to be revealed. An Auditor cannot be captured by HARKONNEN.", factions: ["choam"], advanced: true },
+      { text: "HARKONNEN may capture a random Leader from their opponent if HARKONNEN win the battle. They may either (a) immediately kill the Leader and receive 2 spice or (b) keep the Leader to use in a future battle, but then return that Leader to their faction once used.", factions: ["harkonnen"], advanced: true },
+      { text: "If a Face Dancer wins any combat, TLEILAXU may reveal the Traitor Card and exchange any remaining Forces into TLEILAXU Forces. The Leader gets sent to the tanks, if not already dead, without yielding Spice. Draw 3 new Face Dancers if all 3 are now revealed.", factions: ["tleilaxu"], advanced: false },
+      { text: "After the Battle Phase, if Duke Vidal is still alive, return him to the ECAZ.", factions: ["ecaz"], advanced: false }
+    ]
+  },
+  spiceHarvest: {
+    title: "8. SPICE HARVEST",
+    rules: [
+      { text: "Factions collect spice from territories. Collect 2 Spice per Force in territory, or 3 Spice per Force if the faction controls Arrakeen or Carthag.", factions: [], advanced: false },
+      { text: "While collecting together with ally, ECAZ and ally faction split collection by agreement or equally otherwise (ally gets remainder).", factions: ["ecaz"], advanced: false },
+      { text: "IXIAN Cyborg Forces instead collect 3 Spice each.", factions: ["ixians"], advanced: false },
+      { text: "In addition, 2 Spice each for who occupies Arrakeen/Carthag and 1 Spice for Tuek's Sietch.", factions: [], advanced: true },
+      { text: "If ECAZ and an ally co-occupy Arrakeen, Carthag, and/or Tuek's Sietch, both factions collect the full amount of Spice for occupying the Strongholds.", factions: ["ecaz"], advanced: true }
+    ]
+  },
+  mentatPause: {
+    title: "9. MENTAT PAUSE PHASE",
+    rules: [
+      { text: "Factions gather the Spice they received as bribes (from in front of their shields).", factions: [], advanced: false },
+      { text: "TLEILAXU may discard one of the unrevealed Face Dancers, shuffle the Traitor Deck, and draw a new one, once per Mentat Phase.", factions: ["tleilaxu"], advanced: false },
+      { text: "If MORITANI assassinated a Leader this round, they may draw a new Traitor Card leaving the old one visible face up.", factions: ["moritani"], advanced: true },
+      { text: "MORITANI may place or move a Terror Token to a Stronghold without one (Except the HMS).", factions: ["moritani"], advanced: false },
+      { text: "CHOAM once may choose to use the Inflation Token and make the subsequent CHOAM Charity double or negate in next round. The opposite action happens on the following turn and then the token is removed from the game.", factions: ["choam"], advanced: false },
+      { text: "If a faction has 3 Tech Tokens (Tech Tokens cannot be shared among allies, all 3 must be held by one faction), The Tech Tokens count as a Stronghold.", factions: [], advanced: false, tag: "TECH TOKEN" },
+      { text: "If factions in an alliance have Forces in 4 Strongholds, they win the game.", factions: [], advanced: false, alliance: true },
+      { text: "ECAZ and ally factions only need 3 Strongholds if co-occupying all to win.", factions: ["ecaz"], advanced: false, alliance: true },
+      { text: "If a faction not in an alliance has Forces in 3 Strongholds, they win the game.", factions: [], advanced: false },
+      { text: "If the faction predicted by the BENE GESSERIT wins (alone or as an ally, even as a friendly ally) on the turn predicted, reveal the prediction and win alone. BENE GESSERIT cannot predict special victory conditions.", factions: ["gesserit"], advanced: false },
+      { text: "FREMEN win if no other faction won and: 1) FREMEN or no faction occupies Sietch Tabr and Habbanya Sietch, and 2) None of the great houses (Harkonnen, Atreides, or the Emperor) occupies Tuek's Sietch.", factions: ["fremen"], advanced: false },
+      { text: "RICHESE is also one of the great houses for the FREMEN win condition.", factions: ["richese"], advanced: true },
+      { text: "SPACING GUILD wins if no other faction has won the game by the end.", factions: ["guild"], advanced: false }
+    ]
+  }
+};
+
 // Modal control functions
 function openFactionModal() {
   document.getElementById('factionModal').style.display = 'block';
@@ -1874,6 +2338,11 @@ function applyFactionChanges() {
   
   // Regenerate faction UI
   generateFactionCards();
+  
+  // Re-render Game Flow if currently on that tab
+  if (document.getElementById('page-gameflow').checked) {
+    renderGameFlow();
+  }
   
   // Save to localStorage
   saveData();
@@ -3827,8 +4296,17 @@ function closeFactionRules() {
 
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    // Set up faction management modal
-    document.getElementById('manageFactions').addEventListener('click', openFactionModal);
+    // Set up faction management modal - handle both buttons
+    const manageFactionsBtnTracker = document.getElementById('manageFactions');
+    const manageFactionsBtnGameFlow = document.getElementById('manageFactions-gameflow');
+    
+    if (manageFactionsBtnTracker) {
+        manageFactionsBtnTracker.addEventListener('click', openFactionModal);
+    }
+    if (manageFactionsBtnGameFlow) {
+        manageFactionsBtnGameFlow.addEventListener('click', openFactionModal);
+    }
+    
     document.querySelector('.close-modal').addEventListener('click', closeFactionModal);
     document.getElementById('applyFactions').addEventListener('click', applyFactionChanges);
     
@@ -3850,27 +4328,47 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFactionSelector();
     initializePageNavigation();
     
+    // Initialize bottom navigation
+    initializeBottomNav();
+    
     // Initialize the default Battle Wheel page
     showPage('battle');
+    switchTab('battle');
     
     // If not Atreides and Tracker tab is selected, switch to Battle Wheel
     if (selectedFaction !== 'atreides' && document.getElementById('page-atreides').checked) {
         document.getElementById('page-battle').checked = true;
         showPage('battle');
+        switchTab('battle');
     }
     
     // Handle URL hash for direct navigation
     if (window.location.hash === '#battle') {
         document.getElementById('page-battle').checked = true;
-        showPage('battle');
+        switchTab('battle');
     } else if (window.location.hash === '#cheat') {
         document.getElementById('page-cheat').checked = true;
-        showPage('cheat');
+        switchTab('cheat');
+    } else if (window.location.hash === '#gameflow') {
+        document.getElementById('page-gameflow').checked = true;
+        switchTab('gameflow');
     } else if (window.location.hash === '#tracker' && selectedFaction === 'atreides') {
         document.getElementById('page-atreides').checked = true;
-        showPage('atreides');
+        switchTab('atreides');
     }
 });
+
+// Initialize bottom navigation visibility based on faction
+function initializeBottomNav() {
+    const trackerTab = document.getElementById('bottom-tab-tracker');
+    if (trackerTab) {
+        if (selectedFaction === 'atreides') {
+            trackerTab.style.display = 'flex';
+        } else {
+            trackerTab.style.display = 'none';
+        }
+    }
+}
 </script>
 
 <!--Second radio tabs section -->
@@ -3967,6 +4465,105 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </div>
 
+<!-- Game Flow Page Content -->
+<div class="page-content-gameflow">
+    <!-- Manage Factions button for Game Flow -->
+    <div class="faction-management" style="margin-bottom: 20px;">
+        <button id="manageFactions-gameflow" class="manage-factions-btn">Manage Factions</button>
+    </div>
+    
+    <h2>Game Flow</h2>
+    
+    <!-- Control Toggles -->
+    <div class="gameflow-controls" style="text-align: center; margin: 20px 0;">
+        <label class="toggle-switch">
+            <input type="checkbox" id="advancedRules" checked>
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Advanced Rules</span>
+        </label>
+        <label class="toggle-switch" style="margin-left: 20px;">
+            <input type="checkbox" id="alliancesRules">
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Alliances</span>
+        </label>
+        <label class="toggle-switch" style="margin-left: 20px;">
+            <input type="checkbox" id="landsraadRules">
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Landsraad (LAS)</span>
+        </label>
+    </div>
+    
+    <div id="game-flow-container">
+        <!-- Game flow content will be dynamically generated here -->
+    </div>
+</div>
+
+<!-- Faction Selection Modal (Global - appears over all tabs) -->
+<div id="factionModal" class="faction-modal">
+  <div class="faction-modal-content">
+    <div class="faction-modal-header">
+      <h3>Select Factions</h3>
+      <span class="close-modal">&times;</span>
+    </div>
+    <div class="faction-selection">
+      <!-- Original factions -->
+      <div class="faction-option">
+        <input type="checkbox" id="faction-atreides" checked>
+        <label for="faction-atreides">Atreides (Green) - 10 spice</label>
+      </div>
+      <div class="faction-option">
+        <input type="checkbox" id="faction-harkonnen">
+        <label for="faction-harkonnen">Harkonnen (Black) - 10 spice</label>
+      </div>
+      <div class="faction-option">
+        <input type="checkbox" id="faction-emperor">
+        <label for="faction-emperor">Emperor (Red) - 10 spice</label>
+      </div>
+      <div class="faction-option">
+        <input type="checkbox" id="faction-fremen">
+        <label for="faction-fremen">Fremen (Yellow) - 3 spice</label>
+      </div>
+      <div class="faction-option">
+        <input type="checkbox" id="faction-guild">
+        <label for="faction-guild">Guild (Orange) - 5 spice</label>
+      </div>
+      <div class="faction-option">
+        <input type="checkbox" id="faction-gesserit">
+        <label for="faction-gesserit">Gesserit (Blue) - 5 spice</label>
+      </div>
+      
+      <!-- Expansion factions -->
+      <div class="faction-option expansion-faction">
+        <input type="checkbox" id="faction-ecaz">
+        <label for="faction-ecaz">Ecaz (Pink) - 12 spice</label>
+      </div>
+      <div class="faction-option expansion-faction">
+        <input type="checkbox" id="faction-moritani">
+        <label for="faction-moritani">Moritani (Teal) - 12 spice</label>
+      </div>
+      <div class="faction-option expansion-faction">
+        <input type="checkbox" id="faction-ixians">
+        <label for="faction-ixians">Ixians (Greige) - 10 spice</label>
+      </div>
+      <div class="faction-option expansion-faction">
+        <input type="checkbox" id="faction-tleilaxu">
+        <label for="faction-tleilaxu">Tleilaxu (Purple) - 5 spice</label>
+      </div>
+      <div class="faction-option expansion-faction">
+        <input type="checkbox" id="faction-choam">
+        <label for="faction-choam">Choam (Red/Black) - 2 spice</label>
+      </div>
+      <div class="faction-option expansion-faction">
+        <input type="checkbox" id="faction-richese">
+        <label for="faction-richese">Richese (Light Gray) - 5 spice</label>
+      </div>
+    </div>
+    <div class="faction-modal-footer">
+      <button id="applyFactions" class="apply-factions-btn">Apply Changes</button>
+    </div>
+  </div>
+</div>
+
 <!-- Card Popup Overlay -->
 <div id="cardModal" class="card-modal" onclick="closeCardModal()">
     <div id="cardSvgContainer" class="card-svg">
@@ -3983,6 +4580,14 @@ document.addEventListener('DOMContentLoaded', function() {
             <!-- Content will be populated by JavaScript -->
         </div>
     </div>
+</div>
+
+<!-- Bottom Navigation Bar -->
+<div class="bottom-nav" id="bottomNav">
+    <button class="bottom-nav-tab active" id="bottom-tab-battle" onclick="switchTab('battle')">Battle Wheel</button>
+    <button class="bottom-nav-tab" id="bottom-tab-cheat" onclick="switchTab('cheat')">Cheat Sheet</button>
+    <button class="bottom-nav-tab" id="bottom-tab-gameflow" onclick="switchTab('gameflow')">Game Flow</button>
+    <button class="bottom-nav-tab" id="bottom-tab-tracker" onclick="switchTab('atreides')" style="display: none;">Tracker</button>
 </div>
 
 </body>
