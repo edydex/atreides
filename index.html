@@ -542,6 +542,22 @@ body {
     font-weight: 500;
 }
 
+.rule-item.nested-rule {
+    margin-left: 30px;
+    padding-left: 12px;
+    border-left: 3px solid #ccc;
+    font-size: 14px;
+    position: relative;
+}
+
+.rule-item.nested-rule::before {
+    content: '↳';
+    position: absolute;
+    left: -18px;
+    color: #999;
+    font-size: 16px;
+}
+
 /* Faction color tags */
 .faction-tag {
     display: inline-block;
@@ -2139,6 +2155,7 @@ function renderRules(rules, advancedEnabled, landsraadEnabled, techTokenEnabled)
         // Determine if this is a faction-specific rule
         const isFactionRule = rule.factions && rule.factions.length > 0;
         const factionClass = isFactionRule ? `faction-rule ${rule.factions[0]}` : '';
+        const nestedClass = rule.nested ? 'nested-rule' : '';
         
         // Get faint background color for faction-specific rules
         let bgColorStyle = '';
@@ -2168,7 +2185,7 @@ function renderRules(rules, advancedEnabled, landsraadEnabled, techTokenEnabled)
             }
         }
         
-        html += `<div class="rule-item ${factionClass}"${bgColorStyle}>`;
+        html += `<div class="rule-item ${factionClass} ${nestedClass}"${bgColorStyle}>`;
         
         // Add karama symbol if applicable
         if (rule.karama) {
@@ -2334,13 +2351,14 @@ const gameFlowRules = {
   bidding: {
     title: "4. BIDDING",
     rules: [
-      { text: "RICHESE may intervene and auction up one card from hand in a special Black Market bidding round. The auction type may be chosen, and RICHESE can say anything they want about that card. If this card is sold, Spice is given to the RICHESE, and one fewer card will be put on auction in the normal bidding round (this one fewer card is in addition to the one fewer card that won't be auctioned by default because of the Richese Treachery Card). ATREIDES may still peek at this card, and Karama cannot be used to buy the Black Market card.", factions: ["richese"], advanced: true, karama: false },
+      { text: "RICHESE may intervene and auction up one card from hand in a special Black Market bidding round. The auction type may be chosen, and RICHESE can say anything they want about that card. If this card is sold, Spice is given to the RICHESE, and one fewer card will be put on auction in the normal bidding round (this one fewer card is in addition to the one fewer card that won't be auctioned by default because of the Richese Treachery Card). ATREIDES may still peek at this card, and Karama cannot be used to buy the Black Market card.", factions: ["richese"], advanced: true, karama: true },
       { text: "Factions must announce how many cards they hold.", factions: [], advanced: false, karama: false },
-      { text: "RICHESE must reveal and auction one Richese Treachery Card from their cache. The auction type may be chosen, and the card can be first or the last card for bid (this is announced before IXIAN uses their bidding advantage). RICHESE collects Spice for the Richese Treachery Card if sold to other factions, and to the EMPEROR if bought by the RICHESE. If the card was not bid for (no faction bid any Spice for it), RICHESE may take the card for free. Karama cannot be used to buy the Richese Treachery Card card.", factions: ["richese"], advanced: false, karama: false },
+      { text: "RICHESE must reveal and auction one Richese Treachery Card from their cache. The auction type may be chosen, and the card can be first or the last card for bid (this is announced before IXIAN uses their bidding advantage). RICHESE collects Spice for the Richese Treachery Card if sold to other factions, and to the EMPEROR if bought by the RICHESE. If the card was not bid for (no faction bid any Spice for it), RICHESE may take the card for free. Karama cannot be used to buy the Richese Treachery Card card.", factions: ["richese"], advanced: false, karama: true },
       { text: "IXIAN draws one more Treachery Cards than the number up for bid and looks at them. IXIAN puts one card of their choice to the top or bottom of the deck. Remaining cards are shuffled and placed face down for auction.", factions: ["ixians"], advanced: false, karama: true },
       { text: "IXIAN may swap out a Treachery Card about to be auctioned with one from their hand once per Bidding Phase, before ATREIDES peeks at the card for auction.", factions: ["ixians"], advanced: true, karama: true },
       { text: "ATREIDES may look at each card as it is offered for auction.", factions: ["atreides"], advanced: false, karama: true },
-      { text: "Factions take turns to initiate bidding (starting with the first faction and then to the right of the previous first bidder). Min bid 1 Spice. Pay to EMPEROR (EMPEROR always pays to the Bank).", factions: ["emperor"], advanced: false, karama: true },
+      { text: "Factions take turns to initiate bidding (starting with the first faction and then to the right of the previous first bidder). Min bid 1 Spice.", advanced: false, karama: true },
+      { text: "EMPEROR claims the bid payments from other factions. EMPEROR always pays to the Bank.", factions: ["emperor"], advanced: false, karama: true, nested: true },
       { text: "Auction until all cards claimed, or 1 card unwanted (remaining cards return to top of deck).", factions: [], advanced: false, karama: false },
       { text: "HARKONNEN may take an additional Treachery Card from the deck for each one they win at auction.", factions: ["harkonnen"], advanced: false, karama: true },
       { text: "At the end of any phase, CHOAM may discard duplicates of the same Treachery Cards for 3 Spice each or Worthless Cards for 2 each.", factions: ["choam"], advanced: false, karama: false },
@@ -2351,18 +2369,19 @@ const gameFlowRules = {
   revival: {
     title: "5. REVIVAL",
     rules: [
-      { text: "Factions may revive up to 3 Forces to their reserve, paying 2 Spice per Force after free revivals limits. Pay for all revivals (Forces and Leaders) to TLEILAXU (TLEILAXU always pays to the Bank).", factions: [], advanced: false, karama: true },
-      { text: "Activate the Sietch Tabr Stronghold Card. Increase your free revival by one. This ability may allow you to break the current revival limit, however, this ability does not allow you to pay for revival beyond the regular limit.", factions: [], advanced: false, tag: "LAS", karama: false },
-      { text: "TLEILAXU may increase the revival limit of their factions to 5 as they wish.", factions: ["tleilaxu"], advanced: false, karama: true },
-      { text: "CHOAM revivals cost 1 Spice per Force, and there is no limit to the amount of revivals.", factions: ["choam"], advanced: false, karama: true },
-      { text: "FREMEN can only revive 1 Fedaykin (starred) Force per turn.", factions: ["fremen"], advanced: true, karama: false },
-      { text: "EMPEROR can only revive 1 Sardaukar (starred) Force per turn.", factions: ["emperor"], advanced: true, karama: false },
-      { text: "IXIAN Cyborg cost 3 Spice to revive.", factions: ["ixians"], advanced: false, karama: false },
-      { text: "TLEILAXU may revive additional Forces at half cost (rounded up), paid to the Spice Bank with no limit on the Forces revived.", factions: ["tleilaxu"], advanced: false, karama: true },
-      { text: "TLEILAXU get 1 Spice from the Spice Bank for every other faction that used free revival.", factions: ["tleilaxu"], advanced: false, karama: true },
-      { text: "Factions may revive 1 Leader per turn once all their Leaders have been sent to Tanks. Must pay the Leader's combat value in Spice, paid to TLEILAXU in the same instance as paying for Forces.", factions: [], advanced: false, karama: false },
+      { text: "TLEILAXU claims revival payments from every other faction. Troop and Leader payments count as same instance. TLEILAXU always pays to the Bank.", factions: ["tleilaxu"], advanced: false, karama: true },
+      { text: "CHOAM revivals cost 1 Spice per Force, and there is no limit to the amount of revivals.", factions: ["choam"], advanced: false, karama: true, nested: false },
+      { text: "Factions may revive up to 3 Forces to their reserve, paying 2 Spice per Force after free revivals limits.", factions: [], advanced: false, karama: true, nested: false },
+      { text: "Activate the Sietch Tabr Stronghold Card. Increase your free revival by one. This ability may allow you to break the current revival limit, however, this ability does not allow you to pay for revival beyond the regular limit.", factions: [], advanced: false, tag: "LAS", karama: false, nested: true },
+      { text: "TLEILAXU may increase the revival limit of their factions to 5 as they wish.", factions: ["tleilaxu"], advanced: false, karama: true, nested: true },
+      { text: "FREMEN can only revive 1 Fedaykin (starred) Force per turn.", factions: ["fremen"], advanced: true, karama: false, nested: true },
+      { text: "EMPEROR can only revive 1 Sardaukar (starred) Force per turn.", factions: ["emperor"], advanced: true, karama: false, nested: true },
+      { text: "IXIAN Cyborg cost 3 Spice to revive.", factions: ["ixians"], advanced: false, karama: false, nested: true },
+      { text: "TLEILAXU may revive additional Forces at half cost (rounded up), paid to the Spice Bank with no limit on the Forces revived.", factions: ["tleilaxu"], advanced: false, karama: true, nested: true },
+      { text: "TLEILAXU get 1 Spice from the Spice Bank for every other faction that used free revival.", factions: ["tleilaxu"], advanced: false, karama: true, nested: true },
+      { text: "Factions may revive 1 Leader per turn once all their Leaders have been sent to Tanks. Must pay the Leader's combat value in Spice.", factions: [], advanced: false, karama: false },
       { text: "TLEILAXU may revive other factions' dead Leaders (face up or face down) for a negotiated price before all 5 Leaders are dead. This is different than standard Leader revival, and Spice will be paid to the TLEILAXU.", factions: ["tleilaxu"], advanced: false, karama: true },
-      { text: "TLEILAXU can optionally revive them to use as your own to a max of 5 active Leaders.", factions: ["tleilaxu"], advanced: true, karama: true },
+      { text: "TLEILAXU can optionally revive any Leader to use as its own to a max of 5 active Leaders.", factions: ["tleilaxu"], advanced: true, karama: true },
       { text: "Revived Leaders may not be revived again until all Leaders for that faction have been revived and sent back to the Tanks.", factions: [], advanced: false, karama: false },
       { text: "CHOAM may revive the Auditor for 2 Spice regardless of how many Leaders are in the Tanks.", factions: ["choam"], advanced: true, karama: false },
       { text: "ECAZ may always revive Duke Vidal for 5 Spice, no matter how many Leaders are in the Tanks. ECAZ may revive Leaders normally when at least 5 are in the Tanks (including Duke Vidal).", factions: ["ecaz"], advanced: false, karama: false },
@@ -2389,13 +2408,14 @@ const gameFlowRules = {
       {
         subtitle: "Shipment",
         rules: [
+          { text: "FREMEN do not 'ship' like other factions. They bring any or all of their reserves for free onto or within two territories of the Great Flat.", factions: ["fremen"], advanced: false, karama: false },
+          { text: "SPACING GUILD collects all shippment payments from other factions. SPACING GUILD always pays to the Bank.", factions: ["guild"], advanced: false, karama: true },
           { text: "Activate the Shield Wall Stronghold Card (If 4 Worms have been revealed). You may ship off-planet reserves here at Stronghold Rates. If you are the FREMEN, you may use your shipment action to send your reserves into this territory, those forces cannot move this turn.", factions: [], advanced: false, tag: "LAS", karama: false },
-          { text: "Factions may add Forces from reserves to any one territory. 1 Spice per Force into Stronghold, 2 Spice per Force into other territory. Pay to SPACING GUILD (SPACING GUILD pays to the Bank).", factions: ["guild"], advanced: false, karama: true },
+          { text: "Factions may add Forces from reserves to any one territory. 1 Spice per Force into Stronghold, 2 Spice per Force into other territory.", advanced: false, karama: false },
           { text: "SPACING GUILD may make one of three types of shipments: [1] Ship from home planet to Dune. [2] Ship from one territory to another. [3] Ship from Dune to home planet.", factions: ["guild"], advanced: false, karama: true },
           { text: "SPACING GUILD only pays half when shipping Forces, and shipping back to the reserve (home planet) costs 1 Spice for every 2 Forces.", factions: ["guild"], advanced: false, karama: true },
           { text: "Anytime a faction ships from off-planet, BENE GESSERIT may ship 1 Force for free to the Polar Sink.", factions: ["gesserit"], advanced: false, karama: true },
           { text: "Optionally, BENE GESSERIT may ship 1 Advisor for free to the same territory (including Mobile Stronghold) instead.", factions: ["gesserit"], advanced: true, karama: true },
-          { text: "FREMEN do not 'ship' like other factions. They bring any or all of their reserves for free onto or within two territories of the Great Flat.", factions: ["fremen"], advanced: false, karama: false },
           { text: "RICHESE may ship a No-Field Token instead of normal shipment.", factions: ["richese"], advanced: false, karama: true }
         ]
       },
