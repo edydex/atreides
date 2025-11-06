@@ -80,36 +80,27 @@ body {
 }
 .faction-modal-content {
   background-color: white;
-  margin: 5% auto;
-  padding: 25px;
-  border-radius: 8px;
-  max-width: 550px;
-  max-height: 85vh;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 500px;
+  max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }
 .faction-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 15px;
-  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
 }
 .faction-modal-header h3 {
   margin: 0;
-  font-size: 22px;
-  color: #333;
 }
 .close-modal {
-  font-size: 28px;
+  font-size: 24px;
   cursor: pointer;
-  color: #999;
-  transition: color 0.2s ease;
-  line-height: 1;
-}
-.close-modal:hover {
-  color: #333;
 }
 
 /* Info Banner Styling */
@@ -154,58 +145,32 @@ body {
 .faction-selection {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 10px;
 }
 .faction-option {
-  padding: 10px;
-  background: #f9f9f9;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-}
-.faction-option:hover {
-  background: #f0f0f0;
-}
-.faction-option label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  font-size: 15px;
-}
-.faction-option input[type="checkbox"] {
-  margin-right: 8px;
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
+  padding: 5px;
 }
 .expansion-faction {
-  background-color: #e8f4f8;
-  border-left: 3px solid #4CAF50;
-}
-.expansion-faction:hover {
-  background-color: #dceef5;
+  background-color: #f8f8f8;
+  border-radius: 3px;
 }
 .faction-modal-footer {
   text-align: center;
-  margin-top: 25px;
-  padding-top: 15px;
-  border-top: 2px solid #ddd;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
 }
 .apply-factions-btn {
-  padding: 12px 30px;
+  padding: 8px 20px;
   background-color: #4CAF50;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: 500;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .apply-factions-btn:hover {
-  background-color: #45a049;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  background-color: #3e8e41;
 }
 
 /* Radio Tab Styling */
@@ -513,6 +478,47 @@ input[name="tab-selector"] {
 .faction button:hover {
     background-color: #45a049;
 }
+/* Faction-specific button colors */
+.atreides-btn { background-color: green !important; }
+.atreides-btn:hover { background-color: darkgreen !important; }
+
+.harkonnen-btn { background-color: black !important; }
+.harkonnen-btn:hover { background-color: #333 !important; }
+
+.emperor-btn { background-color: #c41e3a !important; }
+.emperor-btn:hover { background-color: #a01830 !important; }
+
+.fremen-btn { background-color: #EED202 !important; color: black !important; }
+.fremen-btn:hover { background-color: #d4ba02 !important; }
+
+.guild-btn { background-color: orange !important; }
+.guild-btn:hover { background-color: darkorange !important; }
+
+.gesserit-btn { background-color: blue !important; }
+.gesserit-btn:hover { background-color: darkblue !important; }
+
+.ecaz-btn { background-color: #FF69B4 !important; }
+.ecaz-btn:hover { background-color: #ff1493 !important; }
+
+.moritani-btn { background-color: #008080 !important; }
+.moritani-btn:hover { background-color: #006666 !important; }
+
+.ixians-btn { background-color: #99a070 !important; }
+.ixians-btn:hover { background-color: #7d8a56 !important; }
+
+.tleilaxu-btn { background-color: #800080 !important; }
+.tleilaxu-btn:hover { background-color: #660066 !important; }
+
+.choam-btn { 
+    background: repeating-linear-gradient(45deg, #ff0000, #ff0000 10px, #000 10px, #000 20px) !important;
+}
+.choam-btn:hover { 
+    background: repeating-linear-gradient(45deg, #cc0000, #cc0000 10px, #000 10px, #000 20px) !important;
+}
+
+.richese-btn { background-color: #D3D3D3 !important; color: black !important; }
+.richese-btn:hover { background-color: #b8b8b8 !important; }
+
 /* Return card button styling */
 .return-card-btn {
     padding: 4px 8px !important;
@@ -751,6 +757,55 @@ body {
     margin-bottom: 5px;
     font-size: 16px;
     color: #555;
+}
+
+.phase-section h2.collapsible {
+    cursor: pointer;
+    user-select: none;
+}
+
+.phase-section h2.collapsible::before {
+    content: '▼ ';
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+.phase-section h2.collapsible.collapsed::before {
+    transform: rotate(-90deg);
+}
+
+.phase-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.phase-content.collapsed {
+    max-height: 0 !important;
+}
+
+.return-to-storm-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    padding: 0;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.return-to-storm-btn:hover {
+    background-color: #555;
 }
 
 .rule-item {
@@ -1662,9 +1717,6 @@ input[type="text"] {
     margin-bottom: 6px;
     padding-bottom: 6px;
   }
-  .faction-selection {
-    grid-template-columns: 1fr;
-  }
   #miscNotes {
     width: 100%;
     padding: 12px;
@@ -2401,8 +2453,14 @@ function renderGameFlow() {
     
     // Render each phase
     for (const [phaseKey, phaseData] of Object.entries(gameFlowRules)) {
-        html += `<div class="phase-section">`;
-        html += `<h2>${phaseData.title}</h2>`;
+        const isStartSection = phaseKey === 'start';
+        const isStormSection = phaseKey === 'storm';
+        
+        html += `<div class="phase-section" ${isStormSection ? 'id="storm-section"' : ''}>`;
+        html += `<h2 ${isStartSection ? 'class="collapsible collapsed" onclick="togglePhaseSection(this)"' : ''}>${phaseData.title}</h2>`;
+        
+        // Wrap content in a container for collapsibility
+        html += `<div class="phase-content" ${isStartSection ? 'style="max-height: 0;" data-collapsed="true"' : ''}>`;
         
         // Check if phase has subsections (like Shipment & Movement)
         if (phaseData.subsections) {
@@ -2416,10 +2474,38 @@ function renderGameFlow() {
             html += renderRules(phaseData.rules, advancedEnabled, landsraadEnabled, techTokenEnabled);
         }
         
-        html += `</div>`;
+        html += `</div>`; // Close phase-content
+        html += `</div>`; // Close phase-section
     }
     
+    // Add fixed return to storm button
+    html += `<button class="return-to-storm-btn" onclick="scrollToStorm()">↑</button>`;
+    
     container.innerHTML = html;
+}
+
+function togglePhaseSection(headerElement) {
+    const contentDiv = headerElement.nextElementSibling;
+    const isCollapsed = contentDiv.dataset.collapsed === 'true';
+    
+    if (isCollapsed) {
+        // Expand
+        contentDiv.style.maxHeight = contentDiv.scrollHeight + 'px';
+        contentDiv.dataset.collapsed = 'false';
+        headerElement.classList.remove('collapsed');
+    } else {
+        // Collapse
+        contentDiv.style.maxHeight = '0';
+        contentDiv.dataset.collapsed = 'true';
+        headerElement.classList.add('collapsed');
+    }
+}
+
+function scrollToStorm() {
+    const stormSection = document.getElementById('storm-section');
+    if (stormSection) {
+        stormSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 function renderRules(rules, advancedEnabled, landsraadEnabled, techTokenEnabled) {
@@ -2869,7 +2955,7 @@ function generateFactionCards() {
       <select id="cardDropdown-${faction}">
         ${Object.keys(cardPool).map(card => `<option value="${card}">${card}</option>`).join('')}
       </select>
-      <button onclick="addCard('${faction}')">Add Card</button>
+      <button class="faction-action-btn ${faction}-btn" onclick="addCard('${faction}')">Add Card</button>
       <ul id="cardList-${faction}"></ul>
       <h3>Traitors</h3>
       <select id="traitorFactionDropdown-${faction}" onchange="updateTraitorDropdown('${faction}')">
@@ -2879,7 +2965,7 @@ function generateFactionCards() {
       <select id="traitorDropdown-${faction}">
         <option value="">Select Traitor</option>
       </select>
-      <button onclick="addTraitor('${faction}')">Add Traitor</button>
+      <button class="faction-action-btn ${faction}-btn" onclick="addTraitor('${faction}')">Add Traitor</button>
       <ul id="traitorList-${faction}"></ul>
     `;
     
@@ -3405,7 +3491,7 @@ function addCard(faction) {
         li.textContent = cardName;
 
         let returnBtn = document.createElement('button');
-        returnBtn.textContent = " [Return]";
+        returnBtn.textContent = " [Discard]";
         returnBtn.className = "return-card-btn";
         returnBtn.onclick = function () {
             returnCard(faction, cardName, li);
@@ -5026,53 +5112,53 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
       <!-- Original factions -->
       <div class="faction-option">
         <input type="checkbox" id="faction-atreides" checked>
-        <label for="faction-atreides">Atreides (Green) - 10 spice</label>
+        <label for="faction-atreides">Atreides (Green)</label>
       </div>
       <div class="faction-option">
         <input type="checkbox" id="faction-harkonnen">
-        <label for="faction-harkonnen">Harkonnen (Black) - 10 spice</label>
+        <label for="faction-harkonnen">Harkonnen (Black)</label>
       </div>
       <div class="faction-option">
         <input type="checkbox" id="faction-emperor">
-        <label for="faction-emperor">Emperor (Red) - 10 spice</label>
+        <label for="faction-emperor">Emperor (Red)</label>
       </div>
       <div class="faction-option">
         <input type="checkbox" id="faction-fremen">
-        <label for="faction-fremen">Fremen (Yellow) - 3 spice</label>
+        <label for="faction-fremen">Fremen (Yellow)</label>
       </div>
       <div class="faction-option">
         <input type="checkbox" id="faction-guild">
-        <label for="faction-guild">Guild (Orange) - 5 spice</label>
+        <label for="faction-guild">Guild (Orange)</label>
       </div>
       <div class="faction-option">
         <input type="checkbox" id="faction-gesserit">
-        <label for="faction-gesserit">Gesserit (Blue) - 5 spice</label>
+        <label for="faction-gesserit">Gesserit (Blue)</label>
       </div>
       
       <!-- Expansion factions -->
       <div class="faction-option expansion-faction">
         <input type="checkbox" id="faction-ecaz">
-        <label for="faction-ecaz">Ecaz (Pink) - 12 spice</label>
+        <label for="faction-ecaz">Ecaz (Pink)</label>
       </div>
       <div class="faction-option expansion-faction">
         <input type="checkbox" id="faction-moritani">
-        <label for="faction-moritani">Moritani (Teal) - 12 spice</label>
+        <label for="faction-moritani">Moritani (Teal)</label>
       </div>
       <div class="faction-option expansion-faction">
         <input type="checkbox" id="faction-ixians">
-        <label for="faction-ixians">Ixians (Greige) - 10 spice</label>
+        <label for="faction-ixians">Ixians (Greige)</label>
       </div>
       <div class="faction-option expansion-faction">
         <input type="checkbox" id="faction-tleilaxu">
-        <label for="faction-tleilaxu">Tleilaxu (Purple) - 5 spice</label>
+        <label for="faction-tleilaxu">Tleilaxu (Purple)</label>
       </div>
       <div class="faction-option expansion-faction">
         <input type="checkbox" id="faction-choam">
-        <label for="faction-choam">Choam (Red/Black) - 2 spice</label>
+        <label for="faction-choam">Choam (Red/Black)</label>
       </div>
       <div class="faction-option expansion-faction">
         <input type="checkbox" id="faction-richese">
-        <label for="faction-richese">Richese (Light Gray) - 5 spice</label>
+        <label for="faction-richese">Richese (Light Gray)</label>
       </div>
     </div>
     <div class="faction-modal-footer">
