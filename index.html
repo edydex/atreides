@@ -2118,6 +2118,9 @@ function renderRules(rules, advancedEnabled, landsraadEnabled, techTokenEnabled)
         // Filter by advanced rules toggle
         if (rule.advanced && !advancedEnabled) return;
         
+        // Hide basic storm rule when FREMEN are in game AND Advanced Rules are on
+        if (rule.hideIfFremenAdvanced && advancedEnabled && activeFactions.includes('fremen')) return;
+        
         // Show alliance rules automatically when ECAZ is in the game
         if (rule.alliance && !activeFactions.includes('ecaz')) return;
         
@@ -2282,8 +2285,8 @@ const gameFlowRules = {
     rules: [
       { text: "BENE GESSERIT secretly predict what faction will win and on what round.", factions: ["gesserit"], advanced: false, karama: false },
       { text: "ECAZ set aside a random Traitor Card of their faction face up for all factions to see.", factions: ["ecaz"], advanced: true, karama: false },
-      { text: "Factions receive 4 random Traitor Cards and keep 1 (either opponent or own leader).", factions: [], advanced: false, karama: false },
       { text: "Before all other factions, HARKONNEN draw 4 random Traitor Cards and keep all 4. (Optional): Once and only once, HARKONNEN is allowed to discard hand and redraw 4 other Traitor Cards.", factions: ["harkonnen"], advanced: false, karama: false },
+      { text: "Factions receive 4 random Traitor Cards and keep 1 (either opponent or own leader).", factions: [], advanced: false, karama: false },
       { text: "After all other factions, TLEILAXU draw 3 cards from the Traitor Deck as Face Dancers.", factions: ["tleilaxu"], advanced: false, karama: false },
       { text: "Factions receive Treachery Cards based on setup.", factions: [], advanced: false, karama: false },
       { text: "Set up Spice, Storm, and alliances as per game rules.", factions: [], advanced: false, karama: false },
@@ -2299,8 +2302,8 @@ const gameFlowRules = {
   storm: {
     title: "1. STORM",
     rules: [
-      { text: "If playing with Advanced Rules and with FREMEN, skip the normal storm rules. The two factions to the right and to the left of the storm take the Battle Wheel, and secretly choose a number between 1-3. They reveal the number chosen at the same time, and the storm advances that many spaces counter-clockwise.", factions: [], advanced: true, karama: false },
       { text: "After round one, IXIAN may, if Ixian Forces occupy Hidden Mobile Stronghold, move the HMS up to 3 territories distance to a non-Stronghold territory, pointing at a sector of that territory. If Ixian Forces occupy Hidden Mobile Stronghold, as the HMS moves from, into, or through a sector containing Spice, immediately collect 2 of those Spice per Ixian Force in HMS.", factions: ["ixians"], advanced: false, karama: true },
+      { text: "The two factions to the right and to the left of the storm take the Battle Wheel, and secretly choose a number between 1-3. They reveal the number chosen at the same time, and the storm advances that many spaces counter-clockwise.", factions: [], advanced: false, karama: false, hideIfFremenAdvanced: true },
       { text: "FREMEN randomly pick and look at a Storm Card to be revealed next round. The following round, FREMEN advance the storm as indicated by card, then shuffle the Storm Card back into the Storm Deck before drawing a new one to look at.", factions: ["fremen"], advanced: true, karama: false },
       { text: "Forces & Spice in desert touched by Storm and are not protected are sent to Tleilaxu Tanks and Spice Bank.", factions: [], advanced: false, karama: false },
       { text: "FREMEN only lose Forces to the Storm at half loss (rounded up).", factions: ["fremen"], advanced: true, karama: true }
