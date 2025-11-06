@@ -2357,7 +2357,7 @@ const gameFlowRules = {
       { text: "IXIAN draws one more Treachery Cards than the number up for bid and looks at them. IXIAN puts one card of their choice to the top or bottom of the deck. Remaining cards are shuffled and placed face down for auction.", factions: ["ixians"], advanced: false, karama: true },
       { text: "IXIAN may swap out a Treachery Card about to be auctioned with one from their hand once per Bidding Phase, before ATREIDES peeks at the card for auction.", factions: ["ixians"], advanced: true, karama: true },
       { text: "ATREIDES may look at each card as it is offered for auction.", factions: ["atreides"], advanced: false, karama: true },
-      { text: "Factions take turns to initiate bidding (starting with the first faction and then to the right of the previous first bidder). Min bid 1 Spice.", advanced: false, karama: true },
+      { text: "Factions take turns to initiate bidding (starting with the first faction and then to the right of the previous first bidder). Min bid 1 Spice. Karama card can be used to bid more spice than you have, and then discarding Karama to claim the card.", advanced: false, karama: true },
       { text: "EMPEROR claims the bid payments from other factions. EMPEROR always pays to the Bank.", factions: ["emperor"], advanced: false, karama: true, nested: true },
       { text: "Auction until all cards claimed, or 1 card unwanted (remaining cards return to top of deck).", factions: [], advanced: false, karama: false },
       { text: "HARKONNEN may take an additional Treachery Card from the deck for each one they win at auction.", factions: ["harkonnen"], advanced: false, karama: true },
@@ -2373,7 +2373,7 @@ const gameFlowRules = {
       { text: "CHOAM revivals cost 1 Spice per Force, and there is no limit to the amount of revivals.", factions: ["choam"], advanced: false, karama: true, nested: false },
       { text: "Factions may revive up to 3 Forces to their reserve, paying 2 Spice per Force after free revivals limits.", factions: [], advanced: false, karama: true, nested: false },
       { text: "Activate the Sietch Tabr Stronghold Card. Increase your free revival by one. This ability may allow you to break the current revival limit, however, this ability does not allow you to pay for revival beyond the regular limit.", factions: [], advanced: false, tag: "LAS", karama: false, nested: true },
-      { text: "TLEILAXU may increase the revival limit of their factions to 5 as they wish.", factions: ["tleilaxu"], advanced: false, karama: true, nested: true },
+      { text: "TLEILAXU may increase the revival limit of any faction to 5 as they wish.", factions: ["tleilaxu"], advanced: false, karama: true, nested: true },
       { text: "FREMEN can only revive 1 Fedaykin (starred) Force per turn.", factions: ["fremen"], advanced: true, karama: false, nested: true },
       { text: "EMPEROR can only revive 1 Sardaukar (starred) Force per turn.", factions: ["emperor"], advanced: true, karama: false, nested: true },
       { text: "IXIAN Cyborg cost 3 Spice to revive.", factions: ["ixians"], advanced: false, karama: false, nested: true },
@@ -2411,7 +2411,7 @@ const gameFlowRules = {
           { text: "FREMEN do not 'ship' like other factions. They bring any or all of their reserves for free onto or within two territories of the Great Flat.", factions: ["fremen"], advanced: false, karama: false },
           { text: "SPACING GUILD collects all shippment payments from other factions. SPACING GUILD always pays to the Bank.", factions: ["guild"], advanced: false, karama: true },
           { text: "Activate the Shield Wall Stronghold Card (If 4 Worms have been revealed). You may ship off-planet reserves here at Stronghold Rates. If you are the FREMEN, you may use your shipment action to send your reserves into this territory, those forces cannot move this turn.", factions: [], advanced: false, tag: "LAS", karama: false },
-          { text: "Factions may add Forces from reserves to any one territory. 1 Spice per Force into Stronghold, 2 Spice per Force into other territory.", advanced: false, karama: false },
+          { text: "Factions may add Forces from reserves to any one territory. 1 Spice per Force into Stronghold, 2 Spice per Force into other territory. Price can be halved by using Karama card", advanced: false, karama: true },
           { text: "SPACING GUILD may make one of three types of shipments: [1] Ship from home planet to Dune. [2] Ship from one territory to another. [3] Ship from Dune to home planet.", factions: ["guild"], advanced: false, karama: true },
           { text: "SPACING GUILD only pays half when shipping Forces, and shipping back to the reserve (home planet) costs 1 Spice for every 2 Forces.", factions: ["guild"], advanced: false, karama: true },
           { text: "Anytime a faction ships from off-planet, BENE GESSERIT may ship 1 Force for free to the Polar Sink.", factions: ["gesserit"], advanced: false, karama: true },
@@ -4682,7 +4682,7 @@ function initializeBottomNav() {
     
     <!-- Legend -->
     <div style="text-align: center; margin: 10px 0; padding: 8px; background-color: #f0f0f0; border-radius: 5px; font-size: 14px;">
-        <span style="font-weight: bold;">✷</span> = Action can be stopped with a Karama card
+        <span style="font-weight: bold;">✷</span> = Karama card can be used to stop/alter this step 
     </div>
     
     <!-- Control Toggles -->
