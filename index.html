@@ -2416,7 +2416,7 @@ const gameFlowRules = {
           { text: "SPACING GUILD only pays half when shipping Forces, and shipping back to the reserve (home planet) costs 1 Spice for every 2 Forces.", factions: ["guild"], advanced: false, karama: true },
           { text: "Anytime a faction ships from off-planet, BENE GESSERIT may ship 1 Force for free to the Polar Sink.", factions: ["gesserit"], advanced: false, karama: true },
           { text: "Optionally, BENE GESSERIT may ship 1 Advisor for free to the same territory (including Mobile Stronghold) instead.", factions: ["gesserit"], advanced: true, karama: true },
-          { text: "RICHESE may ship a No-Field Token instead of normal shipment.", factions: ["richese"], advanced: false, karama: true }
+          { text: "RICHESE may ship a No-Field Token instead of normal shipment. There can only be one on Dune at any time. The same one cannot be used twice in a row.", factions: ["richese"], advanced: false, karama: true }
         ]
       },
       {
@@ -2425,10 +2425,10 @@ const gameFlowRules = {
           { text: "Factions may move any number of Forces from any 1 territory to adjacent territory. Move up to 3 territories if they have presence in Arrakeen or Carthag. (sectors don't count for movement distance)", factions: [], advanced: false, karama: false },
           { text: "Activate the Habbanya Sietch Stronghold Card. Forces starting their movement action here have an additional two movements beyond any current limits.", factions: [], advanced: false, tag: "LAS", karama: false },
           { text: "You may move the same Forces you shipped.", factions: [], advanced: false, karama: false },
-          { text: "RICHESE move No-Field Tokens as one Force. They can be revealed at any time but there can only be one on Dune at any time. The same one cannot be used twice in a row.", factions: ["richese"], advanced: false, karama: false },
+          { text: "RICHESE move No-Field Tokens as one Force. They can be revealed at any time.", factions: ["richese"], advanced: false, karama: false },
           { text: "BENE GESSERIT Advisors moving into unoccupied territory must flip to Fighters, but may enter occupied territory as either Advisors or Fighters. When another faction ships or moves into a territory where you have Fighters you may flip them to Advisors.", factions: ["gesserit"], advanced: true, karama: true },
           { text: "IXIAN Cyborg (starred) Forces, and any Suboid Forces with them, move up to 2 territories distance. Otherwise, Suboid Forces move a distance of 1.", factions: ["ixians"], advanced: false, karama: true },
-          { text: "FREMEN Forces may move two territories on foot.", factions: ["fremen"], advanced: false, karama: true },
+          { text: "FREMEN Forces may move 2 territories on foot.", factions: ["fremen"], advanced: false, karama: true },
           { text: "Moving to a different sector within the same territory counts as a movement action.", factions: [], advanced: false, karama: false },
           { text: "Heighliners Tech Token triggers if at least one faction, including you, takes shipment this phase (SPACING GUILD will not trigger). Collect 1 Spice per Tech Token you control.", factions: [], advanced: false, tag: "TECH TOKEN", karama: false }
         ]
