@@ -33,14 +33,20 @@ body {
     overflow-x: hidden;
 }
 .container { 
-    display: flex; 
-    justify-content: flex-start; 
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
     gap: 15px;
     padding: 0;
     margin: 0;
     width: 100%;
     box-sizing: border-box;
+}
+
+@media (min-width: 750px) {
+    .container {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 /* "Manage Factions" button and its functions styles*/
@@ -429,9 +435,10 @@ input[name="tab-selector"] {
 /* Faction tiles (faction cards) styling */
 .faction { 
     border: 1px solid #ddd; 
-    padding: 15px; 
-    width: 15%; 
-    min-width: 175px;
+    padding: 15px;
+    width: 100%;
+    max-width: 300px;
+    min-width: 0;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -510,10 +517,10 @@ input[name="tab-selector"] {
 .tleilaxu-btn:hover { background-color: #660066 !important; }
 
 .choam-btn { 
-    background: repeating-linear-gradient(45deg, #ff0000, #ff0000 10px, #000 10px, #000 20px) !important;
+    background: repeating-linear-gradient(45deg, #ff0000, #ff0000 20px, #000 20px, #000 40px) !important;
 }
 .choam-btn:hover { 
-    background: repeating-linear-gradient(45deg, #cc0000, #cc0000 10px, #000 10px, #000 20px) !important;
+    background: repeating-linear-gradient(45deg, #cc0000, #cc0000 20px, #000 20px, #000 40px) !important;
 }
 
 .richese-btn { background-color: #D3D3D3 !important; color: black !important; }
