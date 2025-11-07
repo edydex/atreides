@@ -2349,22 +2349,43 @@ function initializeCheatSheet() {
             <div class="cheat-section">
                 <h3>Special Karama Rules (Advanced)</h3>
                 <div class="rules-reference">
-                    <div class="rule-item">
-                        <strong>Atreides:</strong> You may use a Karama Card to look at
+                    <div class="rule-item atreides">
+                        <span class="faction-tag atreides">Atreides</span> You may use a Karama Card to look at
 any one player’s entire Battle Plan.
                     </div>
-                    <div class="rule-item">
-                        <strong>Emperor:</strong> You may use a Karama Card to revive up
+                    <div class="rule-item emperor">
+                        <span class="faction-tag emperor">Emperor</span> You may use a Karama Card to revive up
 to three forces or one leader for free.
                     </div>
-                    <div class="rule-item">
-                        <strong>Fremen:</strong> You may use a Karama Card to place your sandworm token in any sand territory that you wish. This is treated as a normal sandworm.
+                    <div class="rule-item fremen">
+                        <span class="faction-tag fremen">Fremen</span> You may use a Karama Card to place your sandworm token in any sand territory that you wish. This is treated as a normal sandworm.
                     </div>
-                    <div class="rule-item">
-                        <strong>Spacing Guild:</strong> You may use a Karama Card to stop one off-planet shipment of any one player.
+                    <div class="rule-item guild">
+                        <span class="faction-tag guild">Spacing Guild</span> You may use a Karama Card to stop one off-planet shipment of any one player.
                     </div>
-                    <div class="rule-item">
-                        <strong>Harkonnen:</strong> You may use a Karama Card to take without looking any number of cards, up to the entire hand of any one player of your choice. For each card you take, you must give that player one of your cards in return.
+                    <div class="rule-item harkonnen">
+                        <span class="faction-tag harkonnen">Harkonnen</span> You may use a Karama Card to take without looking any number of cards, up to the entire hand of any one player of your choice. For each card you take, you must give that player one of your cards in return.
+                    </div>
+                    <div class="rule-item gesserit">
+                        <span class="faction-tag gesserit">Bene Gesserit</span> Instead of a once a game ability you may use any worthless card as if it is a Karama Card.
+                    </div>
+                    <div class="rule-item ixians">
+                        <span class="faction-tag ixians">Ixians</span> When it is your turn to take your Shipment and Movement actions, you may use a Karama Card to move the Hidden Mobile Stronghold 2 territories (as long you occupy it with one or more Forces), as well as take your normal Shipment and Movement.
+                    </div>
+                    <div class="rule-item tleilaxu">
+                        <span class="faction-tag tleilaxu">Tleilaxu</span> You may use a Karama Card to prevent a player from performing their standard revival (Forces and/or leader).
+                    </div>
+                    <div class="rule-item choam">
+                        <span class="faction-tag choam">CHOAM</span> At any time, you may use a Karama Card to discard any Treachery Cards, even Worthless Cards, from your hand and gain 3 spice each.
+                    </div>
+                    <div class="rule-item richese">
+                        <span class="faction-tag richese">Richese</span> At any time, you may use a Karama Card and pay 3 spice to secretly add one of your Richese Treachery Cards from your cache to your hand.
+                    </div>
+                    <div class="rule-item ecaz">
+                        <span class="faction-tag ecaz">Ecaz</span> You may use a Karama Card to add the difference between your leader disc and your opponent's leader disc to your number dialed, if you played neither a weapon nor a defense.
+                    </div>
+                    <div class="rule-item moritani">
+                        <span class="faction-tag moritani">Moritani</span> You may use a Karama Card to force your opponent to discard or keep any or all Treachery Cards they played, when you lose a battle.
                     </div>
                 </div>
             </div>
@@ -3587,7 +3608,8 @@ function saveData() {
         cardPool: {},
         discardPile: {},
         expansionPool: {},
-        activeFactions: activeFactions // Save active factions list
+        activeFactions: activeFactions, // Save active factions list
+        battleWheel: {} // Save Battle Wheel state
     };
 
     // Save spice values for active factions
@@ -3637,6 +3659,33 @@ function saveData() {
     // Save expansion pool counts
     for (let card in expansionPool) {
         gameState.expansionPool[card] = expansionPool[card];
+    }
+    
+    // Save Battle Wheel state
+    const battleWheelForces = document.getElementById('your-forces');
+    const battleWheelSpice = document.getElementById('spice-feeding');
+    const battleWheelSpecial = document.getElementById('special-troops');
+    const battleWheelLeader = document.getElementById('your-leader');
+    const battleWheelWeapon = document.getElementById('your-weapon');
+    const battleWheelDefense = document.getElementById('your-defense');
+    const battleWheelKwisatz = document.getElementById('kwisatz-haderach');
+    const battleWheelEcazAlly = document.getElementById('ecaz-alliance');
+    const battleWheelEcazForces = document.getElementById('ecaz-forces');
+    const battleWheelFremenKarama = document.getElementById('fremen-karama');
+    
+    if (battleWheelForces) {
+        gameState.battleWheel = {
+            forces: parseInt(battleWheelForces.value) || 0,
+            spiceFeeding: battleWheelSpice ? (parseInt(battleWheelSpice.value) || 0) : 0,
+            specialTroops: battleWheelSpecial ? (parseInt(battleWheelSpecial.value) || 0) : 0,
+            leader: battleWheelLeader ? battleWheelLeader.value : '0',
+            weapon: battleWheelWeapon ? battleWheelWeapon.value : '0',
+            defense: battleWheelDefense ? battleWheelDefense.value : 'none',
+            kwisatzHaderach: battleWheelKwisatz ? battleWheelKwisatz.checked : false,
+            ecazAlliance: battleWheelEcazAlly ? battleWheelEcazAlly.checked : false,
+            ecazForces: battleWheelEcazForces ? (parseInt(battleWheelEcazForces.value) || 0) : 0,
+            fremenKarama: battleWheelFremenKarama ? battleWheelFremenKarama.checked : false
+        };
     }
 
     localStorage.setItem("duneTrackerData", JSON.stringify(gameState));
@@ -4132,8 +4181,86 @@ function initializeBattleWheel() {
     // Apply faction-specific styling to battle wheel elements
     applyBattleWheelFactionStyling();
     
+    // Restore Battle Wheel state from localStorage
+    restoreBattleWheelState();
+    
     // Initialize the battle dial
     updateBattleDial();
+}
+
+// Function to restore Battle Wheel state from localStorage
+function restoreBattleWheelState() {
+    let savedData = localStorage.getItem("duneTrackerData");
+    if (!savedData) return;
+    
+    savedData = JSON.parse(savedData);
+    const battleWheel = savedData.battleWheel;
+    
+    if (!battleWheel) return;
+    
+    // Restore forces
+    const forcesInput = document.getElementById('your-forces');
+    if (forcesInput && battleWheel.forces !== undefined) {
+        forcesInput.value = battleWheel.forces;
+    }
+    
+    // Restore spice feeding
+    const spiceInput = document.getElementById('spice-feeding');
+    if (spiceInput && battleWheel.spiceFeeding !== undefined) {
+        spiceInput.value = battleWheel.spiceFeeding;
+    }
+    
+    // Restore special troops
+    const specialInput = document.getElementById('special-troops');
+    if (specialInput && battleWheel.specialTroops !== undefined) {
+        specialInput.value = battleWheel.specialTroops;
+    }
+    
+    // Restore leader selection
+    const leaderSelect = document.getElementById('your-leader');
+    if (leaderSelect && battleWheel.leader !== undefined) {
+        leaderSelect.value = battleWheel.leader;
+    }
+    
+    // Restore weapon selection
+    const weaponSelect = document.getElementById('your-weapon');
+    if (weaponSelect && battleWheel.weapon !== undefined) {
+        weaponSelect.value = battleWheel.weapon;
+    }
+    
+    // Restore defense selection
+    const defenseSelect = document.getElementById('your-defense');
+    if (defenseSelect && battleWheel.defense !== undefined) {
+        defenseSelect.value = battleWheel.defense;
+    }
+    
+    // Restore Kwisatz Haderach checkbox (Atreides only)
+    const kwisatzCheckbox = document.getElementById('kwisatz-haderach');
+    if (kwisatzCheckbox && battleWheel.kwisatzHaderach !== undefined) {
+        kwisatzCheckbox.checked = battleWheel.kwisatzHaderach;
+    }
+    
+    // Restore Ecaz alliance checkbox
+    const ecazCheckbox = document.getElementById('ecaz-alliance');
+    if (ecazCheckbox && battleWheel.ecazAlliance !== undefined) {
+        ecazCheckbox.checked = battleWheel.ecazAlliance;
+        // Show/hide Ecaz forces group based on checkbox state
+        toggleEcazForces();
+    }
+    
+    // Restore Ecaz forces
+    const ecazForcesInput = document.getElementById('ecaz-forces');
+    if (ecazForcesInput && battleWheel.ecazForces !== undefined) {
+        ecazForcesInput.value = battleWheel.ecazForces;
+    }
+    
+    // Restore Fremen Karama checkbox (Fremen only)
+    const fremenKaramaCheckbox = document.getElementById('fremen-karama');
+    if (fremenKaramaCheckbox && battleWheel.fremenKarama !== undefined) {
+        fremenKaramaCheckbox.checked = battleWheel.fremenKarama;
+        // Show/hide spice feeding group based on checkbox state
+        toggleFremenSpiceFeeding();
+    }
 }
 
 function applyBattleWheelFactionStyling() {
@@ -4326,6 +4453,9 @@ function updateBattleDial() {
     let yourLeader = document.getElementById('your-leader').value;
     const yourWeapon = document.getElementById('your-weapon').value;
     const yourDefense = document.getElementById('your-defense').value;
+    
+    // Save Battle Wheel state whenever it changes
+    saveData();
     
     const { effectiveForces, spiceNeeded, factionRule } = calculateFactionForceStrength(selectedFaction, yourForces, spiceFeeding, specialTroops);
     
