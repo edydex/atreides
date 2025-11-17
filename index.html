@@ -4015,7 +4015,7 @@ function initializeBattleWheel() {
                         <label>Forces:</label>
                         <div class="number-input-container">
                             <div class="number-btn minus" onclick="decrementValue('your-forces')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
-                            <input type="number" id="your-forces" min="0" max="20" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                            <input type="number" id="your-forces" min="0" max="20" value="0" onchange="updateMaxSpiceFeeding(); updateBattleDial()" inputmode="numeric">
                             <div class="number-btn plus" onclick="incrementValue('your-forces')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
                         </div>
                     </div>
@@ -4024,7 +4024,7 @@ function initializeBattleWheel() {
                             <label>Fedaykin Special Troops:</label>
                             <div class="number-input-container">
                                 <div class="number-btn minus" onclick="decrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
-                                <input type="number" id="special-troops" min="0" max="3" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                                <input type="number" id="special-troops" min="0" max="3" value="0" onchange="updateMaxSpiceFeeding(); updateBattleDial()" inputmode="numeric">
                                 <div class="number-btn plus" onclick="incrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
                             </div>
                             <label class="kwisatz-checkbox">
@@ -4047,7 +4047,7 @@ function initializeBattleWheel() {
                             <label>Special Troops:</label>
                             <div class="number-input-container">
                                 <div class="number-btn minus" onclick="decrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
-                                <input type="number" id="special-troops" min="0" max="5" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                                <input type="number" id="special-troops" min="0" max="5" value="0" onchange="updateMaxSpiceFeeding(); updateBattleDial()" inputmode="numeric">
                                 <div class="number-btn plus" onclick="incrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
                             </div>
                             <div class="description">Elite troops (2 strength when fed, 1 when unfed). Against Fremen they count as normal forces.</div>
@@ -4066,7 +4066,7 @@ function initializeBattleWheel() {
                             <label>Special Troops:</label>
                             <div class="number-input-container">
                                 <div class="number-btn minus" onclick="decrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
-                                <input type="number" id="special-troops" min="0" max="7" value="0" onchange="updateBattleDial()" inputmode="numeric">
+                                <input type="number" id="special-troops" min="0" max="7" value="0" onchange="updateMaxSpiceFeeding(); updateBattleDial()" inputmode="numeric">
                                 <div class="number-btn plus" onclick="incrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
                             </div>
                             <div class="description">Elite troops (2 strength when fed, 1 when unfed)</div>
@@ -4183,6 +4183,9 @@ function initializeBattleWheel() {
     
     // Restore Battle Wheel state from localStorage
     restoreBattleWheelState();
+    
+    // Update max spice feeding based on current forces
+    updateMaxSpiceFeeding();
     
     // Initialize the battle dial
     updateBattleDial();
@@ -4417,6 +4420,28 @@ function calculateFactionForceStrength(faction, totalForces, spiceFeeding, speci
         spiceNeeded,
         factionRule
     };
+}
+
+// Update max spice feeding based on total troops
+function updateMaxSpiceFeeding() {
+    const forcesInput = document.getElementById('your-forces');
+    const specialTroopsInput = document.getElementById('special-troops');
+    const spiceFeedingInput = document.getElementById('spice-feeding');
+    
+    if (!spiceFeedingInput) return;
+    
+    const totalForces = parseInt(forcesInput?.value) || 0;
+    const specialTroops = parseInt(specialTroopsInput?.value) || 0;
+    const totalTroops = totalForces + specialTroops;
+    
+    // Update max attribute
+    spiceFeedingInput.max = totalTroops;
+    
+    // Cap current value if it exceeds the new max
+    const currentSpice = parseInt(spiceFeedingInput.value) || 0;
+    if (currentSpice > totalTroops) {
+        spiceFeedingInput.value = totalTroops;
+    }
 }
 
 // Custom number input functions
