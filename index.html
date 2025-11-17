@@ -4371,6 +4371,19 @@ function calculateFactionForceStrength(faction, totalForces, spiceFeeding, speci
             break;
             
         case 'ixians':
+            // Ixian regular troops are 0.5 power and CANNOT eat spice
+            // Cyborgs (special troops) are normal: 2 when fed, 1 when not fed
+            spiceNeeded = specialTroops; // Only cyborgs can eat spice
+            
+            let fedCyborgs = Math.min(spiceFeeding, specialTroops);
+            let unfedCyborgs = specialTroops - fedCyborgs;
+            
+            // Regular Ixian troops are always 0.5 and cannot be fed
+            effectiveForces = (totalForces * 0.5) + (fedCyborgs * 2) + (unfedCyborgs * 1);
+            
+            factionRule = `Regular: ${totalForces}×0.5, fed Cyborgs: ${fedCyborgs}×2, unfed Cyborgs: ${unfedCyborgs}×1`;
+            break;
+            
         case 'emperor':
             // Prioritize feeding special troops first (they're worth more when fed)
             const totalTroopsToFeed = totalForces + specialTroops;
@@ -4419,15 +4432,17 @@ function updateMaxSpiceFeeding() {
     
     const totalForces = parseInt(forcesInput?.value) || 0;
     const specialTroops = parseInt(specialTroopsInput?.value) || 0;
-    const totalTroops = totalForces + specialTroops;
+    
+    // For Ixians, only Cyborgs (special troops) can eat spice
+    const maxSpice = selectedFaction === 'ixians' ? specialTroops : (totalForces + specialTroops);
     
     // Update max attribute
-    spiceFeedingInput.max = totalTroops;
+    spiceFeedingInput.max = maxSpice;
     
     // Cap current value if it exceeds the new max
     const currentSpice = parseInt(spiceFeedingInput.value) || 0;
-    if (currentSpice > totalTroops) {
-        spiceFeedingInput.value = totalTroops;
+    if (currentSpice > maxSpice) {
+        spiceFeedingInput.value = maxSpice;
     }
 }
 
