@@ -4538,13 +4538,25 @@ function updateBattleDial() {
         previewElement.textContent = yourTotal;
     }
     
-    // Build breakdown text
-    let breakdownText = effectiveForces + ' effective forces + ' + yourLeader + ' leader';
+    // Build detailed breakdown text
+    let breakdownText = 'Troops Spent: ' + yourForces;
+    if (specialTroops > 0) {
+        breakdownText += '; Special Troops: ' + specialTroops;
+    }
+    if (spiceFeeding > 0) {
+        breakdownText += '; Spice Used: ' + spiceFeeding;
+    }
+    
+    // Get leader name for display (already includes value in the text)
+    const leaderSelect = document.getElementById('your-leader');
+    const leaderNameWithValue = leaderSelect ? leaderSelect.selectedOptions[0].text : 'No Leader (0)';
+    
+    breakdownText += '<br>Leader: ' + leaderNameWithValue;
     if (kwisatzBonus > 0) {
-        breakdownText += ' + ' + kwisatzBonus + ' Kwisatz Haderach';
+        breakdownText += ' + (2) Kwisatz Haderach';
     }
     if (ecazForces > 0) {
-        breakdownText += ' + ' + ecazForces + ' Ecaz forces';
+        breakdownText += '<br>Ecaz Forces: ' + ecazForces;
     }
     document.getElementById('strength-breakdown').innerHTML = '<small>' + breakdownText + '</small>';
     
