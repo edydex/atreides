@@ -4063,22 +4063,22 @@ function initializeBattleWheel() {
                         </div>
                     ` : selectedFaction === 'ixians' ? `
                         <div class="input-group">
-                            <label>Special Troops:</label>
+                            <label>Cyborgs (Special Troops):</label>
                             <div class="number-input-container">
                                 <div class="number-btn minus" onclick="decrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
                                 <input type="number" id="special-troops" min="0" max="7" value="0" onchange="updateMaxSpiceFeeding(); updateBattleDial()" inputmode="numeric">
                                 <div class="number-btn plus" onclick="incrementValue('special-troops')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
                             </div>
-                            <div class="description">Elite troops (2 strength when fed, 1 when unfed)</div>
+                            <div class="description">Cyborgs: 2 strength when fed, 1 when unfed</div>
                         </div>
                         <div class="input-group">
-                            <label>Spice to Feed Forces:</label>
+                            <label>Spice to Feed Cyborgs:</label>
                             <div class="number-input-container">
                                 <div class="number-btn minus" onclick="decrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">−</div>
                                 <input type="number" id="spice-feeding" min="0" max="20" value="0" onchange="updateBattleDial()" inputmode="numeric">
                                 <div class="number-btn plus" onclick="incrementValue('spice-feeding')" style="background-color: ${factionColor}; color: ${textColor};">+</div>
                             </div>
-                            <small id="spice-info">Prioritizes feeding special troops first</small>
+                            <small id="spice-info">Only Cyborgs can be fed (regular troops are always 0.5)</small>
                         </div>
                     ` : `
                         <div class="input-group">
@@ -4381,7 +4381,7 @@ function calculateFactionForceStrength(faction, totalForces, spiceFeeding, speci
             // Regular Ixian troops are always 0.5 and cannot be fed
             effectiveForces = (totalForces * 0.5) + (fedCyborgs * 2) + (unfedCyborgs * 1);
             
-            factionRule = `Regular: ${totalForces}×0.5, fed Cyborgs: ${fedCyborgs}×2, unfed Cyborgs: ${unfedCyborgs}×1`;
+            factionRule = `Fed Cyborgs: ${fedCyborgs}×2, unfed Cyborgs: ${unfedCyborgs}×1 (regular troops always 0.5)`;
             break;
             
         case 'emperor':
@@ -4450,7 +4450,7 @@ function updateMaxSpiceFeeding() {
 function incrementValue(inputId) {
     const input = document.getElementById(inputId);
     const currentValue = parseInt(input.value) || 0;
-    const maxValue = parseInt(input.max) || 20;
+    const maxValue = input.max !== '' ? parseInt(input.max) : 20;
     
     if (currentValue < maxValue) {
         input.value = currentValue + 1;
