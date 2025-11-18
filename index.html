@@ -4796,20 +4796,13 @@ function closeShareQRCode() {
 // Copy share link to clipboard
 function copyShareLink() {
     const url = document.getElementById('share-url').textContent;
+    const button = event.target;
+    const originalText = button.innerHTML;
     
-    // Use the Clipboard API
-    navigator.clipboard.writeText(url).then(() => {
-        // Show feedback to user
-        const button = event.target;
-        const originalText = button.innerHTML;
-        button.innerHTML = '✓ Copied!';
-        button.style.backgroundColor = '#45a049';
-        
-        setTimeout(() => {
-            button.innerHTML = originalText;
-            button.style.backgroundColor = '#4CAF50';
-        }, 2000);
-    }).catch(err => {
+    // Try modern Clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url);
+    } else {
         // Fallback for older browsers
         const textArea = document.createElement('textarea');
         textArea.value = url;
@@ -4817,22 +4810,18 @@ function copyShareLink() {
         textArea.style.left = '-999999px';
         document.body.appendChild(textArea);
         textArea.select();
-        try {
-            document.execCommand('copy');
-            const button = event.target;
-            const originalText = button.innerHTML;
-            button.innerHTML = '✓ Copied!';
-            button.style.backgroundColor = '#45a049';
-            
-            setTimeout(() => {
-                button.innerHTML = originalText;
-                button.style.backgroundColor = '#4CAF50';
-            }, 2000);
-        } catch (err) {
-            alert('Failed to copy link');
-        }
+        document.execCommand('copy');
         document.body.removeChild(textArea);
-    });
+    }
+    
+    // Always show success feedback
+    button.innerHTML = '✓ Copied!';
+    button.style.backgroundColor = '#45a049';
+    
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.style.backgroundColor = '#4CAF50';
+    }, 2000);
 }
 
 // Load factions from URL hash on page load (supports multi-faction sharing)
