@@ -4636,10 +4636,17 @@ function updateBattleDial() {
     weaponInfo += '<div style="margin-bottom: 10px;"><strong>Weapon:</strong> ' + weaponIcon + weaponName + '</div>';
     weaponInfo += '<div><strong>Defense:</strong> ' + defenseIcon + defenseName + '</div>';
     
-    // Add special weapon warnings
-    if (yourWeapon === 'lasgun') {
+    // Check if Lasgun + Shield combination for nuclear explosion
+    const hasLasgunShieldExplosion = yourWeapon === 'lasgun' && (yourDefense === 'shield' || yourDefense === 'shield-snooper' || yourDefense === 'weirding-way');
+    
+    // Add special defense warning for Lasgun + Shield combination
+    if (hasLasgunShieldExplosion) {
+        weaponInfo += '<div style="margin-top: 10px; padding: 8px; background-color: yellow; border-radius: 4px;"><span style="color: red; font-weight: bold;">⚠️ You played Lasgun and a Projectile Shield - this will cause a nuclear explosion!</span></div>';
+    } else if (yourWeapon === 'lasgun') {
+        // Only show the general Lasgun warning if explosion won't happen
         weaponInfo += '<div style="margin-top: 10px;"><span style="color: #ff9800;">⚠️ Lasgun: If enemy has Shield = Nuclear explosion!</span></div>';
     }
+    
     weaponInfo += '</div>';
     
     document.getElementById('weapon-info').innerHTML = weaponInfo;
