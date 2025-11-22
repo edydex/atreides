@@ -2381,7 +2381,13 @@ to three forces or one leader for free.
                         <span class="faction-tag choam">CHOAM</span> At any time, you may use a Karama Card to discard any Treachery Cards, even Worthless Cards, from your hand and gain 3 spice each.
                     </div>
                     <div class="rule-item richese">
-                        <span class="faction-tag richese">Richese</span> At any time, you may use a Karama Card and pay 3 spice to secretly add one of your Richese Treachery Cards from your cache to your hand.
+                        <span class="faction-tag richese">Richese</span> ${(() => {
+                            const landsraadToggle = document.getElementById('landsraadRules');
+                            const isLandsraadActive = landsraadToggle ? landsraadToggle.checked : false;
+                            return isLandsraadActive 
+                                ? 'Take a Richese Treachery Card from the Richese Cache.'
+                                : 'At any time, you may use a Karama Card and pay 3 spice to secretly add one of your Richese Treachery Cards from your cache to your hand.';
+                        })()}
                     </div>
                     <div class="rule-item ecaz">
                         <span class="faction-tag ecaz">Ecaz</span> You may use a Karama Card to add the difference between your leader disc and your opponent's leader disc to your number dialed, if you played neither a weapon nor a defense.
@@ -5442,7 +5448,31 @@ function showFactionRules(factionKey) {
     const faction = factionRules[factionKey];
     if (faction) {
         title.textContent = faction.title;
-        content.innerHTML = faction.content;
+        
+        // Check Landsraad toggle state for dynamic content
+        const landsraadToggle = document.getElementById('landsraadRules');
+        const isLandsraadActive = landsraadToggle ? landsraadToggle.checked : false;
+        
+        let factionContent = faction.content;
+        
+        // Apply Landsraad-specific changes
+        if (isLandsraadActive) {
+            if (factionKey === 'richese') {
+                // Hide the line about giving Richese Treachery Cards to allies
+                factionContent = factionContent.replace(
+                    /<p>You may also give your ally a Richese Treachery Card that is in your hand at any time if their hand is not full\.<\/p>/,
+                    ''
+                );
+            } else if (factionKey === 'ixians') {
+                // Replace Ixians Alliance power with "Once per turn" version
+                factionContent = factionContent.replace(
+                    /After an ally purchases a Treachery Card during bidding, they may immediately discard it and draw the top card from the deck\./,
+                    'Once per turn, after an ally purchases a Treachery Card during bidding, they may immediately discard it and draw the top card from the deck.'
+                );
+            }
+        }
+        
+        content.innerHTML = factionContent;
         modal.style.display = 'flex';
     }
 }
