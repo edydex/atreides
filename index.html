@@ -2686,6 +2686,35 @@ let expansionCards = {
   "Worthless": 1,
 };
 
+// Richese-specific expansion cards
+const richeseCards = [
+  "Distrans",
+  "Juice of Sappho",
+  "Mirror Weapon",
+  "Nullentropy Box",
+  "Ornithopter",
+  "Portable Snooper",
+  "Residual Poison",
+  "Semuta Drug",
+  "Stone Burner"
+];
+
+// Helper function to get available expansion cards based on active factions
+function getAvailableExpansionCards() {
+    const available = {};
+    const isRicheseActive = activeFactions.includes('richese');
+    
+    for (let card in expansionCards) {
+        // If card is Richese-specific and Richese is not active, skip it
+        if (richeseCards.includes(card) && !isRicheseActive) {
+            continue;
+        }
+        available[card] = expansionCards[card];
+    }
+    
+    return available;
+}
+
 // Initialize expansion pool with the expansion cards
 let expansionPool = {};
 for (let card in expansionCards) {
@@ -2780,7 +2809,7 @@ const gameFlowRules = {
       { text: "RICHESE may look at the bottom two cards of the Treachery Deck (one if only one is available). Set one Aside facedown and put the other card (if you have seen two) to the bottom of the deck. There is one fewer card up for bid this Turn. In the Bidding Phase, after the the auction cards are dealt, put the set aside card on the row before or after any other face down Treachery Card selecting when it will be bid on, turn this card sideways to denote this is the card you have seen.", factions: ["richese"], advanced: true, karama: true, landsraad: true },
       { text: "Factions must announce how many cards they hold.", factions: [], advanced: false, karama: false },
       { text: "RICHESE must reveal and auction one Richese Treachery Card from their cache. The auction type may be chosen, and the card can be first or the last card for bid (this is announced before IXIAN uses their bidding advantage). RICHESE collects Spice for the Richese Treachery Card if sold to other factions, and to the EMPEROR if bought by the RICHESE. If the card was not bid for (no faction bid any Spice for it), RICHESE may take the card for free. Karama cannot be used to buy the Richese Treachery Card card.", factions: ["richese"], advanced: false, karama: true, hideIfLandsraad: true },
-      { text: "RICHESE During Bidding Phase Declaration, announces whether the Richese Treachery Card from their cache will be the first card for bid, or the last card for bid (this is announced before IXIAN uses their bidding advantage). If first, complete the Richese Bidding immediately.", factions: ["richese"], advanced: false, karama: true, landsraad: true },
+      { text: "During Bidding Phase Declaration, RICHESE announces whether the Richese Treachery Card from their cache will be the first card for bid, or the last card for bid (this is announced before IXIAN uses their bidding advantage). If first, complete the Richese Bidding immediately.", factions: ["richese"], advanced: false, karama: true, landsraad: true },
       { text: "RICHESE must reveal and auction one Richese Treachery Card from their cache for Richese Bidding. The auction type may be chosen. If the card was not bid for (no faction bid any Spice for it), RICHESE may take the card for free. Karama cannot be used to buy the Richese Treachery Card card. Whenever any other faction pays spice for a Richese Cache Card sold using ability Richese Bidding, they pay it to you instead of the Spice Bank (or EMPEROR). When RICHESE buys their own card, the spice goes to the Spice Bank or the EMPEROR normally. Whenever a Richese Treachery Card is discarded it will go to the normal Treachery discard pile. Treachery Cards you sell using Richese Bidding cannot be bid on or bought with a Karama.", factions: ["richese"], advanced: false, karama: false, landsraad: true },
       { text: "IXIAN draws one more Treachery Cards than the number up for bid and looks at them. IXIAN puts one card of their choice to the top or bottom of the deck. Remaining cards are shuffled and placed face down for auction.", factions: ["ixians"], advanced: false, karama: true },
       { text: "IXIAN may swap out a Treachery Card about to be auctioned with one from their hand once per Bidding Phase, before ATREIDES peeks at the card for auction.", factions: ["ixians"], advanced: true, karama: true },
@@ -2964,6 +2993,23 @@ function applyFactionChanges(showQRCode = true) {
   
   // Update active factions
   activeFactions = newActiveFactions;
+  
+  // Update expansion pool based on new factions (remove/add Richese cards)
+  const availableCards = getAvailableExpansionCards();
+  const newExpansionPool = {};
+  
+  // Keep existing counts for cards that should remain
+  for (let card in availableCards) {
+    if (card in expansionPool) {
+      newExpansionPool[card] = expansionPool[card];
+    } else {
+      // New card that should be added (Richese was just enabled)
+      newExpansionPool[card] = availableCards[card];
+    }
+  }
+  
+  expansionPool = newExpansionPool;
+  updateExpansionPool();
   
   // Regenerate faction UI
   generateFactionCards();
@@ -3783,13 +3829,24 @@ function loadData() {
     
     // Restore Expansion Pool counts
     if (savedData.expansionPool) {
-        expansionPool = savedData.expansionPool;
-    } else {
-        // If no expansion pool in saved data, initialize it
+        // Filter saved pool to remove Richese cards if Richese is not active
+        const availableCards = getAvailableExpansionCards();
         expansionPool = {};
-        for (let card in expansionCards) {
-            expansionPool[card] = expansionCards[card];
+        for (let card in savedData.expansionPool) {
+            // Only restore cards that should be available
+            if (card in availableCards) {
+                expansionPool[card] = savedData.expansionPool[card];
+            }
         }
+        // Add any new cards that weren't in saved data
+        for (let card in availableCards) {
+            if (!(card in expansionPool)) {
+                expansionPool[card] = availableCards[card];
+            }
+        }
+    } else {
+        // If no expansion pool in saved data, initialize it with available cards only
+        expansionPool = getAvailableExpansionCards();
     }
     
     updateExpansionPool();
@@ -4038,11 +4095,8 @@ function resetData() {
         // Reset active factions to default
         activeFactions = ['atreides'];
         
-        // Reset expansion pool to initial state
-        expansionPool = {};
-        for (let card in expansionCards) {
-            expansionPool[card] = expansionCards[card];
-        }
+        // Reset expansion pool to initial state (with only available cards)
+        expansionPool = getAvailableExpansionCards();
         
         location.reload(); // Reloads the page to apply reset
     }
