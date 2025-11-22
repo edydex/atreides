@@ -2284,9 +2284,10 @@ function initializeCheatSheet() {
             <div class="cheat-section">
                 <h3>Expansion Cards</h3>
                 <div class="card-grid" id="expansion-card-grid">
-                    ${Object.keys(expansionCards).map(card => 
-                        `<div class="card-item" data-card-name="${card}">${card} (${expansionCards[card]})</div>`
-                    ).join('')}
+                    ${Object.keys(getAvailableExpansionCards()).map(card => {
+                        const availableCards = getAvailableExpansionCards();
+                        return `<div class="card-item" data-card-name="${card}">${card} (${availableCards[card]})</div>`;
+                    }).join('')}
                 </div>
             </div>
             
@@ -2440,6 +2441,12 @@ function initializeGameFlow() {
             
             expansionPool = newExpansionPool;
             updateExpansionPool();
+            
+            // Update Cheat Sheet if it's currently visible (to reflect Landsraad card changes)
+            if (document.getElementById('page-cheat').checked) {
+                initializeCheatSheet();
+            }
+            
             saveData();
         });
     }
@@ -3060,6 +3067,11 @@ function applyFactionChanges(showQRCode = true) {
   // Re-render Game Flow if currently on that tab
   if (document.getElementById('page-gameflow').checked) {
     renderGameFlow();
+  }
+  
+  // Update Cheat Sheet if currently on that tab (to reflect Richese card changes)
+  if (document.getElementById('page-cheat').checked) {
+    initializeCheatSheet();
   }
   
   // Save to localStorage
