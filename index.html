@@ -2412,11 +2412,15 @@ function initializeGameFlow() {
     
     // Add event listeners for toggles
     const advancedToggle = document.getElementById('advancedRules');
+    const lasStrongholdsToggle = document.getElementById('lasStrongholdsRules');
     const landsraadToggle = document.getElementById('landsraadRules');
     const techTokenToggle = document.getElementById('techTokenRules');
     
     if (advancedToggle) {
         advancedToggle.addEventListener('change', renderGameFlow);
+    }
+    if (lasStrongholdsToggle) {
+        lasStrongholdsToggle.addEventListener('change', renderGameFlow);
     }
     if (landsraadToggle) {
         landsraadToggle.addEventListener('change', renderGameFlow);
@@ -2471,10 +2475,12 @@ function renderGameFlow() {
     if (!container) return;
     
     const advancedToggle = document.getElementById('advancedRules');
+    const lasStrongholdsToggle = document.getElementById('lasStrongholdsRules');
     const landsraadToggle = document.getElementById('landsraadRules');
     const techTokenToggle = document.getElementById('techTokenRules');
     
     const advancedEnabled = advancedToggle ? advancedToggle.checked : true;
+    const lasStrongholdsEnabled = lasStrongholdsToggle ? lasStrongholdsToggle.checked : false;
     const landsraadEnabled = landsraadToggle ? landsraadToggle.checked : false;
     const techTokenEnabled = techTokenToggle ? techTokenToggle.checked : false;
     
@@ -2497,10 +2503,10 @@ function renderGameFlow() {
                 if (subsection.subtitle) {
                     html += `<h3>${subsection.subtitle}</h3>`;
                 }
-                html += renderRules(subsection.rules, advancedEnabled, landsraadEnabled, techTokenEnabled);
+                html += renderRules(subsection.rules, advancedEnabled, lasStrongholdsEnabled, landsraadEnabled, techTokenEnabled);
             });
         } else {
-            html += renderRules(phaseData.rules, advancedEnabled, landsraadEnabled, techTokenEnabled);
+            html += renderRules(phaseData.rules, advancedEnabled, lasStrongholdsEnabled, landsraadEnabled, techTokenEnabled);
         }
         
         html += `</div>`; // Close phase-content
@@ -2537,7 +2543,7 @@ function scrollToStorm() {
     }
 }
 
-function renderRules(rules, advancedEnabled, landsraadEnabled, techTokenEnabled) {
+function renderRules(rules, advancedEnabled, lasStrongholdsEnabled, landsraadEnabled, techTokenEnabled) {
     let html = '';
     
     rules.forEach(rule => {
@@ -2547,11 +2553,20 @@ function renderRules(rules, advancedEnabled, landsraadEnabled, techTokenEnabled)
         // Hide basic storm rule when FREMEN are in game AND Advanced Rules are on
         if (rule.hideIfFremenAdvanced && advancedEnabled && activeFactions.includes('fremen')) return;
         
+        // Hide default CHOAM Charity rule when CHOAM is in the game
+        if (rule.hideIfChoam && activeFactions.includes('choam')) return;
+        
+        // Hide old rules when Landsraad is enabled (marked with hideIfLandsraad)
+        if (rule.hideIfLandsraad && landsraadEnabled) return;
+        
+        // Show Landsraad rules only when Landsraad toggle is enabled
+        if (rule.landsraad && !landsraadEnabled) return;
+        
         // Show alliance rules automatically when ECAZ is in the game
         if (rule.alliance && !activeFactions.includes('ecaz')) return;
         
-        // Filter by Landsraad (LAS) toggle
-        if (rule.tag === 'LAS' && !landsraadEnabled) return;
+        // Filter by LAS Strongholds toggle
+        if (rule.tag === 'Strongholds' && !lasStrongholdsEnabled) return;
         
         // Filter by Tech Token toggle
         if (rule.tag === 'TECH TOKEN' && !techTokenEnabled) return;
@@ -2722,7 +2737,7 @@ const gameFlowRules = {
       { text: "Special faction setup rules may apply.", factions: [], advanced: false, karama: false },
       { text: "Factions to the left and right of the storm each use a battle wheel to dial a number from 0 to 20. The sum advances the storm for Round 1.", factions: [], advanced: false, karama: false },
       { text: "IXIAN place Hidden Mobile Stronghold in any non-Stronghold territory, pointing at a sector of that territory.", factions: ["ixians"], advanced: false, karama: false },
-      { text: "Distribute the Landsraad Advanced Strongholds Cards to each faction that is occupying Strongholds. Shield Wall LAS Card will not be given out (Shield Wall does not become a Stronghold until 4 Worms have been revealed).", factions: [], advanced: true, tag: "LAS", karama: false },
+      { text: "Distribute the Landsraad Advanced Strongholds Cards to each faction that is occupying Strongholds. Shield Wall LAS Card will not be given out (Shield Wall does not become a Stronghold until 4 Worms have been revealed).", factions: [], advanced: true, tag: "Strongholds", karama: false },
       { text: "Distribute the Tech Tokens to the starting factions. If any of these factions are not present, control is assigned randomly to factions without a Tech Token, according to turn order.", factions: [], advanced: false, tag: "TECH TOKEN", karama: false }
     ]
   },
@@ -2752,18 +2767,21 @@ const gameFlowRules = {
   choamCharity: {
     title: "3. CHOAM CHARITY",
     rules: [
-      { text: "Factions with 0 or 1 Spice can collect Spice to bring their total to 2 Spice by calling out 'CHOAM Charity'.", factions: [], advanced: false, karama: false },
-      { text: "Instead of normal CHOAM Charity collection, CHOAM collects 2 Spice from the Spice Bank for each faction in the game, and pay other factions that claim CHOAM Charity. The Inflation Token doubles or cancels all amounts in this step. No bribes can be made when the Inflation Token Shows double.", factions: ["choam"], advanced: false, karama: true, nested: true },
-      { text: "BENE GESSERIT always collects 2 Spice from 'CHOAM Charity'.", factions: ["gesserit"], advanced: true, karama: true },
+      { text: "Factions with 0 or 1 Spice can collect Spice to bring their total to 2 Spice by calling out 'CHOAM Charity'.", factions: [], advanced: false, karama: false, hideIfChoam: true },
+      { text: "CHOAM collects 2 Spice from the Spice Bank for each faction in the game, and pay other factions that claim CHOAM Charity. Factions with 0 or 1 Spice can collect Spice to bring their total to 2 Spice by calling out 'CHOAM Charity'. The Inflation Token doubles or cancels all amounts in this step. No bribes can be made when the Inflation Token Shows double.", factions: ["choam"], advanced: false, karama: true },
+      { text: "BENE GESSERIT always collects 2 Spice from 'CHOAM Charity'.", factions: ["gesserit"], advanced: true, nested: true, karama: true },
       { text: "Spice Production Tech Token triggers if at least one faction, including you, takes CHOAM Charity this phase (BENE GESSERIT will not trigger). Collect 1 Spice per Tech Token you control.", factions: [], advanced: false, tag: "TECH TOKEN", karama: false }
     ]
   },
   bidding: {
     title: "4. BIDDING",
     rules: [
-      { text: "RICHESE may intervene and auction up one card from hand in a special Black Market bidding round. The auction type may be chosen, and RICHESE can say anything they want about that card. If this card is sold, Spice is given to the RICHESE, and one fewer card will be put on auction in the normal bidding round (this one fewer card is in addition to the one fewer card that won't be auctioned by default because of the Richese Treachery Card). ATREIDES may still peek at this card, and Karama cannot be used to buy the Black Market card.", factions: ["richese"], advanced: true, karama: true },
+      { text: "RICHESE may intervene and auction up one card from hand in a special Black Market bidding round. The auction type may be chosen, and RICHESE can say anything they want about that card. If this card is sold, Spice is given to the RICHESE, and one fewer card will be put on auction in the normal bidding round (this one fewer card is in addition to the one fewer card that won't be auctioned by default because of the Richese Treachery Card). ATREIDES may still peek at this card, and Karama cannot be used to buy the Black Market card.", factions: ["richese"], advanced: true, karama: true, hideIfLandsraad: true },
+      { text: "RICHESE may look at the bottom two cards of the Treachery Deck (one if only one is available). Set one Aside facedown and put the other card (if you have seen two) to the bottom of the deck. There is one fewer card up for bid this Turn. In the Bidding Phase, after the the auction cards are dealt, put the set aside card on the row before or after any other face down Treachery Card selecting when it will be bid on, turn this card sideways to denote this is the card you have seen.", factions: ["richese"], advanced: true, karama: true, landsraad: true },
       { text: "Factions must announce how many cards they hold.", factions: [], advanced: false, karama: false },
-      { text: "RICHESE must reveal and auction one Richese Treachery Card from their cache. The auction type may be chosen, and the card can be first or the last card for bid (this is announced before IXIAN uses their bidding advantage). RICHESE collects Spice for the Richese Treachery Card if sold to other factions, and to the EMPEROR if bought by the RICHESE. If the card was not bid for (no faction bid any Spice for it), RICHESE may take the card for free. Karama cannot be used to buy the Richese Treachery Card card.", factions: ["richese"], advanced: false, karama: true },
+      { text: "RICHESE must reveal and auction one Richese Treachery Card from their cache. The auction type may be chosen, and the card can be first or the last card for bid (this is announced before IXIAN uses their bidding advantage). RICHESE collects Spice for the Richese Treachery Card if sold to other factions, and to the EMPEROR if bought by the RICHESE. If the card was not bid for (no faction bid any Spice for it), RICHESE may take the card for free. Karama cannot be used to buy the Richese Treachery Card card.", factions: ["richese"], advanced: false, karama: true, hideIfLandsraad: true },
+      { text: "RICHESE During Bidding Phase Declaration, announces whether the Richese Treachery Card from their cache will be the first card for bid, or the last card for bid (this is announced before IXIAN uses their bidding advantage). If first, complete the Richese Bidding immediately.", factions: ["richese"], advanced: false, karama: true, landsraad: true },
+      { text: "RICHESE must reveal and auction one Richese Treachery Card from their cache for Richese Bidding. The auction type may be chosen. If the card was not bid for (no faction bid any Spice for it), RICHESE may take the card for free. Karama cannot be used to buy the Richese Treachery Card card. Whenever any other faction pays spice for a Richese Cache Card sold using ability Richese Bidding, they pay it to you instead of the Spice Bank (or EMPEROR). When RICHESE buys their own card, the spice goes to the Spice Bank or the EMPEROR normally. Whenever a Richese Treachery Card is discarded it will go to the normal Treachery discard pile. Treachery Cards you sell using Richese Bidding cannot be bid on or bought with a Karama.", factions: ["richese"], advanced: false, karama: false, landsraad: true },
       { text: "IXIAN draws one more Treachery Cards than the number up for bid and looks at them. IXIAN puts one card of their choice to the top or bottom of the deck. Remaining cards are shuffled and placed face down for auction.", factions: ["ixians"], advanced: false, karama: true },
       { text: "IXIAN may swap out a Treachery Card about to be auctioned with one from their hand once per Bidding Phase, before ATREIDES peeks at the card for auction.", factions: ["ixians"], advanced: true, karama: true },
       { text: "ATREIDES may look at each card as it is offered for auction.", factions: ["atreides"], advanced: false, karama: true },
@@ -2773,7 +2791,7 @@ const gameFlowRules = {
       { text: "HARKONNEN may take an additional Treachery Card from the deck for each one they win at auction.", factions: ["harkonnen"], advanced: false, karama: true },
       { text: "At the end of any phase, CHOAM may discard duplicates of the same Treachery Cards for 3 Spice each or Worthless Cards for 2 each.", factions: ["choam"], advanced: false, karama: false },
       { text: "At the end of any phase, CHOAM may use Worthless Cards for special effects.", factions: ["choam"], advanced: false, karama: false },
-      { text: "Activate the Ixian Hidden Mobile Stronghold Card. Copy one LAS Card you control, this lasts until the end of the turn.", factions: [], advanced: false, tag: "LAS", karama: false }
+      { text: "Activate the Ixian Hidden Mobile Stronghold Card. Copy one LAS Card you control, this lasts until the end of the turn.", factions: [], advanced: false, tag: "Strongholds", karama: false }
     ]
   },
   revival: {
@@ -2782,7 +2800,7 @@ const gameFlowRules = {
       { text: "TLEILAXU claims revival payments from every other faction. Troop and Leader payments count as same instance. TLEILAXU always pays to the Bank.", factions: ["tleilaxu"], advanced: false, karama: true },
       { text: "CHOAM revivals cost 1 Spice per Force, and there is no limit to the amount of revivals.", factions: ["choam"], advanced: false, karama: true, nested: false },
       { text: "Factions may revive up to 3 Forces to their reserve, paying 2 Spice per Force after free revivals limits.", factions: [], advanced: false, karama: false, nested: false },
-      { text: "Activate the Sietch Tabr Stronghold Card. Increase your free revival by one. This ability may allow you to break the current revival limit, however, this ability does not allow you to pay for revival beyond the regular limit.", factions: [], advanced: false, tag: "LAS", karama: false, nested: true },
+      { text: "Activate the Sietch Tabr Stronghold Card. Increase your free revival by one. This ability may allow you to break the current revival limit, however, this ability does not allow you to pay for revival beyond the regular limit.", factions: [], advanced: false, tag: "Strongholds", karama: false, nested: true },
       { text: "TLEILAXU may increase the revival limit of any faction to 5 as they wish.", factions: ["tleilaxu"], advanced: false, karama: true, nested: true },
       { text: "FREMEN can only revive 1 Fedaykin (starred) Force per turn.", factions: ["fremen"], advanced: true, karama: false, nested: true },
       { text: "EMPEROR can only revive 1 Sardaukar (starred) Force per turn.", factions: ["emperor"], advanced: true, karama: false, nested: true },
@@ -2805,7 +2823,7 @@ const gameFlowRules = {
       {
         subtitle: "General",
         rules: [
-          { text: "Activate the Carthag Stronghold Card. Before any player takes their shipment and movement action you may ship one of your Forces here.", factions: [], advanced: false, tag: "LAS", karama: false },
+          { text: "Activate the Carthag Stronghold Card. Before any player takes their shipment and movement action you may ship one of your Forces here.", factions: [], advanced: false, tag: "Strongholds", karama: false },
           { text: "ATREIDES may look at the top card of the Spice Deck before any faction acts in this phase.", factions: ["atreides"], advanced: false, karama: true },
           { text: "MORITANI may reveal and activate a Terror Token in a Stronghold when any non-allied faction enters it.", factions: ["moritani"], advanced: false, karama: false },
           { text: "Alternatively, MORITANI forms an alliance with them (barring ECAZ), returning the Terror Token to the pool. Can break existing alliances. Refusal of allying will activate the Terror Token.", factions: ["moritani"], advanced: false, karama: true },
@@ -2819,23 +2837,26 @@ const gameFlowRules = {
         subtitle: "Shipment",
         rules: [
           { text: "FREMEN do not 'ship' like other factions. They bring any or all of their reserves for free onto or within two territories of the Great Flat.", factions: ["fremen"], advanced: false, karama: false },
-          { text: "SPACING GUILD collects all shippment payments from other factions. SPACING GUILD always pays to the Bank.", factions: ["guild"], advanced: false, karama: true },
-          { text: "Activate the Shield Wall Stronghold Card (If 4 Worms have been revealed). You may ship off-planet reserves here at Stronghold Rates. If you are the FREMEN, you may use your shipment action to send your reserves into this territory, those forces cannot move this turn.", factions: [], advanced: false, tag: "LAS", karama: false },
           { text: "Factions may add Forces from reserves to any one territory. 1 Spice per Force into Stronghold, 2 Spice per Force into other territory. Price can be halved by using Karama card.", advanced: false, karama: true },
-          { text: "SPACING GUILD may make one of three types of shipments: [1] Ship from home planet to Dune. [2] Ship from one territory to another. [3] Ship from Dune to home planet.", factions: ["guild"], advanced: false, karama: true },
-          { text: "SPACING GUILD only pays half when shipping Forces, and shipping back to the reserve (home planet) costs 1 Spice for every 2 Forces.", factions: ["guild"], advanced: false, karama: true },
-          { text: "Anytime a faction ships from off-planet, BENE GESSERIT may ship 1 Force for free to the Polar Sink.", factions: ["gesserit"], advanced: false, karama: true },
-          { text: "Optionally, BENE GESSERIT may ship 1 Advisor for free to the same territory (including Mobile Stronghold) instead.", factions: ["gesserit"], advanced: true, karama: true },
-          { text: "RICHESE may ship a No-Field Token instead of normal shipment. There can only be one on Dune at any time. The same one cannot be used twice in a row.", factions: ["richese"], advanced: false, karama: true }
+          { text: "SPACING GUILD collects all shippment payments from other factions. SPACING GUILD always pays to the Bank.", factions: ["guild"], advanced: false, nested: true, karama: true },
+          { text: "Activate the Shield Wall Stronghold Card (If 4 Worms have been revealed). You may ship off-planet reserves here at Stronghold Rates. If you are the FREMEN, you may use your shipment action to send your reserves into this territory, those forces cannot move this turn.", factions: [], advanced: false, tag: "Strongholds", nested: true, karama: false },
+          { text: "SPACING GUILD may make one of three types of shipments: [1] Ship from home planet to Dune. [2] Ship from one territory to another. [3] Ship from Dune to home planet.", factions: ["guild"], advanced: false, nested: true, karama: true },
+          { text: "SPACING GUILD only pays half when shipping Forces, and shipping back to the reserve (home planet) costs 1 Spice for every 2 Forces.", factions: ["guild"], advanced: false, nested: true, karama: true },
+          { text: "Anytime a faction ships from off-planet, BENE GESSERIT may ship 1 Force for free to the Polar Sink.", factions: ["gesserit"], advanced: false, nested: true, karama: true },
+          { text: "Optionally, BENE GESSERIT may ship 1 Advisor for free to the same territory (including Mobile Stronghold) instead.", factions: ["gesserit"], advanced: true, nested: true, karama: true },
+          { text: "RICHESE may ship a No-Field Token instead of normal shipment. There can only be one on Dune at any time. The same one cannot be used twice in a row.", factions: ["richese"], advanced: false, nested: true, karama: true, hideIfLandsraad: true },
+          { text: "RICHESE may include a single No-Field token from their Supply as part of the Shipment of Forces or use it as your sole Shipment. The cost of a No-Field is the cost of one Force. Place a No-Field tokens face down in the Territory where the shipment lands. Return any No-Field tokens from in front of your Player Shield to your Supply.", factions: ["richese"], advanced: false, nested: true, karama: true, landsraad: true }
         ]
       },
       {
         subtitle: "Movement",
         rules: [
           { text: "Factions may move any number of Forces from any 1 territory to adjacent territory. Move up to 3 territories if they have presence in Arrakeen or Carthag. (sectors don't count for movement distance)", factions: [], advanced: false, karama: false },
-          { text: "Activate the Habbanya Sietch Stronghold Card. Forces starting their movement action here have an additional two movements beyond any current limits.", factions: [], advanced: false, tag: "LAS", karama: false },
+          { text: "Activate the Habbanya Sietch Stronghold Card. Forces starting their movement action here have an additional two movements beyond any current limits.", factions: [], advanced: false, tag: "Strongholds", karama: false },
           { text: "You may move the same Forces you shipped.", factions: [], advanced: false, karama: false },
-          { text: "RICHESE move No-Field Tokens as one Force. They can be revealed at any time.", factions: ["richese"], advanced: false, karama: false },
+          { text: "RICHESE move No-Field Tokens as one Force. They can be revealed at any time.", factions: ["richese"], advanced: false, karama: false, hideIfLandsraad: true },
+          { text: "A No-Field token is treated as one Force for purposes of movement, spice collection, and occupancy limits. Once per turn, RICHESE may reveal a No-Field token at any time other than during a Battle.", factions: ["richese"], advanced: false, karama: false, landsraad: true },
+          { text: "After RICHESE reveal a No-Field Token for any reason, put it face up in front of your shield adding any current No-Field tokens there to your Supply, then Place the indicated number of Forces from your reserves (or all remaining reserve Forces if you have fewer Forces left in reserves) into the Territory and Sector it occupied. A No-Field token is revealed when the storm moves over or lands on it, is caught in an explosion, or when a worm appears in that territory, normal effects apply. When revealing multiple No-Fields at the same time you decide which one is Put in front your Player Shield first.", factions: ["richese"], advanced: false, karama: false, landsraad: true },
           { text: "BENE GESSERIT Advisors moving into unoccupied territory must flip to Fighters, but may enter occupied territory as either Advisors or Fighters. When another faction ships or moves into a territory where you have Fighters you may flip them to Advisors.", factions: ["gesserit"], advanced: true, karama: true },
           { text: "IXIAN Cyborg (starred) Forces, and any Suboid Forces with them, move up to 2 territories distance. Otherwise, Suboid Forces move a distance of 1.", factions: ["ixians"], advanced: false, karama: true },
           { text: "FREMEN Forces may move 2 territories on foot.", factions: ["fremen"], advanced: false, karama: true },
@@ -2852,14 +2873,15 @@ const gameFlowRules = {
       { text: "Factions must battle in all territories with 2 or more factions, except if separated by Storm, or at Polar Sink.", factions: [], advanced: false, karama: false },
       { text: "The First Faction is the aggressor and must resolve ALL their battles. Then the aggressor passes to the right and so on. Aggressor wins ties.", factions: [], advanced: false, karama: false },
       { text: "Combatants secretly dial a number from 0 to total strength of Forces in territory, and Leader/cheap hero (mandatory unless none available, must announce if no Leader is available), and optionally 1 weapon and/or 1 defense treachery card if Leader/cheap hero present. (Useless cards replace a weapon/defense card). Weapon kills Leader unprotected by defense. Killed Leaders don't count in battle.", factions: [], advanced: false, karama: false },
-      { text: "Activate the Arrakeen Stronghold Card. Collect two Spice from the Spice Bank.", factions: [], advanced: false, tag: "LAS", karama: false, nested: true },
+      { text: "Activate the Arrakeen Stronghold Card. Collect two Spice from the Spice Bank.", factions: [], advanced: false, tag: "Strongholds", karama: false, nested: true },
       { text: "Spice Dialing: Forces have 0.5 combat strength per token (ex. Emperor Sardaukar is 1) unless fed 1 spice per Force, then they are worth 1 strength (ex. Sardaukar is 2).", factions: [], advanced: true, karama: false, nested: true },
       { text: "CHOAM receives half the Spice spent for Forces in battle (rounded down), unless a traitor is revealed.", factions: ["choam"], advanced: true, karama: true, nested: true },
       { text: "EMPEROR Sardaukar Forces are worth 2 normal Forces in battle and when taking losses, except against FREMEN, which will only be worth 1 each in battle.", factions: ["emperor"], advanced: true, karama: true, nested: true },
       { text: "FREMEN Fedaykin Forces are worth 2 normal Forces in battle and when taking losses.", factions: ["fremen"], advanced: true, karama: true, nested: true },
       { text: "FREMEN Forces fight at full strength without paying spice.", factions: ["fremen"], advanced: true, karama: true, nested: true },
       { text: "IXIAN Suboid Forces have 0.5 combat strength per token (and will always be considered at 0.5, even with advance rules spice dialing), Cyborg (starred) Forces have 2 combat strength per token.", factions: ["ixians"], advanced: false, karama: true, nested: true },
-      { text: "RICHESE No-Field Tokens are dialed as the Forces they represent, but you must have the required number of Forces in reserve. ATREIDES may not see the RICHESE dialed number if there is a No-Field Token.", factions: ["richese"], advanced: false, karama: false, nested: true },
+      { text: "RICHESE No-Field Tokens are dialed as the Forces they represent, but you must have the required number of Forces in reserve. ATREIDES may not see the RICHESE dialed number if there is a No-Field Token.", factions: ["richese"], advanced: false, karama: false, nested: true, hideIfLandsraad: true },
+      { text: "When you are in a battle, you must reveal any No-Field tokens in that Territory when revealing your Battle Plan. ATREIDES may not see the RICHESE dialed number if there is a No-Field Token.", factions: ["richese"], advanced: false, karama: false, nested: true, landsraad: true },
       { text: "ATREIDES may force their opponent to reveal either their dial value, Leader, weapon card, or defence card.", factions: ["atreides"], advanced: false, karama: true, nested: true },
       { text: "BENE GESSERIT may Voice opponents to play or not play cards.", factions: ["gesserit"], advanced: false, karama: true, nested: true },
       { text: "ATREIDES may add the Kwisatz Haderach (if available) to the Battle Plan, but can only be used with a Leader (or Cheap Hero). Leaders accompanied by the Kwisatz Haderach cannot turn traitor. The Kwisatz Haderach can only be killed in a lasgun-shield explosion.", factions: ["atreides"], advanced: true, karama: true, nested: true },
@@ -2867,7 +2889,7 @@ const gameFlowRules = {
       { text: "After the total strength from each side is revealed, each participating faction has a chance to reveal traitors, if any (you may choose not to).", factions: [], advanced: false, karama: false },
       { text: "The winner of the battle receives Spice equal to the value of the killed Leaders (including their own). The killed Leaders are then placed into the Tanks. Surviving Leaders are returned, but cannot be used in another battle this Battle Phase.", factions: [], advanced: false, karama: false },
       { text: "The losing faction puts all Forces into the Tanks. The winning faction puts all dialed forces into the Tanks.", factions: [], advanced: false, karama: false },
-      { text: "Activate the Tuek's Sietch Stronghold Card. After a battle here you may send two Forces that would have gone to the tanks to your reserves instead.", factions: [], advanced: false, tag: "LAS", karama: false },
+      { text: "Activate the Tuek's Sietch Stronghold Card. After a battle here you may send two Forces that would have gone to the tanks to your reserves instead.", factions: [], advanced: false, tag: "Strongholds", karama: false },
       { text: "The winner of the battle may take a Tech Token from the losing faction. If they have more than one Tech Token, choose any that you'd like to take.", factions: [], advanced: false, tag: "TECH TOKEN", karama: false },
       { text: "If MORITANI lose a battle in which the opponent had a Leader disc that was not killed (and no Traitor was called), MORITANI may reveal a Traitor Card for the same faction (other than the Leader opposed). If they are not in the Tanks, kill that leader and collect spice for them. MORITANI can only do this to each faction once per game.", factions: ["moritani"], advanced: true, karama: false },
       { text: "If an Auditor Leader is in battle, CHOAM can audit (look at) cards randomly in the opponent's hand. Two cards if they survived, one if they died. The subject can cancel the audit by paying 1 Spice per card to be revealed. An Auditor cannot be captured by HARKONNEN.", factions: ["choam"], advanced: true, karama: true },
@@ -2900,7 +2922,8 @@ const gameFlowRules = {
       { text: "If a faction not in an alliance has Forces in 3 Strongholds, they win the game.", factions: [], advanced: false, karama: false },
       { text: "If the faction predicted by the BENE GESSERIT wins (alone or as an ally, even as a friendly ally) on the turn predicted, reveal the prediction and win alone. BENE GESSERIT cannot predict special victory conditions.", factions: ["gesserit"], advanced: false, karama: false },
       { text: "FREMEN win if no other faction won and: 1) FREMEN or no faction occupies Sietch Tabr and Habbanya Sietch, and 2) None of the great houses (Harkonnen, Atreides, or the Emperor) occupies Tuek's Sietch.", factions: ["fremen"], advanced: false, karama: false },
-      { text: "RICHESE is also one of the great houses for the FREMEN win condition.", factions: ["richese"], advanced: true, karama: false },
+      { text: "RICHESE is also one of the great houses for the FREMEN win condition.", factions: ["richese"], advanced: true, karama: false, hideIfLandsraad: true },
+      { text: "RICHESE is also one of the great houses for the FREMEN win condition.", factions: ["richese"], advanced: false, karama: false, landsraad: true },
       { text: "SPACING GUILD wins if no other faction has won the game by the end.", factions: ["guild"], advanced: false, karama: false }
     ]
   }
@@ -5535,9 +5558,14 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
             <span class="toggle-label">Advanced Rules</span>
         </label>
         <label class="toggle-switch" style="margin-left: 20px;">
+            <input type="checkbox" id="lasStrongholdsRules">
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">LAS Strongholds</span>
+        </label>
+        <label class="toggle-switch" style="margin-left: 20px;">
             <input type="checkbox" id="landsraadRules">
             <span class="toggle-slider"></span>
-            <span class="toggle-label">Landsraad (LAS)</span>
+            <span class="toggle-label">Landsraad</span>
         </label>
         <label class="toggle-switch" style="margin-left: 20px;">
             <input type="checkbox" id="techTokenRules">
