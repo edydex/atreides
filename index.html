@@ -2423,7 +2423,25 @@ function initializeGameFlow() {
         lasStrongholdsToggle.addEventListener('change', renderGameFlow);
     }
     if (landsraadToggle) {
-        landsraadToggle.addEventListener('change', renderGameFlow);
+        landsraadToggle.addEventListener('change', function() {
+            renderGameFlow();
+            // Update expansion pool when Landsraad toggle changes (affects Richese cards)
+            const availableCards = getAvailableExpansionCards();
+            const newExpansionPool = {};
+            
+            for (let card in availableCards) {
+                if (card in expansionPool) {
+                    newExpansionPool[card] = expansionPool[card];
+                } else {
+                    // New Landsraad card that should be added
+                    newExpansionPool[card] = availableCards[card];
+                }
+            }
+            
+            expansionPool = newExpansionPool;
+            updateExpansionPool();
+            saveData();
+        });
     }
     if (techTokenToggle) {
         techTokenToggle.addEventListener('change', renderGameFlow);
@@ -2686,7 +2704,7 @@ let expansionCards = {
   "Worthless": 1,
 };
 
-// Richese-specific expansion cards
+// Richese-specific expansion cards (base game)
 const richeseCards = [
   "Distrans",
   "Juice of Sappho",
@@ -2699,17 +2717,42 @@ const richeseCards = [
   "Stone Burner"
 ];
 
-// Helper function to get available expansion cards based on active factions
+// Landsraad Richese expansion cards (replace Stone Burner, add new cards)
+const landsraadRicheseCards = {
+  "Axolotl Tank": 1,
+  "Desert Seeded Water": 1,
+  "Lasgun": 1,
+  "Artillery Strike": 1,  // Note: Artillery Strike already exists in base, this is Landsraad version
+  "Levenbrech": 1,
+  "Poison Dart": 1
+};
+
+// Helper function to get available expansion cards based on active factions and toggles
 function getAvailableExpansionCards() {
     const available = {};
     const isRicheseActive = activeFactions.includes('richese');
+    const landsraadToggle = document.getElementById('landsraadRules');
+    const isLandsraadActive = landsraadToggle ? landsraadToggle.checked : false;
     
     for (let card in expansionCards) {
+        // Skip Stone Burner if Landsraad is active (it gets replaced)
+        if (card === "Stone Burner" && isRicheseActive && isLandsraadActive) {
+            continue;
+        }
+        
         // If card is Richese-specific and Richese is not active, skip it
         if (richeseCards.includes(card) && !isRicheseActive) {
             continue;
         }
+        
         available[card] = expansionCards[card];
+    }
+    
+    // Add Landsraad Richese cards if both Richese and Landsraad are active
+    if (isRicheseActive && isLandsraadActive) {
+        for (let card in landsraadRicheseCards) {
+            available[card] = landsraadRicheseCards[card];
+        }
     }
     
     return available;
