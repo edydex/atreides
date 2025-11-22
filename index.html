@@ -2781,7 +2781,7 @@ const gameFlowRules = {
     rules: [
       { text: "TLEILAXU claims revival payments from every other faction. Troop and Leader payments count as same instance. TLEILAXU always pays to the Bank.", factions: ["tleilaxu"], advanced: false, karama: true },
       { text: "CHOAM revivals cost 1 Spice per Force, and there is no limit to the amount of revivals.", factions: ["choam"], advanced: false, karama: true, nested: false },
-      { text: "Factions may revive up to 3 Forces to their reserve, paying 2 Spice per Force after free revivals limits.", factions: [], advanced: false, karama: true, nested: false },
+      { text: "Factions may revive up to 3 Forces to their reserve, paying 2 Spice per Force after free revivals limits.", factions: [], advanced: false, karama: false, nested: false },
       { text: "Activate the Sietch Tabr Stronghold Card. Increase your free revival by one. This ability may allow you to break the current revival limit, however, this ability does not allow you to pay for revival beyond the regular limit.", factions: [], advanced: false, tag: "LAS", karama: false, nested: true },
       { text: "TLEILAXU may increase the revival limit of any faction to 5 as they wish.", factions: ["tleilaxu"], advanced: false, karama: true, nested: true },
       { text: "FREMEN can only revive 1 Fedaykin (starred) Force per turn.", factions: ["fremen"], advanced: true, karama: false, nested: true },
@@ -2805,7 +2805,7 @@ const gameFlowRules = {
       {
         subtitle: "General",
         rules: [
-          { text: "Activate the Carthag Stronghold Card. Before any player takes their shipment and movement action you may pay 1 Spice to ship one of your Forces here.", factions: [], advanced: false, tag: "LAS", karama: false },
+          { text: "Activate the Carthag Stronghold Card. Before any player takes their shipment and movement action you may ship one of your Forces here.", factions: [], advanced: false, tag: "LAS", karama: false },
           { text: "ATREIDES may look at the top card of the Spice Deck before any faction acts in this phase.", factions: ["atreides"], advanced: false, karama: true },
           { text: "MORITANI may reveal and activate a Terror Token in a Stronghold when any non-allied faction enters it.", factions: ["moritani"], advanced: false, karama: false },
           { text: "Alternatively, MORITANI forms an alliance with them (barring ECAZ), returning the Terror Token to the pool. Can break existing alliances. Refusal of allying will activate the Terror Token.", factions: ["moritani"], advanced: false, karama: true },
@@ -3417,6 +3417,16 @@ function updateDiscardPile() {
                 showCardSvg(card);
             };
             li.appendChild(cardText);
+            
+            // Add return button to restore individual card
+            let returnBtn = document.createElement('button');
+            returnBtn.textContent = " [Return]";
+            returnBtn.className = "return-card-btn";
+            returnBtn.onclick = function() {
+                returnFromDiscard(card);
+            };
+            li.appendChild(returnBtn);
+            
             if (index % 2 === 0) {
                 pool1.appendChild(li);
             } else {
@@ -3587,6 +3597,24 @@ function restoreAllCards() {
 
     // Save the game state
     saveData();
+}
+
+// Function to return a single card from discard pile to the main pool
+function returnFromDiscard(cardName) {
+    if (discardPile[cardName] > 0) {
+        // Decrease count in discard pile
+        discardPile[cardName]--;
+        
+        // Increase count in main pool
+        cardPool[cardName]++;
+        
+        // Update both displays
+        updateCardPool();
+        updateDiscardPile();
+        
+        // Save the game state
+        saveData();
+    }
 }
 
 // Function to keep track of Spice
