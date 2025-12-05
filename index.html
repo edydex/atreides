@@ -154,12 +154,54 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-.faction-option {
-  padding: 5px;
+.faction-toggle-btn {
+  padding: 6px 10px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.faction-toggle-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+.faction-toggle-btn:active {
+  transform: translateY(0);
+}
+.faction-toggle-btn.active {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-color: #4CAF50;
+}
+.faction-toggle-btn:not(.active) {
+  background-color: #ffebee;
+  color: #c62828;
+  border-color: #d32f2f;
+}
+.faction-status-icon {
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-2deg);
+  font-weight: 900;
+  font-size: 72px;
+  line-height: 1;
+  opacity: 0.15;
+  pointer-events: none;
+}
+.faction-toggle-btn.active .faction-status-icon {
+  color: #4CAF50;
+}
+.faction-toggle-btn:not(.active) .faction-status-icon {
+  color: #d32f2f;
 }
 .expansion-faction {
-  background-color: #f8f8f8;
-  border-radius: 3px;
+  opacity: 0.95;
 }
 .faction-modal-footer {
   text-align: center;
@@ -3078,9 +3120,19 @@ const gameFlowRules = {
 function openFactionModal() {
   document.getElementById('factionModal').style.display = 'block';
   
-  // Sync faction checkboxes
+  // Sync faction buttons
   for (let faction in allFactions) {
-    document.getElementById(`faction-${faction}`).checked = activeFactions.includes(faction);
+    const button = document.querySelector(`[data-faction="${faction}"]`);
+    if (button) {
+      const isActive = activeFactions.includes(faction);
+      if (isActive) {
+        button.classList.add('active');
+        button.querySelector('.faction-status-icon').textContent = '✓';
+      } else {
+        button.classList.remove('active');
+        button.querySelector('.faction-status-icon').textContent = '✕';
+      }
+    }
   }
   
   // Sync your faction selector
@@ -3108,10 +3160,11 @@ function closeBanner() {
 }
 
 function applyFactionChanges(showQRCode = false) {
-  // Get selected factions
+  // Get selected factions from buttons
   const newActiveFactions = [];
   for (let faction in allFactions) {
-    if (document.getElementById(`faction-${faction}`).checked) {
+    const button = document.querySelector(`[data-faction="${faction}"]`);
+    if (button && button.classList.contains('active')) {
       newActiveFactions.push(faction);
     }
   }
@@ -5744,6 +5797,19 @@ document.addEventListener('DOMContentLoaded', function() {
         applyFactionChanges(true);
     });
     
+    // Set up faction toggle button click handlers
+    document.querySelectorAll('.faction-toggle-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const icon = this.querySelector('.faction-status-icon');
+            if (this.classList.contains('active')) {
+                icon.textContent = '\u2713'; // Checkmark
+            } else {
+                icon.textContent = '\u2715'; // X
+            }
+        });
+    });
+    
     // Auto-open configuration modal on every page load
     setTimeout(() => {
         openFactionModal();
@@ -5959,8 +6025,8 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
     </div>
     
     <!-- Your Faction Section -->
-    <div style="padding: 12px; border-bottom: 1px solid #ddd;">
-      <h4 style="margin-top: 0; margin-bottom: 12px;">Your Faction</h4>
+    <div style="padding: 6px 10px; border-bottom: 1px solid #ddd;">
+      <h4 style="margin-top: 0; margin-bottom: 6px;">Your Faction</h4>
       <select id="factionSelectorModal" style="width: 100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc;">
         <option value="atreides">Atreides (Green)</option>
         <option value="harkonnen">Harkonnen (Black)</option>
@@ -5978,8 +6044,8 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
     </div>
     
     <!-- Game Rules Section -->
-    <div style="padding: 12px; border-bottom: 1px solid #ddd;">
-      <h4 style="margin-top: 0; margin-bottom: 12px;">Game Rules</h4>
+    <div style="padding: 6px 10px; border-bottom: 1px solid #ddd;">
+      <h4 style="margin-top: 0; margin-bottom: 6px;">Game Rules</h4>
       <div style="display: flex; flex-direction: column; gap: 10px;">
         <label class="toggle-switch" style="display: flex; align-items: center; justify-content: space-between;">
           <span class="toggle-label">Advanced Rules</span>
@@ -6013,60 +6079,60 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
     </div>
     
     <!-- Factions in Game Section -->
-    <div style="padding: 12px;">
-      <h4 style="margin-top: 0; margin-bottom: 12px;">Factions in Game</h4>
-      <div class="faction-selection">
+    <div style="padding: 6px 10px;">
+      <h4 style="margin-top: 0; margin-bottom: 6px;">Factions in Game</h4>
+      <div class="faction-selection" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
         <!-- Original factions -->
-        <div class="faction-option">
-          <input type="checkbox" id="faction-atreides" checked>
-          <label for="faction-atreides">Atreides (Green)</label>
-        </div>
-        <div class="faction-option">
-          <input type="checkbox" id="faction-harkonnen">
-          <label for="faction-harkonnen">Harkonnen (Black)</label>
-        </div>
-        <div class="faction-option">
-          <input type="checkbox" id="faction-emperor">
-          <label for="faction-emperor">Emperor (Red)</label>
-        </div>
-        <div class="faction-option">
-          <input type="checkbox" id="faction-fremen">
-          <label for="faction-fremen">Fremen (Yellow)</label>
-        </div>
-        <div class="faction-option">
-          <input type="checkbox" id="faction-guild">
-          <label for="faction-guild">Guild (Orange)</label>
-        </div>
-        <div class="faction-option">
-          <input type="checkbox" id="faction-gesserit">
-          <label for="faction-gesserit">Gesserit (Blue)</label>
-        </div>
+        <button class="faction-toggle-btn active" data-faction="atreides">
+          <span style="color: green; font-weight: 600;">Atreides</span>
+          <span class="faction-status-icon">✓</span>
+        </button>
+        <button class="faction-toggle-btn" data-faction="harkonnen">
+          <span style="color: black; font-weight: 600;">Harkonnen</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
+        <button class="faction-toggle-btn" data-faction="emperor">
+          <span style="color: #c41e3a; font-weight: 600;">Emperor</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
+        <button class="faction-toggle-btn" data-faction="fremen">
+          <span style="color: #FFE100; font-weight: 600; text-shadow: -1px -1px 0 #CC8800, 1px -1px 0 #CC8800, -1px 1px 0 #CC8800, 1px 1px 0 #CC8800;">Fremen</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
+        <button class="faction-toggle-btn" data-faction="guild">
+          <span style="color: orange; font-weight: 600;">Spacing Guild</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
+        <button class="faction-toggle-btn" data-faction="gesserit">
+          <span style="color: blue; font-weight: 600;">Gesserit</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
         
         <!-- Expansion factions -->
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-ecaz">
-          <label for="faction-ecaz">Ecaz (Pink)</label>
-        </div>
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-moritani">
-          <label for="faction-moritani">Moritani (Teal)</label>
-        </div>
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-ixians">
-          <label for="faction-ixians">Ixians (Greige)</label>
-        </div>
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-tleilaxu">
-          <label for="faction-tleilaxu">Tleilaxu (Purple)</label>
-        </div>
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-choam">
-          <label for="faction-choam">Choam (Red/Black)</label>
-        </div>
-        <div class="faction-option expansion-faction">
-          <input type="checkbox" id="faction-richese">
-          <label for="faction-richese">Richese (Light Gray)</label>
-        </div>
+        <button class="faction-toggle-btn expansion-faction" data-faction="ecaz">
+          <span style="color: #FF1493; font-weight: 600;">Ecaz</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
+        <button class="faction-toggle-btn expansion-faction" data-faction="moritani">
+          <span style="color: teal; font-weight: 600;">Moritani</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
+        <button class="faction-toggle-btn expansion-faction" data-faction="ixians">
+          <span style="color: #8B8378; font-weight: 600;">Ixians</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
+        <button class="faction-toggle-btn expansion-faction" data-faction="tleilaxu">
+          <span style="color: purple; font-weight: 600;">Tleilaxu</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
+        <button class="faction-toggle-btn expansion-faction" data-faction="choam">
+          <span style="font-weight: 600; background: linear-gradient(180deg, #c41e3a 0%, #c41e3a 50%, black 50%, black 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">CHOAM</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
+        <button class="faction-toggle-btn expansion-faction" data-faction="richese">
+          <span style="color: #999; font-weight: 600;">Richese</span>
+          <span class="faction-status-icon">✕</span>
+        </button>
       </div>
     </div>
     
