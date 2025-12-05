@@ -88,7 +88,7 @@ body {
 .faction-modal-content {
   background-color: white;
   margin: 10% auto;
-  padding: 20px;
+  padding: 12px;
   border-radius: 5px;
   max-width: 500px;
   max-height: 80vh;
@@ -1737,23 +1737,9 @@ input[type="text"] {
 <body>
     <h1 id="main-title">Atreides Tracker Sheet</h1>
     
-    <!-- Faction Selector -->
-    <div class="faction-selector-container" style="text-align: center; margin: 10px 0 20px 0;">
-        <label for="factionSelector" style="font-size: 18px; margin-right: 10px;">Choose Your Faction:</label>
-        <select id="factionSelector" style="padding: 8px 12px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc;">
-            <option value="atreides">Atreides (Green)</option>
-            <option value="harkonnen">Harkonnen (Black)</option>
-            <option value="emperor">Emperor (Red)</option>
-            <option value="fremen">Fremen (Yellow)</option>
-            <option value="guild">Guild (Orange)</option>
-            <option value="gesserit">Gesserit (Blue)</option>
-            <option value="ecaz">Ecaz (Pink)</option>
-            <option value="moritani">Moritani (Teal)</option>
-            <option value="ixians">Ixians (Greige)</option>
-            <option value="tleilaxu">Tleilaxu (Purple)</option>
-            <option value="choam">Choam (Red/Black)</option>
-            <option value="richese">Richese (Light Gray)</option>
-        </select>
+    <!-- Configuration Button -->
+    <div class="configuration-container" style="text-align: center; margin: 10px 0 20px 0;">
+        <button id="openConfiguration" class="manage-factions-btn" style="font-size: 16px; padding: 10px 30px;">⚙️ Configuration</button>
     </div>
 
     <!-- Page Navigation Tabs -->
@@ -1777,11 +1763,6 @@ input[type="text"] {
     <button class="banner-close" onclick="closeBanner()">&times;</button>
     <h4>YOU ARE NOT ENTITLED TO ALL INFORMATION</h4>
     <p>You only get to keep track of Treachery cards. You might only be able to keep track of the spice of 1-2 people, but you won't have time to keep track of everything, you would just be holding up the game.</p>
-</div>
-
-<!-- "Manage Factions" button and its contents" -->
-<div class="faction-management">
-  <button id="manageFactions" class="manage-factions-btn">Manage Factions</button>
 </div>
 
 <!-- Treachery, Discard, and Expansion Piles tabs (radio) -->
@@ -1990,64 +1971,62 @@ const factionData = {
 };
 
 function updateFactionSelector() {
-    const selector = document.getElementById('factionSelector');
+    // Use the selectedFaction variable (already loaded from localStorage or set by modal)
+    const faction = factionData[selectedFaction];
+    
+    // Update titles if they exist
     const title = document.getElementById('main-title');
     const battleTitle = document.getElementById('battle-title');
+    if (title) title.textContent = `Dune Companion`;
+    if (battleTitle && faction) battleTitle.textContent = `${faction.name} Battle Wheel Calculator`;
     
-    if (selector && title && battleTitle) {
-        selectedFaction = selector.value;
-        const faction = factionData[selectedFaction];
-        
-        title.textContent = `Dune Companion`;
-        battleTitle.textContent = `${faction.name} Battle Wheel Calculator`;
-        
-        // Save selection to localStorage
-        localStorage.setItem('selectedFaction', selectedFaction);
-        
-        // Show/hide Tracker tab based on faction
-        const trackerTab = document.querySelector('label[for="page-atreides"]');
-        const trackerRadio = document.getElementById('page-atreides');
-        const bottomTrackerTab = document.getElementById('bottom-tab-atreides');
-        
-        if (selectedFaction === 'atreides') {
-            if (trackerTab) trackerTab.style.display = 'inline-block';
-            if (bottomTrackerTab) bottomTrackerTab.style.display = 'flex';
-        } else {
-            if (trackerTab) trackerTab.style.display = 'none';
-            if (bottomTrackerTab) bottomTrackerTab.style.display = 'none';
-            // If Tracker tab was selected and we're switching away from Atreides,
-            // automatically switch to Battle Wheel
-            if (trackerRadio.checked) {
-                document.getElementById('page-battle').checked = true;
-                showPage('battle');
-                switchTab('battle');
-            }
+    // Save selection to localStorage
+    localStorage.setItem('selectedFaction', selectedFaction);
+    
+    // Show/hide Tracker tab based on faction
+    const trackerTab = document.querySelector('label[for="page-atreides"]');
+    const trackerRadio = document.getElementById('page-atreides');
+    const bottomTrackerTab = document.getElementById('bottom-tab-atreides');
+    
+    if (selectedFaction === 'atreides') {
+        if (trackerTab) trackerTab.style.display = 'inline-block';
+        if (bottomTrackerTab) bottomTrackerTab.style.display = 'flex';
+    } else {
+        if (trackerTab) trackerTab.style.display = 'none';
+        if (bottomTrackerTab) bottomTrackerTab.style.display = 'none';
+        // If Tracker tab was selected and we're switching away from Atreides,
+        // automatically switch to Battle Wheel
+        if (trackerRadio && trackerRadio.checked) {
+            const battleRadio = document.getElementById('page-battle');
+            if (battleRadio) battleRadio.checked = true;
+            showPage('battle');
+            switchTab('battle');
         }
-        
-        // Apply faction-specific styling to page tabs
-        applyFactionStyling();
-        
-        // Apply faction-specific colors to Game Flow toggles
-        applyFactionColorsToToggles();
-        
-        // Update bottom nav active tab styling
-        const activeBottomTab = document.querySelector('.bottom-nav-tab.active');
-        if (activeBottomTab) {
-            // Find which page is currently active
-            const currentPageId = activeBottomTab.id.replace('bottom-tab-', '');
-            switchTab(currentPageId);
-        }
-        
-        // Update battle wheel if visible
-        const battlePage = document.querySelector('.page-content-battle');
-        const battleContainer = document.getElementById('battle-wheel-container');
-        
-        if (battlePage && battlePage.style.display !== 'none') {
-            initializeBattleWheel();
-        } else if (battleContainer && battleContainer.innerHTML.trim() !== '') {
-            // If battle wheel exists but not currently visible, update its styling
-            applyBattleWheelFactionStyling();
-        }
+    }
+    
+    // Apply faction-specific styling to page tabs
+    applyFactionStyling();
+    
+    // Apply faction-specific colors to Game Flow toggles
+    applyFactionColorsToToggles();
+    
+    // Update bottom nav active tab styling
+    const activeBottomTab = document.querySelector('.bottom-nav-tab.active');
+    if (activeBottomTab) {
+        // Find which page is currently active
+        const currentPageId = activeBottomTab.id.replace('bottom-tab-', '');
+        switchTab(currentPageId);
+    }
+    
+    // Update battle wheel if visible
+    const battlePage = document.querySelector('.page-content-battle');
+    const battleContainer = document.getElementById('battle-wheel-container');
+    
+    if (battlePage && battlePage.style.display !== 'none') {
+        initializeBattleWheel();
+    } else if (battleContainer && battleContainer.innerHTML.trim() !== '') {
+        // If battle wheel exists but not currently visible, update its styling
+        applyBattleWheelFactionStyling();
     }
 }
 
@@ -3018,10 +2997,19 @@ const gameFlowRules = {
 function openFactionModal() {
   document.getElementById('factionModal').style.display = 'block';
   
-  // Set checkboxes based on active factions
+  // Sync faction checkboxes
   for (let faction in allFactions) {
     document.getElementById(`faction-${faction}`).checked = activeFactions.includes(faction);
   }
+  
+  // Sync your faction selector
+  document.getElementById('factionSelectorModal').value = selectedFaction;
+  
+  // Sync toggle states from game flow to modal
+  document.getElementById('advancedRulesModal').checked = document.getElementById('advancedRules')?.checked ?? true;
+  document.getElementById('lasStrongholdsRulesModal').checked = document.getElementById('lasStrongholdsRules')?.checked ?? false;
+  document.getElementById('landsraadRulesModal').checked = document.getElementById('landsraadRules')?.checked ?? false;
+  document.getElementById('techTokenRulesModal').checked = document.getElementById('techTokenRules')?.checked ?? false;
 }
 
 function closeFactionModal() {
@@ -3049,6 +3037,24 @@ function applyFactionChanges(showQRCode = true) {
   
   // Update active factions
   activeFactions = newActiveFactions;
+  
+  // Update selected faction from modal
+  const newSelectedFaction = document.getElementById('factionSelectorModal').value;
+  if (newSelectedFaction !== selectedFaction) {
+    selectedFaction = newSelectedFaction;
+    updateFactionSelector();
+  }
+  
+  // Sync toggle states from modal to game flow
+  const advancedRulesCheckbox = document.getElementById('advancedRules');
+  const lasStrongholdsRulesCheckbox = document.getElementById('lasStrongholdsRules');
+  const landsraadRulesCheckbox = document.getElementById('landsraadRules');
+  const techTokenRulesCheckbox = document.getElementById('techTokenRules');
+  
+  if (advancedRulesCheckbox) advancedRulesCheckbox.checked = document.getElementById('advancedRulesModal').checked;
+  if (lasStrongholdsRulesCheckbox) lasStrongholdsRulesCheckbox.checked = document.getElementById('lasStrongholdsRulesModal').checked;
+  if (landsraadRulesCheckbox) landsraadRulesCheckbox.checked = document.getElementById('landsraadRulesModal').checked;
+  if (techTokenRulesCheckbox) techTokenRulesCheckbox.checked = document.getElementById('techTokenRulesModal').checked;
   
   // Update expansion pool based on new factions (remove/add Richese cards)
   const availableCards = getAvailableExpansionCards();
@@ -4938,7 +4944,17 @@ function generateShareQRCode() {
         .sort() // Sort alphabetically for consistency
         .join('');
     
-    const url = window.location.origin + window.location.pathname + '#' + hashCodes;
+    // Encode toggle states as binary string (1=checked, 0=unchecked)
+    const advancedChecked = document.getElementById('advancedRules')?.checked ? '1' : '0';
+    const lasStrongholdsChecked = document.getElementById('lasStrongholdsRules')?.checked ? '1' : '0';
+    const landsraadChecked = document.getElementById('landsraadRules')?.checked ? '1' : '0';
+    const techChecked = document.getElementById('techTokenRules')?.checked ? '1' : '0';
+    const toggles = advancedChecked + lasStrongholdsChecked + landsraadChecked + techChecked;
+    
+    // Format: factions|toggles (e.g., "ahefg|1010")
+    const hash = hashCodes + '|' + toggles;
+    
+    const url = window.location.origin + window.location.pathname + '#' + hash;
     
     // Clear previous QR code
     const qrContainer = document.getElementById('qr-code');
@@ -5001,8 +5017,11 @@ function copyShareLink() {
 function loadFactionFromURL() {
     const hash = window.location.hash.substring(1); // Remove #
     if (hash && hash.length > 0) {
-        // Parse each character as a faction code
-        const factionCodes = hash.split('');
+        // Split into factions and toggles (format: factions|toggles)
+        const [factionsPart, togglesPart] = hash.split('|');
+        
+        // Parse faction codes
+        const factionCodes = factionsPart.split('');
         const factionsToSelect = [];
         
         for (let code of factionCodes) {
@@ -5028,6 +5047,25 @@ function loadFactionFromURL() {
                 if (checkbox) {
                     checkbox.checked = true;
                 }
+            }
+            
+            // Apply toggle states if provided (format: "1010" = advanced+landsraad, no las strongholds, no tech)
+            if (togglesPart && togglesPart.length === 4) {
+                const advancedCheckbox = document.getElementById('advancedRules');
+                const lasStrongholdsCheckbox = document.getElementById('lasStrongholdsRules');
+                const landsraadCheckbox = document.getElementById('landsraadRules');
+                const techCheckbox = document.getElementById('techTokenRules');
+                
+                if (advancedCheckbox) advancedCheckbox.checked = togglesPart[0] === '1';
+                if (lasStrongholdsCheckbox) lasStrongholdsCheckbox.checked = togglesPart[1] === '1';
+                if (landsraadCheckbox) landsraadCheckbox.checked = togglesPart[2] === '1';
+                if (techCheckbox) techCheckbox.checked = togglesPart[3] === '1';
+                
+                // Also sync to modal toggles
+                document.getElementById('advancedRulesModal').checked = togglesPart[0] === '1';
+                document.getElementById('lasStrongholdsRulesModal').checked = togglesPart[1] === '1';
+                document.getElementById('landsraadRulesModal').checked = togglesPart[2] === '1';
+                document.getElementById('techTokenRulesModal').checked = togglesPart[3] === '1';
             }
             
             // Apply the changes WITHOUT showing QR code (false parameter)
@@ -5485,25 +5523,29 @@ function closeFactionRules() {
 
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    // Set up faction management modal - handle both buttons
-    const manageFactionsBtnTracker = document.getElementById('manageFactions');
-    const manageFactionsBtnGameFlow = document.getElementById('manageFactions-gameflow');
+    // Set up configuration modal button
+    const openConfigBtn = document.getElementById('openConfiguration');
     
-    if (manageFactionsBtnTracker) {
-        manageFactionsBtnTracker.addEventListener('click', openFactionModal);
-    }
-    if (manageFactionsBtnGameFlow) {
-        manageFactionsBtnGameFlow.addEventListener('click', openFactionModal);
+    if (openConfigBtn) {
+        openConfigBtn.addEventListener('click', openFactionModal);
     }
     
     document.querySelector('.close-modal').addEventListener('click', closeFactionModal);
     document.getElementById('applyFactions').addEventListener('click', applyFactionChanges);
+    
+    // Auto-open configuration modal on every page load
+    setTimeout(() => {
+        openFactionModal();
+    }, 300);
     
     // Set up restore button for discard pile
     document.getElementById('restoreAllCards').addEventListener('click', restoreAllCards);
     
     // Initialize faction UI and data
     loadData();
+    
+    // Update faction UI based on selected faction (especially Tracker tab visibility)
+    updateFactionSelector();
     
     // Check if info banner should be hidden
     if (localStorage.getItem('atreidesInfoBannerClosed') === 'true') {
@@ -5677,11 +5719,6 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
 
 <!-- Game Flow Page Content -->
 <div class="page-content-gameflow">
-    <!-- Manage Factions button for Game Flow -->
-    <div class="faction-management" style="margin-bottom: 20px;">
-        <button id="manageFactions-gameflow" class="manage-factions-btn">Manage Factions</button>
-    </div>
-    
     <h2>Game Flow</h2>
     
     <!-- Legend -->
@@ -5689,28 +5726,12 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
         <span style="font-weight: bold;">✷</span> = Karama card can be used to stop/alter this step 
     </div>
     
-    <!-- Control Toggles -->
-    <div class="gameflow-controls" style="text-align: center; margin: 20px 0;">
-        <label class="toggle-switch">
-            <input type="checkbox" id="advancedRules" checked>
-            <span class="toggle-slider"></span>
-            <span class="toggle-label">Advanced Rules</span>
-        </label>
-        <label class="toggle-switch" style="margin-left: 20px;">
-            <input type="checkbox" id="lasStrongholdsRules">
-            <span class="toggle-slider"></span>
-            <span class="toggle-label">LAS Strongholds</span>
-        </label>
-        <label class="toggle-switch" style="margin-left: 20px;">
-            <input type="checkbox" id="landsraadRules">
-            <span class="toggle-slider"></span>
-            <span class="toggle-label">Landsraad</span>
-        </label>
-        <label class="toggle-switch" style="margin-left: 20px;">
-            <input type="checkbox" id="techTokenRules">
-            <span class="toggle-slider"></span>
-            <span class="toggle-label">Tech Tokens</span>
-        </label>
+    <!-- Hidden checkboxes to maintain state (synced with modal) -->
+    <div style="display: none;">
+        <input type="checkbox" id="advancedRules" checked>
+        <input type="checkbox" id="lasStrongholdsRules">
+        <input type="checkbox" id="landsraadRules">
+        <input type="checkbox" id="techTokenRules">
     </div>
     
     <div id="game-flow-container">
@@ -5720,66 +5741,126 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
 
 <!-- Faction Selection Modal (Global - appears over all tabs) -->
 <div id="factionModal" class="faction-modal">
-  <div class="faction-modal-content">
+  <div class="faction-modal-content" style="max-width: 600px;">
     <div class="faction-modal-header">
-      <h3>Select Factions</h3>
+      <h3>Game Configuration</h3>
       <span class="close-modal">&times;</span>
     </div>
-    <div class="faction-selection">
-      <!-- Original factions -->
-      <div class="faction-option">
-        <input type="checkbox" id="faction-atreides" checked>
-        <label for="faction-atreides">Atreides (Green)</label>
-      </div>
-      <div class="faction-option">
-        <input type="checkbox" id="faction-harkonnen">
-        <label for="faction-harkonnen">Harkonnen (Black)</label>
-      </div>
-      <div class="faction-option">
-        <input type="checkbox" id="faction-emperor">
-        <label for="faction-emperor">Emperor (Red)</label>
-      </div>
-      <div class="faction-option">
-        <input type="checkbox" id="faction-fremen">
-        <label for="faction-fremen">Fremen (Yellow)</label>
-      </div>
-      <div class="faction-option">
-        <input type="checkbox" id="faction-guild">
-        <label for="faction-guild">Guild (Orange)</label>
-      </div>
-      <div class="faction-option">
-        <input type="checkbox" id="faction-gesserit">
-        <label for="faction-gesserit">Gesserit (Blue)</label>
-      </div>
-      
-      <!-- Expansion factions -->
-      <div class="faction-option expansion-faction">
-        <input type="checkbox" id="faction-ecaz">
-        <label for="faction-ecaz">Ecaz (Pink)</label>
-      </div>
-      <div class="faction-option expansion-faction">
-        <input type="checkbox" id="faction-moritani">
-        <label for="faction-moritani">Moritani (Teal)</label>
-      </div>
-      <div class="faction-option expansion-faction">
-        <input type="checkbox" id="faction-ixians">
-        <label for="faction-ixians">Ixians (Greige)</label>
-      </div>
-      <div class="faction-option expansion-faction">
-        <input type="checkbox" id="faction-tleilaxu">
-        <label for="faction-tleilaxu">Tleilaxu (Purple)</label>
-      </div>
-      <div class="faction-option expansion-faction">
-        <input type="checkbox" id="faction-choam">
-        <label for="faction-choam">Choam (Red/Black)</label>
-      </div>
-      <div class="faction-option expansion-faction">
-        <input type="checkbox" id="faction-richese">
-        <label for="faction-richese">Richese (Light Gray)</label>
+    
+    <!-- Your Faction Section -->
+    <div style="padding: 12px; border-bottom: 1px solid #ddd;">
+      <h4 style="margin-top: 0; margin-bottom: 12px;">Your Faction</h4>
+      <select id="factionSelectorModal" style="width: 100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc;">
+        <option value="atreides">Atreides (Green)</option>
+        <option value="harkonnen">Harkonnen (Black)</option>
+        <option value="emperor">Emperor (Red)</option>
+        <option value="fremen">Fremen (Yellow)</option>
+        <option value="guild">Guild (Orange)</option>
+        <option value="gesserit">Gesserit (Blue)</option>
+        <option value="ecaz">Ecaz (Pink)</option>
+        <option value="moritani">Moritani (Teal)</option>
+        <option value="ixians">Ixians (Greige)</option>
+        <option value="tleilaxu">Tleilaxu (Purple)</option>
+        <option value="choam">Choam (Red/Black)</option>
+        <option value="richese">Richese (Light Gray)</option>
+      </select>
+    </div>
+    
+    <!-- Game Rules Section -->
+    <div style="padding: 12px; border-bottom: 1px solid #ddd;">
+      <h4 style="margin-top: 0; margin-bottom: 12px;">Game Rules</h4>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <label class="toggle-switch" style="display: flex; align-items: center; justify-content: space-between;">
+          <span class="toggle-label">Advanced Rules</span>
+          <div style="display: flex; align-items: center;">
+            <input type="checkbox" id="advancedRulesModal" checked>
+            <span class="toggle-slider"></span>
+          </div>
+        </label>
+        <label class="toggle-switch" style="display: flex; align-items: center; justify-content: space-between;">
+          <span class="toggle-label">LAS Strongholds</span>
+          <div style="display: flex; align-items: center;">
+            <input type="checkbox" id="lasStrongholdsRulesModal">
+            <span class="toggle-slider"></span>
+          </div>
+        </label>
+        <label class="toggle-switch" style="display: flex; align-items: center; justify-content: space-between;">
+          <span class="toggle-label">Landsraad</span>
+          <div style="display: flex; align-items: center;">
+            <input type="checkbox" id="landsraadRulesModal">
+            <span class="toggle-slider"></span>
+          </div>
+        </label>
+        <label class="toggle-switch" style="display: flex; align-items: center; justify-content: space-between;">
+          <span class="toggle-label">Tech Tokens</span>
+          <div style="display: flex; align-items: center;">
+            <input type="checkbox" id="techTokenRulesModal">
+            <span class="toggle-slider"></span>
+          </div>
+        </label>
       </div>
     </div>
+    
+    <!-- Factions in Game Section -->
+    <div style="padding: 12px;">
+      <h4 style="margin-top: 0; margin-bottom: 12px;">Factions in Game</h4>
+      <div class="faction-selection">
+        <!-- Original factions -->
+        <div class="faction-option">
+          <input type="checkbox" id="faction-atreides" checked>
+          <label for="faction-atreides">Atreides (Green)</label>
+        </div>
+        <div class="faction-option">
+          <input type="checkbox" id="faction-harkonnen">
+          <label for="faction-harkonnen">Harkonnen (Black)</label>
+        </div>
+        <div class="faction-option">
+          <input type="checkbox" id="faction-emperor">
+          <label for="faction-emperor">Emperor (Red)</label>
+        </div>
+        <div class="faction-option">
+          <input type="checkbox" id="faction-fremen">
+          <label for="faction-fremen">Fremen (Yellow)</label>
+        </div>
+        <div class="faction-option">
+          <input type="checkbox" id="faction-guild">
+          <label for="faction-guild">Guild (Orange)</label>
+        </div>
+        <div class="faction-option">
+          <input type="checkbox" id="faction-gesserit">
+          <label for="faction-gesserit">Gesserit (Blue)</label>
+        </div>
+        
+        <!-- Expansion factions -->
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-ecaz">
+          <label for="faction-ecaz">Ecaz (Pink)</label>
+        </div>
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-moritani">
+          <label for="faction-moritani">Moritani (Teal)</label>
+        </div>
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-ixians">
+          <label for="faction-ixians">Ixians (Greige)</label>
+        </div>
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-tleilaxu">
+          <label for="faction-tleilaxu">Tleilaxu (Purple)</label>
+        </div>
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-choam">
+          <label for="faction-choam">Choam (Red/Black)</label>
+        </div>
+        <div class="faction-option expansion-faction">
+          <input type="checkbox" id="faction-richese">
+          <label for="faction-richese">Richese (Light Gray)</label>
+        </div>
+      </div>
+    </div>
+    
     <div class="faction-modal-footer">
-      <button id="applyFactions" class="apply-factions-btn">Apply Changes</button>
+      <button id="applyFactions" class="apply-factions-btn">Apply Configuration</button>
     </div>
   </div>
 </div>
