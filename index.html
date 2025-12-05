@@ -4279,6 +4279,7 @@ function initializeBattleWheel() {
                                 }
                                 return `<option value="${leader.strength}">${leader.name} (${leader.strength})</option>`;
                             }).join('')}
+                            <option value="6" id="duke-vidal-option" style="display: none;">Duke Prad Vidal (6)</option>
                             <option value="0">Cheap Hero (0)</option>
                         </select>
                         ${selectedFaction === 'atreides' ? `
@@ -4294,11 +4295,13 @@ function initializeBattleWheel() {
                             <option value="0">No Weapon</option>
                             <option value="projectile">Projectile Weapon</option>
                             <option value="poison">Poison Weapon</option>
+                            <option value="poison-blade">Poison Blade</option>
                             <option value="lasgun">Lasgun</option>
                             <option value="artillery">Artillery Strike</option>
                             <option value="chemistry">Chemistry</option>
                             <option value="weirding-way">Weirding Way</option>
                             <option value="reinforcements">Reinforcements</option>
+                            <option value="worthless">Worthless</option>
                         </select>
                     </div>
                     <div class="input-group">
@@ -4311,6 +4314,7 @@ function initializeBattleWheel() {
                             <option value="shield-snooper">Shield Snooper</option>
                             <option value="weirding-way">Weirding Way</option>
                             <option value="reinforcements">Reinforcements</option>
+                            <option value="worthless">Worthless</option>
                         </select>
                     </div>
                     ${selectedFaction !== 'ecaz' ? `
@@ -4696,12 +4700,16 @@ function updateBattleDial() {
         weaponName = 'Projectile Weapon';
     } else if (yourWeapon === 'poison') {
         weaponName = 'Poison Weapon';
+    } else if (yourWeapon === 'poison-blade') {
+        weaponName = 'Poison Blade';
     } else if (yourWeapon === 'lasgun') {
         weaponName = 'Lasgun';
     } else if (yourWeapon === 'artillery') {
         weaponName = 'Artillery Strike';
     } else if (yourWeapon === 'chemistry') {
         weaponName = 'Chemistry';
+    } else if (yourWeapon === 'worthless') {
+        weaponName = 'Worthless';
     } else if (yourWeapon && yourWeapon !== '0') {
         weaponName = document.getElementById('your-weapon').selectedOptions[0].text;
     }
@@ -4783,7 +4791,10 @@ function updateBattleDial() {
     // Determine weapon icon type
     let weaponIcon = '';
     if (yourWeapon !== '0' && yourWeapon !== 'none') {
-        if (yourWeapon === 'chemistry') {
+        if (yourWeapon === 'poison-blade') {
+            // Poison Blade shows both projectile and poison icons
+            weaponIcon = getCardIcon('projectile') + getCardIcon('poison');
+        } else if (yourWeapon === 'chemistry') {
             // Chemistry as weapon shows poison icon
             weaponIcon = getCardIcon('poison');
         } else if (yourWeapon === 'weirding-way') {
@@ -4792,14 +4803,15 @@ function updateBattleDial() {
         } else if (weaponName.toLowerCase().includes('poison')) {
             weaponIcon = getCardIcon('poison');
         } else if (yourWeapon === 'lasgun') {
-            weaponIcon = getCardIcon('lightning');
+            // Lasgun shows both projectile and lightning icons
+            weaponIcon = getCardIcon('projectile') + getCardIcon('lightning');
         } else if (weaponName.toLowerCase().includes('projectile')) {
             weaponIcon = getCardIcon('projectile');
         } else if (weaponName.toLowerCase().includes('artillery')) {
             weaponIcon = getCardIcon('lightning');
         } else if (yourWeapon === 'reinforcements' || weaponName.toLowerCase().includes('reinforcements')) {
             weaponIcon = getCardIcon('hand');
-        } else if (weaponName.toLowerCase().includes('worthless')) {
+        } else if (yourWeapon === 'worthless' || weaponName.toLowerCase().includes('worthless')) {
             weaponIcon = getCardIcon('worthless');
         }
     }
@@ -4847,13 +4859,26 @@ function validateKwisatzHaderach() {
 function toggleEcazForces() {
     const checkbox = document.getElementById('ecaz-alliance');
     const forcesGroup = document.getElementById('ecaz-forces-group');
+    const dukeVidalOption = document.getElementById('duke-vidal-option');
+    const leaderSelect = document.getElementById('your-leader');
     
     if (checkbox && forcesGroup) {
         if (checkbox.checked) {
             forcesGroup.style.display = 'block';
+            // Show Duke Prad Vidal in leader dropdown if not Ecaz
+            if (dukeVidalOption && selectedFaction !== 'ecaz') {
+                dukeVidalOption.style.display = 'block';
+            }
         } else {
             forcesGroup.style.display = 'none';
             document.getElementById('ecaz-forces').value = 0;
+            // Hide Duke Prad Vidal and deselect if selected
+            if (dukeVidalOption) {
+                dukeVidalOption.style.display = 'none';
+                if (leaderSelect && leaderSelect.value === '6' && leaderSelect.selectedIndex === leaderSelect.options.length - 2) {
+                    leaderSelect.value = '0'; // Reset to No Leader
+                }
+            }
         }
     }
 }
