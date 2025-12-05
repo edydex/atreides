@@ -87,11 +87,11 @@ body {
 }
 .faction-modal-content {
   background-color: white;
-  margin: 10% auto;
+  margin: 2% auto;
   padding: 12px;
   border-radius: 5px;
   max-width: 500px;
-  max-height: 80vh;
+  max-height: 95vh;
   overflow-y: auto;
 }
 .faction-modal-header {
@@ -3860,7 +3860,13 @@ function saveData() {
         discardPile: {},
         expansionPool: {},
         activeFactions: activeFactions, // Save active factions list
-        battleWheel: {} // Save Battle Wheel state
+        battleWheel: {}, // Save Battle Wheel state
+        toggles: { // Save toggle states
+            advanced: document.getElementById('advancedRules')?.checked || false,
+            lasStrongholds: document.getElementById('lasStrongholdsRules')?.checked || false,
+            landsraad: document.getElementById('landsraadRules')?.checked || false,
+            techTokens: document.getElementById('techTokenRules')?.checked || false
+        }
     };
 
     // Save spice values for active factions
@@ -3958,6 +3964,25 @@ function loadData() {
     // Restore active factions list if available
     if (savedData.activeFactions && Array.isArray(savedData.activeFactions)) {
         activeFactions = savedData.activeFactions;
+    }
+    
+    // Restore toggle states if available
+    if (savedData.toggles) {
+        const advancedCheckbox = document.getElementById('advancedRules');
+        const lasStrongholdsCheckbox = document.getElementById('lasStrongholdsRules');
+        const landsraadCheckbox = document.getElementById('landsraadRules');
+        const techCheckbox = document.getElementById('techTokenRules');
+        
+        if (advancedCheckbox) advancedCheckbox.checked = savedData.toggles.advanced || false;
+        if (lasStrongholdsCheckbox) lasStrongholdsCheckbox.checked = savedData.toggles.lasStrongholds || false;
+        if (landsraadCheckbox) landsraadCheckbox.checked = savedData.toggles.landsraad || false;
+        if (techCheckbox) techCheckbox.checked = savedData.toggles.techTokens || false;
+        
+        // Also sync to modal toggles
+        document.getElementById('advancedRulesModal').checked = savedData.toggles.advanced || false;
+        document.getElementById('lasStrongholdsRulesModal').checked = savedData.toggles.lasStrongholds || false;
+        document.getElementById('landsraadRulesModal').checked = savedData.toggles.landsraad || false;
+        document.getElementById('techTokenRulesModal').checked = savedData.toggles.techTokens || false;
     }
     
     // Generate faction cards based on active factions
@@ -5082,8 +5107,8 @@ function generateShareQRCode() {
     const techChecked = document.getElementById('techTokenRules')?.checked ? '1' : '0';
     const toggles = advancedChecked + lasStrongholdsChecked + landsraadChecked + techChecked;
     
-    // Format: factions|toggles (e.g., "ahefg|1010")
-    const hash = hashCodes + '|' + toggles;
+    // Format: factions_toggles (e.g., "ahefg_1010")
+    const hash = hashCodes + '_' + toggles;
     
     const url = window.location.origin + window.location.pathname + '#' + hash;
     
@@ -5148,8 +5173,8 @@ function copyShareLink() {
 function loadFactionFromURL() {
     const hash = window.location.hash.substring(1); // Remove #
     if (hash && hash.length > 0) {
-        // Split into factions and toggles (format: factions|toggles)
-        const [factionsPart, togglesPart] = hash.split('|');
+        // Split into factions and toggles (format: factions_toggles)
+        const [factionsPart, togglesPart] = hash.split('_');
         
         // Parse faction codes
         const factionCodes = factionsPart.split('');
@@ -5201,6 +5226,9 @@ function loadFactionFromURL() {
             
             // Apply the changes WITHOUT showing QR code (false parameter)
             applyFactionChanges(false);
+            
+            // Clean the URL hash after loading
+            window.history.replaceState(null, '', window.location.pathname);
         }
     }
 }
@@ -6042,9 +6070,9 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
       </div>
     </div>
     
-    <div class="faction-modal-footer">
-      <button id="applyFactionsWithQR" class="qr-icon-btn" title="Apply Configuration & Show QR Code">Share Configuration</button>
-      <button id="applyFactions" class="apply-factions-btn">Apply Configuration</button>
+    <div class="faction-modal-footer" style="display: flex; gap: 10px;">
+      <button id="applyFactionsWithQR" class="qr-icon-btn" title="Apply Configuration & Show QR Code" style="flex: 1; margin-right: 0;">Share Configuration</button>
+      <button id="applyFactions" class="apply-factions-btn" style="flex: 1;">Apply Configuration</button>
     </div>
   </div>
 </div>
