@@ -1134,6 +1134,74 @@ input[type="number"] {
     color: #2e7d32;
 }
 
+.killed-leader-circle {
+    width: 100px;
+    height: 100px;
+    border: 4px solid #4CAF50;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f8f0;
+    position: relative;
+    margin-left: 20px;
+    transition: all 0.3s ease;
+}
+
+.killed-leader-circle.hidden {
+    display: none;
+}
+
+.killed-leader-circle.crossed-out {
+    border-color: #d32f2f;
+    background-color: #ffebee;
+}
+
+.killed-leader-circle.crossed-out::before,
+.killed-leader-circle.crossed-out::after {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 3px;
+    background-color: #d32f2f;
+    top: 50%;
+    left: -10%;
+}
+
+.killed-leader-circle.crossed-out::before {
+    transform: rotate(45deg);
+}
+
+.killed-leader-circle.crossed-out::after {
+    transform: rotate(-45deg);
+}
+
+.killed-leader-circle .leader-info {
+    text-align: center;
+    z-index: 1;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.killed-leader-circle .leader-name {
+    font-weight: bold;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 4px;
+    word-wrap: break-word;
+    max-width: 80px;
+}
+
+.killed-leader-circle .leader-strength {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.killed-leader-circle.crossed-out .leader-strength {
+    color: #c62828;
+}
+
 .info-text {
     background-color: #e3f2fd;
     padding: 10px;
@@ -4446,6 +4514,19 @@ function restoreBattleWheelState() {
         // Show/hide spice feeding group based on checkbox state
         toggleFremenSpiceFeeding();
     }
+    
+    // Restore killed leader info
+    if (battleWheel.killedLeader) {
+        const killedCircle = document.getElementById('killed-leader-circle');
+        const killedName = document.getElementById('killed-leader-name');
+        const killedStrength = document.getElementById('killed-leader-strength');
+        
+        if (killedCircle && killedName && killedStrength) {
+            killedCircle.classList.add('crossed-out');
+            killedName.textContent = battleWheel.killedLeader.name.split(' (')[0];
+            killedStrength.textContent = battleWheel.killedLeader.strength;
+        }
+    }
 }
 
 function applyBattleWheelFactionStyling() {
@@ -4764,6 +4845,18 @@ function updateBattleDial() {
     // Get leader name for display (already includes value in the text)
     const leaderSelect = document.getElementById('your-leader');
     const leaderNameWithValue = leaderSelect ? leaderSelect.selectedOptions[0].text : 'No Leader (0)';
+    
+    // Update leader circle display (only if not killed)
+    const killedCircle = document.getElementById('killed-leader-circle');
+    const killedName = document.getElementById('killed-leader-name');
+    const killedStrength = document.getElementById('killed-leader-strength');
+    
+    if (killedCircle && !killedCircle.classList.contains('crossed-out')) {
+        if (killedName && killedStrength) {
+            killedName.textContent = leaderNameWithValue.split(' (')[0];
+            killedStrength.textContent = yourLeader;
+        }
+    }
     
     breakdownText += '<br>Leader: ' + leaderNameWithValue;
     if (kwisatzBonus > 0) {
@@ -5125,11 +5218,38 @@ window.addEventListener('DOMContentLoaded', loadFactionFromURL);
 
 // Kill Leader function - removes leader from battle
 function killLeader() {
-    // Set leader to "No Leader (0)"
     const leaderSelect = document.getElementById('your-leader');
-    if (leaderSelect) {
-        leaderSelect.value = '0';
+    if (!leaderSelect || leaderSelect.value === '0') return;
+    
+    // Get current leader info before resetting
+    const leaderValue = leaderSelect.value;
+    const leaderText = leaderSelect.selectedOptions[0].text;
+    
+    // Store killed leader info in Battle Wheel state
+    let savedData = localStorage.getItem("duneTrackerData");
+    if (savedData) {
+        savedData = JSON.parse(savedData);
+        if (!savedData.battleWheel) savedData.battleWheel = {};
+        savedData.battleWheel.killedLeader = {
+            name: leaderText,
+            strength: leaderValue
+        };
+        localStorage.setItem("duneTrackerData", JSON.stringify(savedData));
     }
+    
+    // Show killed leader circle with crossed-out styling
+    const killedCircle = document.getElementById('killed-leader-circle');
+    const killedName = document.getElementById('killed-leader-name');
+    const killedStrength = document.getElementById('killed-leader-strength');
+    
+    if (killedCircle && killedName && killedStrength) {
+        killedCircle.classList.add('crossed-out');
+        killedName.textContent = leaderText.split(' (')[0]; // Get just the name without strength
+        killedStrength.textContent = leaderValue === 'X' ? 'X' : leaderValue;
+    }
+    
+    // Set leader to "No Leader (0)"
+    leaderSelect.value = '0';
     
     // Uncheck Kwisatz Haderach if it exists (Atreides only)
     const kwisatzCheckbox = document.getElementById('kwisatz-haderach');
@@ -5144,6 +5264,26 @@ function killLeader() {
 // Clear Battle Wheel function
 function clearBattleWheel() {
     if (confirm('Clear all Battle Wheel selections?')) {
+        // Clear killed leader info from localStorage
+        let savedData = localStorage.getItem("duneTrackerData");
+        if (savedData) {
+            savedData = JSON.parse(savedData);
+            if (savedData.battleWheel) {
+                delete savedData.battleWheel.killedLeader;
+                localStorage.setItem("duneTrackerData", JSON.stringify(savedData));
+            }
+        }
+        
+        // Reset killed leader circle
+        const killedCircle = document.getElementById('killed-leader-circle');
+        if (killedCircle) {
+            killedCircle.classList.remove('crossed-out');
+        }
+        const killedName = document.getElementById('killed-leader-name');
+        const killedStrength = document.getElementById('killed-leader-strength');
+        if (killedName) killedName.textContent = 'No Leader';
+        if (killedStrength) killedStrength.textContent = '0';
+        
         document.getElementById('your-forces').value = 0;
         
         // Clear spice feeding if it exists (not for Fremen)
@@ -5940,6 +6080,12 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
             </button>
             <div class="strength-circle">
                 <span id="your-total">0</span>
+            </div>
+            <div id="killed-leader-circle" class="killed-leader-circle">
+                <div class="leader-info">
+                    <span class="leader-name" id="killed-leader-name">No Leader</span>
+                    <span class="leader-strength" id="killed-leader-strength">0</span>
+                </div>
             </div>
         </div>
         
