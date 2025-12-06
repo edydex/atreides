@@ -1177,9 +1177,9 @@ input[type="number"] {
 }
 
 .killed-leader-circle {
-    width: 100px;
-    height: 100px;
-    border: 4px solid #4CAF50;
+    width: 80px;
+    height: 80px;
+    border: 3px solid #4CAF50;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -1187,6 +1187,7 @@ input[type="number"] {
     background-color: #f0f8f0;
     position: relative;
     margin-left: 20px;
+    margin-right: 80px;
     transition: all 0.3s ease;
 }
 
@@ -1227,15 +1228,15 @@ input[type="number"] {
 
 .killed-leader-circle .leader-name {
     font-weight: bold;
-    font-size: 11px;
+    font-size: 10px;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     word-wrap: break-word;
-    max-width: 80px;
+    max-width: 65px;
 }
 
 .killed-leader-circle .leader-strength {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: #2e7d32;
 }
@@ -1325,7 +1326,7 @@ input[type="number"] {
 /* Leader Killed Button Styling */
 .leader-killed-btn {
     position: absolute;
-    left: 0;
+    right: 0;
     padding: 6px 8px;
     font-size: 11px;
     background-color: #d32f2f;
@@ -2912,8 +2913,8 @@ const gameFlowRules = {
   start: {
     title: "START",
     rules: [
-      { text: "[Landsraad] Players now determine seating order. Remove numbers greater than the number of players from the Prediction deck, each player selects a card at random. The player with number 1 on their card sits nearest Tuek's Sietch. Each player will sit to the right of the player with a lower number, excluding the highest number drawn (the player who drew number 1 will sit to their right). Prediction cards are returned to the Prediction deck.", factions: [], advanced: false, karama: false, landsraad: true },
-      { text: "[Landsraad] Players now choose factions. Each player is dealt two Prediction Cards with faction icons (one of a Classic faction and one of an Expansion Faction), each player selects one secretly and returns the other to the box. All players reveal which card they selected simultaneously. The Prediction Card they select represents which faction they will play. Prediction cards are returned to the Prediction deck. Players collect the selection faction tokens place their Player Marker on the player circle closest to their Player Shield and their seat at the table.", factions: [], advanced: false, karama: false, landsraad: true },
+      { text: "Players now determine seating order. Remove numbers greater than the number of players from the Prediction deck, each player selects a card at random. The player with number 1 on their card sits nearest Tuek's Sietch. Each player will sit to the right of the player with a lower number, excluding the highest number drawn (the player who drew number 1 will sit to their right). Prediction cards are returned to the Prediction deck.", factions: [], advanced: false, karama: false, landsraad: true },
+      { text: "Players now choose factions. Each player is dealt two Prediction Cards with faction icons (one of a Classic faction and one of an Expansion Faction), each player selects one secretly and returns the other to the box. All players reveal which card they selected simultaneously. The Prediction Card they select represents which faction they will play. Prediction cards are returned to the Prediction deck. Players collect the selection faction tokens place their Player Marker on the player circle closest to their Player Shield and their seat at the table.", factions: [], advanced: false, karama: false, landsraad: true },
       { text: "IXIAN draws Treachery Cards equal to the number of players (plus one if HARKONNEN is in the game). After looking at the cards, IXIAN keeps one and shuffles the rest. Other factions draw starting cards from these cards.", factions: ["ixians"], advanced: false, karama: false },
       { text: "Factions receive 1 Treachery Card each.", factions: [], advanced: false, karama: false },
       { text: "HARKONNEN receives 2 Treachery Cards.", factions: ["harkonnen"], advanced: false, karama: false, nested: true },
@@ -4931,7 +4932,18 @@ function updateBattleDial() {
         ecazForces = parseInt(document.getElementById('ecaz-forces').value) || 0;
     }
     
-    const yourTotal = effectiveForces + yourLeader + kwisatzBonus + ecazForces;
+    // Check if leader is marked as killed
+    let leaderAdjustment = yourLeader;
+    let savedData = localStorage.getItem("duneTrackerData");
+    if (savedData) {
+        savedData = JSON.parse(savedData);
+        if (savedData.battleWheel && savedData.battleWheel.killedLeader) {
+            // Leader is killed, so don't count their strength
+            leaderAdjustment = 0;
+        }
+    }
+    
+    const yourTotal = effectiveForces + leaderAdjustment + kwisatzBonus + ecazForces;
     
     // Update displays (both preview and modal)
     document.getElementById('your-total').textContent = yourTotal;
@@ -4953,19 +4965,38 @@ function updateBattleDial() {
     const leaderSelect = document.getElementById('your-leader');
     const leaderNameWithValue = leaderSelect ? leaderSelect.selectedOptions[0].text : 'No Leader (0)';
     
-    // Update leader circle display (only if not killed)
+    // Update leader circle display and check if we need to clear killed state
     const killedCircle = document.getElementById('killed-leader-circle');
     const killedName = document.getElementById('killed-leader-name');
     const killedStrength = document.getElementById('killed-leader-strength');
     
-    if (killedCircle && !killedCircle.classList.contains('crossed-out')) {
-        if (killedName && killedStrength) {
-            killedName.textContent = leaderNameWithValue.split(' (')[0];
-            killedStrength.textContent = yourLeader;
+    // Check if current leader matches the killed leader in storage
+    if (savedData && savedData.battleWheel && savedData.battleWheel.killedLeader) {
+        const killedLeaderName = savedData.battleWheel.killedLeader.name.split(' (')[0];
+        const currentLeaderName = leaderNameWithValue.split(' (')[0];
+        
+        // If leader changed, clear the killed state
+        if (killedLeaderName !== currentLeaderName) {
+            delete savedData.battleWheel.killedLeader;
+            localStorage.setItem("duneTrackerData", JSON.stringify(savedData));
+            if (killedCircle) {
+                killedCircle.classList.remove('crossed-out');
+            }
         }
     }
     
-    breakdownText += '<br>Leader: ' + leaderNameWithValue;
+    // Always update the leader circle to show current selection
+    if (killedName && killedStrength) {
+        killedName.textContent = leaderNameWithValue.split(' (')[0];
+        killedStrength.textContent = yourLeader;
+    }
+    
+    // Show leader strength in breakdown (0 if killed)
+    if (leaderAdjustment === 0 && yourLeader > 0) {
+        breakdownText += '<br>Leader: ' + leaderNameWithValue + ' (KILLED - not counted)';
+    } else {
+        breakdownText += '<br>Leader: ' + leaderNameWithValue;
+    }
     if (kwisatzBonus > 0) {
         breakdownText += ' + (2) Kwisatz Haderach';
     }
@@ -5130,9 +5161,28 @@ function getCardIcon(cardType) {
 
 // Open Battle Summary Modal
 function openBattleSummary() {
+    // Recalculate total from scratch
+    updateBattleDial();
+    
     const modal = document.getElementById('battleSummaryModal');
     if (modal) {
         modal.style.display = 'block';
+    }
+    
+    // Reset leader to alive state (remove crossed-out styling)
+    const killedCircle = document.getElementById('killed-leader-circle');
+    if (killedCircle) {
+        killedCircle.classList.remove('crossed-out');
+    }
+    
+    // Clear killed leader from Battle Wheel state
+    let savedData = localStorage.getItem("duneTrackerData");
+    if (savedData) {
+        savedData = JSON.parse(savedData);
+        if (savedData.battleWheel && savedData.battleWheel.killedLeader) {
+            delete savedData.battleWheel.killedLeader;
+            localStorage.setItem("duneTrackerData", JSON.stringify(savedData));
+        }
     }
 }
 
@@ -5326,12 +5376,12 @@ function updateURLHash() {
 // Initialize on page load
 window.addEventListener('DOMContentLoaded', loadFactionFromURL);
 
-// Kill Leader function - removes leader from battle
+// Kill Leader function - marks leader as killed in summary only
 function killLeader() {
     const leaderSelect = document.getElementById('your-leader');
     if (!leaderSelect || leaderSelect.value === '0') return;
     
-    // Get current leader info before resetting
+    // Get current leader info
     const leaderValue = leaderSelect.value;
     const leaderText = leaderSelect.selectedOptions[0].text;
     
@@ -5358,17 +5408,19 @@ function killLeader() {
         killedStrength.textContent = leaderValue === 'X' ? 'X' : leaderValue;
     }
     
-    // Set leader to "No Leader (0)"
-    leaderSelect.value = '0';
-    
-    // Uncheck Kwisatz Haderach if it exists (Atreides only)
-    const kwisatzCheckbox = document.getElementById('kwisatz-haderach');
-    if (kwisatzCheckbox) {
-        kwisatzCheckbox.checked = false;
+    // Directly subtract leader strength from the Total Strength circle
+    const totalElement = document.getElementById('your-total');
+    if (totalElement && leaderValue !== 'X') {
+        const currentTotal = parseInt(totalElement.textContent) || 0;
+        const leaderStrength = parseInt(leaderValue) || 0;
+        
+        // Check if Kwisatz Haderach is also selected
+        const kwisatzCheckbox = document.getElementById('kwisatz-haderach');
+        const kwisatzBonus = (kwisatzCheckbox && kwisatzCheckbox.checked) ? 2 : 0;
+        
+        // Subtract both leader strength and Kwisatz bonus if applicable
+        totalElement.textContent = currentTotal - leaderStrength - kwisatzBonus;
     }
-    
-    // Update the battle dial to reflect changes
-    updateBattleDial();
 }
 
 // Clear Battle Wheel function
@@ -6198,9 +6250,6 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
         <h2 style="text-align: center; margin-bottom: 20px;">Battle Summary</h2>
         
         <div style="display: flex; align-items: center; justify-content: center; position: relative; margin: 20px 0;">
-            <button onclick="killLeader()" class="leader-killed-btn">
-                Leader<br>Killed
-            </button>
             <div class="strength-circle">
                 <span id="your-total">0</span>
             </div>
@@ -6210,6 +6259,9 @@ document.getElementById('resetDataBtn').addEventListener('mouseleave', function(
                     <span class="leader-strength" id="killed-leader-strength">0</span>
                 </div>
             </div>
+            <button onclick="killLeader()" class="leader-killed-btn">
+                Leader<br>Killed
+            </button>
         </div>
         
         <div id="strength-breakdown" style="text-align: center; margin: 10px 0; color: #666;">
