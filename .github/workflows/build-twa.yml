@@ -30,9 +30,15 @@ jobs:
       run: |
         npm install -g @bubblewrap/cli
     
-    - name: Configure Bubblewrap paths
+    - name: Create Bubblewrap config directory
       run: |
-        bubblewrap updateConfig --jdkPath="${JAVA_HOME}" --androidSdkPath="${ANDROID_SDK_ROOT}"
+        mkdir -p $HOME/.bubblewrap
+        cat > $HOME/.bubblewrap/config.json << EOF
+        {
+          "jdkPath": "$JAVA_HOME",
+          "androidSdkPath": "$ANDROID_SDK_ROOT"
+        }
+        EOF
       
     - name: Initialize TWA project
       run: |
