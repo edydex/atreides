@@ -40,11 +40,49 @@ jobs:
         }
         EOF
       
-    - name: Initialize TWA project
+    - name: Create TWA manifest file
       run: |
-        # Pipe all confirmations to bubblewrap init
-        # Each line represents pressing Enter to accept the default/suggested value
-        printf '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n' | bubblewrap init --manifest=https://dune.how/manifest.json
+        cat > twa-manifest.json << 'EOF'
+        {
+          "packageId": "how.dune.twa",
+          "host": "dune.how",
+          "name": "Dune: Imperium - Digital Companion",
+          "launcherName": "Dune",
+          "display": "standalone",
+          "orientation": "default",
+          "themeColor": "#000000",
+          "themeColorDark": "#000000",
+          "navigationColor": "#000000",
+          "navigationColorDark": "#000000",
+          "backgroundColor": "#000000",
+          "startUrl": "/",
+          "iconUrl": "https://dune.how/svgs/atreides.svg",
+          "maskableIconUrl": "https://dune.how/svgs/atreides.svg",
+          "appVersion": "1.0.0",
+          "appVersionCode": 1,
+          "signingKey": {
+            "path": "./android.keystore",
+            "alias": "android"
+          },
+          "enableNotifications": false,
+          "enableSiteSettingsShortcut": true,
+          "webManifestUrl": "https://dune.how/manifest.json",
+          "shortcuts": [],
+          "generatorApp": "bubblewrap-cli",
+          "fallbackType": "customtabs",
+          "features": {},
+          "alphaDependencies": {
+            "enabled": false
+          },
+          "splashScreenFadeOutDuration": 300
+        }
+        EOF
+        cat twa-manifest.json
+      
+    - name: Generate TWA project from manifest
+      run: |
+        # Use update command which reads from twa-manifest.json non-interactively
+        bubblewrap update --skipVersionUpgrade
       env:
         BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
