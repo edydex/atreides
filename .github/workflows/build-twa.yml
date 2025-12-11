@@ -30,13 +30,16 @@ jobs:
       run: |
         npm install -g @bubblewrap/cli
     
+    - name: Configure Bubblewrap paths
+      run: |
+        bubblewrap updateConfig --jdkPath="${JAVA_HOME}" --androidSdkPath="${ANDROID_SDK_ROOT}"
+      
     - name: Initialize TWA project
       run: |
-        bubblewrap init --manifest=https://dune.how/manifest.json --skipJdkInstall
+        bubblewrap init --manifest=https://dune.how/manifest.json
       env:
         BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        JAVA_HOME: ${{ env.JAVA_HOME }}
     
     - name: Build APK
       run: |
