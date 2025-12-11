@@ -94,9 +94,9 @@ jobs:
         BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
     
-    - name: Generate signing key
+    - name: Restore signing key from secrets
       run: |
-        keytool -genkey -v -keystore android.keystore -alias android -keyalg RSA -keysize 2048 -validity 10000 -storepass ${{ secrets.KEYSTORE_PASSWORD }} -keypass ${{ secrets.KEY_PASSWORD }} -dname "CN=Dune Companion, OU=Development, O=Dune, L=City, S=State, C=US"
+        echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > android.keystore
     
     - name: Build APK
       run: |
