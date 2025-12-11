@@ -56,8 +56,8 @@ jobs:
           "navigationColorDark": "#000000",
           "backgroundColor": "#000000",
           "startUrl": "/",
-          "iconUrl": "https://dune.how/dune.svg",
-          "maskableIconUrl": "https://dune.how/dune.svg",
+          "iconUrl": "https://dune.how/dune_x1024.png",
+          "maskableIconUrl": "https://dune.how/dune_x1024.png",
           "appVersion": "1.0.0",
           "appVersionCode": 1,
           "signingKey": {
