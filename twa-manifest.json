@@ -1,0 +1,31 @@
+{
+  "host": "dune.how",
+  "name": "Atreides Companion - Dune",
+  "launcherName": "Atreides",
+  "display": "standalone",
+  "themeColor": "#4CAF50",
+  "navigationColor": "#4CAF50",
+  "backgroundColor": "#ffffff",
+  "enableNotifications": false,
+  "startUrl": "/",
+  "iconUrl": "https://dune.how/dune_x1024.png",
+  "maskableIconUrl": "https://dune.how/dune_x1024.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://dune.how/manifest.json",
+  "fallbackType": "customtabs",
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "features": {},
+  "androidPackageId": "how.dune.twa"
+}

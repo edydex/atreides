@@ -5,7 +5,7 @@
     ],
     "target": {
       "namespace": "android_app",
-      "package_name": "onl.mayo.dune.twa",
+      "package_name": "how.dune.twa",
       "sha256_cert_fingerprints": [
         "5A:26:0F:C1:32:A3:0B:3B:0B:F1:00:9C:6B:86:DD:4F:22:A7:8B:CE:E2:35:4B:24:FD:47:1B:D4:F7:EA:B6:0C",
         "4B:CD:95:48:1B:C7:97:E1:21:D1:A2:C9:FC:6A:F1:21:79:12:64:7E:2C:8F:D9:92:B1:C1:9F:94:36:70:4C:5D"
@@ -18,7 +18,7 @@
     ],
     "target": {
       "namespace": "android_app",
-      "package_name": "onl.mayo.dune.twa"
+      "package_name": "how.dune.twa"
     }
   }
 ]

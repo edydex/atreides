@@ -1,8 +1,8 @@
 {
-    "id": "onl.mayo.dune.twa",
-    "name": "Atreides Companion - Dune",
-    "short_name": "Atreides",
-    "description": "Companion app for Atreides faction in Dune (2019) board game",
+    "id": "how.dune.twa",
+    "name": "Dune Companion",
+    "short_name": "Dune",
+    "description": "Companion app for Dune (2019) board game",
     "start_url": "./index.html",
     "display": "standalone",
     "orientation": "any",
@@ -10,12 +10,13 @@
         "client_mode": "auto"
     },
     "background_color": "#ffffff",
-    "theme_color": "#4CAF50",
+    "theme_color": "#000000",
     "icons": [
         {
             "src": "dune_x1024.png",
             "sizes": "1024x1024",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         }
     ],
     "dir": "ltr",

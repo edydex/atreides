@@ -1,0 +1,64 @@
+name: Build TWA APK
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    
+    - name: Install Bubblewrap
+      run: |
+        npm install -g @bubblewrap/cli
+    
+    - name: Initialize TWA project
+      run: |
+        bubblewrap init --manifest=https://dune.how/manifest.json
+      env:
+        BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    
+    - name: Build APK
+      run: |
+        bubblewrap build
+      env:
+        BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: twa-apk
+        path: |
+          app-release-signed.apk
+          app-release-bundle.aab
+        retention-days: 30
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          app-release-signed.apk
+          app-release-bundle.aab
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
