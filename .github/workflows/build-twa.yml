@@ -32,10 +32,11 @@ jobs:
     
     - name: Initialize TWA project
       run: |
-        yes | bubblewrap init --manifest=https://dune.how/manifest.json
+        bubblewrap init --manifest=https://dune.how/manifest.json --skipJdkInstall
       env:
         BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        JAVA_HOME: ${{ env.JAVA_HOME }}
     
     - name: Build APK
       run: |
