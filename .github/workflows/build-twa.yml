@@ -53,7 +53,7 @@ jobs:
         {
           "packageId": "onl.mayo.dune.twa",
           "host": "dune.how",
-          "name": "Dune: Imperium - Digital Companion",
+          "name": "Dune Companion",
           "launcherName": "Dune",
           "display": "standalone",
           "orientation": "default",
