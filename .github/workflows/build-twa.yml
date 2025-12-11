@@ -51,7 +51,7 @@ jobs:
       run: |
         cat > twa-manifest.json << 'EOF'
         {
-          "packageId": "how.dune.twa",
+          "packageId": "onl.mayo.dune.twa",
           "host": "dune.how",
           "name": "Dune: Imperium - Digital Companion",
           "launcherName": "Dune",
@@ -65,8 +65,8 @@ jobs:
           "startUrl": "/",
           "iconUrl": "https://dune.how/dune_x1024.png",
           "maskableIconUrl": "https://dune.how/dune_x1024.png",
-          "appVersion": "1.0.0",
-          "appVersionCode": 1,
+          "appVersion": "1.0.5",
+          "appVersionCode": 5,
           "signingKey": {
             "path": "./android.keystore",
             "alias": "android"
