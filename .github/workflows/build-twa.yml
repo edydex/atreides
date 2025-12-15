@@ -65,8 +65,8 @@ jobs:
           "startUrl": "/",
           "iconUrl": "https://dune.how/dune_x1024.png",
           "maskableIconUrl": "https://dune.how/dune_x1024.png",
-          "appVersion": "1.0.7",
-          "appVersionCode": 7,
+          "appVersion": "1.0.8",
+          "appVersionCode": 8,
           "signingKey": {
             "path": "./android.keystore",
             "alias": "android"
