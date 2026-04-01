@@ -1340,6 +1340,11 @@ input[type="number"] {
     line-height: 1.1;
     transition: all 0.2s ease;
 }
+.leader-killed-btn:disabled {
+    background-color: #bbb;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
 
 /* Make Leader Killed button bigger on larger screens */
 @media (min-width: 501px) {
@@ -4675,6 +4680,9 @@ function restoreBattleWheelState() {
             killedName.textContent = battleWheel.killedLeader.name.split(' (')[0];
             killedStrength.textContent = battleWheel.killedLeader.strength;
         }
+        // Disable the Leader Killed button since leader is already killed
+        const killBtn = document.querySelector('.leader-killed-btn');
+        if (killBtn) killBtn.disabled = true;
     }
 }
 
@@ -5216,6 +5224,10 @@ function openBattleSummary() {
         killedCircle.classList.remove('crossed-out');
     }
     
+    // Re-enable the Leader Killed button
+    const killBtn = document.querySelector('.leader-killed-btn');
+    if (killBtn) killBtn.disabled = false;
+    
     // Clear killed leader from Battle Wheel state
     let savedData = localStorage.getItem("duneTrackerData");
     if (savedData) {
@@ -5422,6 +5434,10 @@ function killLeader() {
     const leaderSelect = document.getElementById('your-leader');
     if (!leaderSelect || leaderSelect.value === '0') return;
     
+    // Prevent multiple clicks
+    const killBtn = document.querySelector('.leader-killed-btn');
+    if (killBtn && killBtn.disabled) return;
+    
     // Get current leader info
     const leaderValue = leaderSelect.value;
     const leaderText = leaderSelect.selectedOptions[0].text;
@@ -5449,18 +5465,24 @@ function killLeader() {
         killedStrength.textContent = leaderValue === 'X' ? 'X' : leaderValue;
     }
     
+    // Disable the button to prevent multiple clicks
+    if (killBtn) killBtn.disabled = true;
+    
     // Directly subtract leader strength from the Total Strength circle
     const totalElement = document.getElementById('your-total');
     if (totalElement && leaderValue !== 'X') {
-        const currentTotal = parseInt(totalElement.textContent) || 0;
-        const leaderStrength = parseInt(leaderValue) || 0;
+        const currentTotal = parseFloat(totalElement.textContent) || 0;
+        const leaderStrength = parseFloat(leaderValue) || 0;
         
         // Check if Kwisatz Haderach is also selected
         const kwisatzCheckbox = document.getElementById('kwisatz-haderach');
         const kwisatzBonus = (kwisatzCheckbox && kwisatzCheckbox.checked) ? 2 : 0;
         
         // Subtract both leader strength and Kwisatz bonus if applicable
-        totalElement.textContent = currentTotal - leaderStrength - kwisatzBonus;
+        const newTotal = currentTotal - leaderStrength - kwisatzBonus;
+        totalElement.textContent = newTotal;
+        const previewElement = document.getElementById('total-strength-preview');
+        if (previewElement) previewElement.textContent = newTotal;
     }
 }
 
@@ -5482,6 +5504,10 @@ function clearBattleWheel() {
         if (killedCircle) {
             killedCircle.classList.remove('crossed-out');
         }
+        
+        // Re-enable the Leader Killed button
+        const killBtn = document.querySelector('.leader-killed-btn');
+        if (killBtn) killBtn.disabled = false;
         const killedName = document.getElementById('killed-leader-name');
         const killedStrength = document.getElementById('killed-leader-strength');
         if (killedName) killedName.textContent = 'No Leader';
